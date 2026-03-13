@@ -1,0 +1,47 @@
+=== VERITAS AI: NORMALIZED CLINICAL CONTEXT ===
+
+Source Entity: Fatigue
+--------------------------------------------------
+  Result 1 [ICD: R53 | Score: 0.5464]: Malaise and fatigue
+  Context: myalgic encephalomyelitis (G93.32) other post infection and related fatigue syndromes (G93.39) postviral fatigue syndrome (G93.31) **R53.83 Other fatigue** Fatigue NOS Lack of energy Lethargy Tiredness **Excludes2:** exhaustion and fatigue due to depressive episode (F32.-)
+
+  Result 2 [ICD: R53 | Score: 0.4650]: Malaise and fatigue
+  Context: exhaustion and fatigue due to heat (T67.-) exhaustion and fatigue due to pregnancy (O26.8-) exhaustion and fatigue due to recurrent depressive episode (F33-) exhaustion and fatigue due to senile debility (R54) **R53.81 Other malaise** Chronic debility Debility NOS General physical deterioration
+
+
+Source Entity: Acute nasopharyngitis
+--------------------------------------------------
+  Result 1 [ICD: J00 | Score: 0.9917]: Acute nasopharyngitis [common cold]
+  Context: **J00 Acute nasopharyngitis [common cold]** Acute rhinitis Coryza (acute) Infective nasopharyngitis NOS Infective rhinitis Nasal catarrh, acute Nasopharyngitis NOS **Excludes1:** acute pharyngitis (J02.-) acute sore throat NOS (J02.9)
+
+  Result 2 [ICD: J02 | Score: 0.9527]: Acute pharyngitis
+  Context: Gangrenous pharyngitis (acute) Infective pharyngitis (acute) NOS Pharyngitis (acute) NOS Sore throat (acute) NOS Suppurative pharyngitis (acute) Ulcerative pharyngitis (acute) **Excludes1:** influenza virus with other respiratory manifestations (J09.X2, J10.1, J11.1)
+
+
+Source Entity: Viral fever
+--------------------------------------------------
+  Result 1 [ICD: A93 | Score: 0.9300]: Other arthropod-borne viral fevers, not elsewhere classified
+  Context: **A93 Other arthropod-borne viral fevers, not elsewhere classified** **A93.0 Oropouche virus disease** Oropouche fever **A93.1 Sandfly fever** Pappataci fever Phlebotomus fever **A93.2 Colorado tick fever** **A93.8 Other specified arthropod-borne viral fevers** Piry virus disease
+
+  Result 2 [ICD: A98 | Score: 0.8605]: Other viral hemorrhagic fevers, not elsewhere classified
+  Context: **A98 Other viral hemorrhagic fevers, not elsewhere classified** **Excludes1:** chikungunya hemorrhagic fever (A92.0) dengue hemorrhagic fever (A91) **A98.0 Crimean-Congo hemorrhagic fever** Central Asian hemorrhagic fever **A98.1 Omsk hemorrhagic fever** **A98.2 Kyasanur Forest disease**
+
+
+Source Entity: Myalgia
+--------------------------------------------------
+  Result 1 [ICD: G89 | Score: 0.9469]: Pain, not elsewhere classified
+  Context: migraines (G43.-) myalgia (M79.1-) pain from prosthetic devices, implants, and grafts (T82.84, T83.84, T84.84, T85.84-) phantom limb syndrome with pain (G54.6) vulvar vestibulitis (N94.810) vulvodynia (N94.81-) **G89.0 Central pain syndrome** Déjérine-Roussy syndrome Myelopathic pain syndrome
+
+  Result 2 [ICD: M79 | Score: 0.8660]: Other and unspecified soft tissue disorders, not elsewhere classified
+  Context: palindromic rheumatism (M12.3-) **M79.1 Myalgia** Myofascial pain syndrome **Excludes1:** fibromyalgia (M79.7) myositis (M60.-) **M79.10 Myalgia, unspecified site** **M79.11 Myalgia of mastication muscle** **M79.12 Myalgia of auxiliary muscles, head and neck** **M79.18 Myalgia, other site**
+
+
+Source Entity: Fever
+--------------------------------------------------
+  Result 1 [ICD: R50 | Score: 0.8664]: Fever of other and unknown origin
+  Context: FNHTR Posttransfusion fever **R50.9 Fever, unspecified** Fever NOS Fever of unknown origin [FUO] Fever with chills Fever with rigors Hyperpyrexia NOS Persistent fever Pyrexia NOS
+
+  Result 2 [ICD: A95 | Score: 0.8190]: Yellow fever
+  Context: **A95 Yellow fever** **A95.0 Sylvatic yellow fever** Jungle yellow fever **A95.1 Urban yellow fever** **A95.9 Yellow fever, unspecified**
+
+

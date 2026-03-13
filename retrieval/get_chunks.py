@@ -45,4 +45,4 @@ if __name__ == "__main__":
         
         print(f"--- Result {i+1} [Score: {score}] ---")
         print(f"Path: {section}")
-        print(f"Content: {chunk['content']}\n")
+        print(f"Content: {chunk['text']}\n")
