@@ -5,6 +5,7 @@ import google.generativeai as genai
 from pdf2image import convert_from_path
 
 #keys in secrets tab
+
 api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=api_key)
 
@@ -55,7 +56,10 @@ def structure_text_with_gemini(raw_text, filename):
 
 def main():
     input_folder = "hospital_pdfs"
-    output_file = "structured_hospital_data.txt"
+    # POINT THIS TO YOUR FRIEND'S RETRIEVAL DATA FOLDER
+    output_folder = "../retrieval/data_from_preprocessing" 
+    output_file = os.path.join(output_folder, "structured_hospital_data.txt")
+    #output_file = "structured_hospital_data.txt"
 
     if not os.path.exists(input_folder):
         os.makedirs(input_folder)
@@ -83,11 +87,11 @@ def main():
             # Step C: Total Clean Version
             master_file.write(structured_data + "\n\n")
 
-    print(f"\nSuccess! All data saved to '{output_file}'")
+    print(f"\nSuccess! Data synced to retrieval folder: '{output_file}'")
 
     # Check if file exists and has content before downloading
-    if os.path.exists(output_file) and os.path.getsize(output_file) > 0:
-        files.download(output_file)
+    #if os.path.exists(output_file) and os.path.getsize(output_file) > 0:
+    #    files.download(output_file)
 
 if __name__ == "__main__":
     main()
