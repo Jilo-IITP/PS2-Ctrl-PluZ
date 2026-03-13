@@ -1,0 +1,14 @@
+# --- RCM Engine Dependencies ---
+
+# 1. Medical Standards & Validation
+fhir.resources==7.1.0
+
+# 2. Document Parsing (The fastest PDF extractor)
+PyMuPDF>=1.23.0
+
+# 3. Data Validation & Schema Enforcement (V2 methods required)
+pydantic>=2.5.0
+
+# 4. AI & LLM SDK (The new official Gemini client)
+google-genai>=0.2.0
+python-dotenv>=1.0.0
