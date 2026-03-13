@@ -21,15 +21,6 @@ print(f"Total Gender Codes Loaded: {len(GENDER_SPECIFIC_CODES)}")
 print(f"Total PTP Base Codes Loaded: {len(PTP_EDITS)}")
 print(f"Total NCD Policies Loaded: {len(NCD_MAP)}")
 
-# --- TEMPORARY: Find Real Codes to Inject ---
-if len(MUE_LIMITS) > 5:
-    sample_mue = list(MUE_LIMITS.keys())[5]
-    print(f"🎯 REAL MUE CODE TO USE: {sample_mue} (Limit: {MUE_LIMITS[sample_mue]})")
-if len(GENDER_SPECIFIC_CODES) > 5:
-    sample_gender = list(GENDER_SPECIFIC_CODES.keys())[5]
-    print(f"🎯 REAL GENDER CODE TO USE: {sample_gender} (Requires: {GENDER_SPECIFIC_CODES[sample_gender]})")
-print("-" * 50)
-
 class FHIRAnomalyDetector:
     def __init__(self, bundle_json, ptp_edits, mue_limits, gender_codes, ncd_map):
         self.data = bundle_json
@@ -150,32 +141,46 @@ class FHIRAnomalyDetector:
             "severity": "High"
         })
 
+import glob # Make sure to add this import!
+
 # --- 5. EXECUTION & FHIR OUTPUT GENERATION ---
 
-# Load the chaos data
-try:
-    with open("synthetic_chaos_claims.json", "r") as f:
-        fhir_input = json.load(f)
+print("\n--- INGESTING AI-GENERATED FHIR BUNDLES ---")
 
-    # Run the detector
-    detector = FHIRAnomalyDetector(fhir_input, PTP_EDITS, MUE_LIMITS, GENDER_SPECIFIC_CODES, NCD_MAP)
-    results = detector.analyze()
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
+output_folder_pattern = os.path.join(PROJECT_ROOT, "data", "output", "claim_*.json")
+ai_generated_files = glob.glob(output_folder_pattern)
 
-    if results:
-        print(f"\n🚨 FOUND {len(results)} TOTAL ANOMALIES 🚨")
+if not ai_generated_files:
+    print(f"❌ No AI generated FHIR files found in {output_folder}")
+    print("Please run fhir_gen.py first!")
+else:
+    all_results = []
+    
+    for filepath in ai_generated_files:
+        print(f"🔍 Analyzing {filepath}...")
         
-        # Build the official FHIR OperationOutcome Resource
+        with open(filepath, "r") as f:
+            fhir_input = json.load(f)
+
+        detector = FHIRAnomalyDetector(fhir_input, PTP_EDITS, MUE_LIMITS, GENDER_SPECIFIC_CODES, NCD_MAP)
+        results = detector.analyze()
+        all_results.extend(results) 
+
+    if all_results:
+        print(f"\n🚨 FOUND {len(all_results)} TOTAL ANOMALIES ACROSS ALL AI FILES 🚨")
+        
         operation_outcome = {
             "resourceType": "OperationOutcome",
             "id": "validation-results-001",
             "issue": []
         }
 
-        # Translate our internal anomaly list into FHIR 'issue' blocks
-        for anomaly in results:
+        for anomaly in all_results:
             issue = {
-                "severity": "error", # FHIR standard values: fatal | error | warning | information
-                "code": "business-rule", # The standard code for policy violations
+                "severity": "error", 
+                "code": "business-rule", 
                 "details": {
                     "text": anomaly['suspicion_reason']
                 },
@@ -186,21 +191,16 @@ try:
             }
             operation_outcome["issue"].append(issue)
 
-        # Save the structured FHIR output to a JSON document
         output_filename = "audit_results.json"
         with open(output_filename, "w") as f:
             json.dump(operation_outcome, f, indent=2)
 
         print(f"✅ Successfully exported FHIR OperationOutcome to: {output_filename}")
         
-        # Quick terminal summary using pandas just for your visibility
-        df_results = pd.DataFrame(results)
+        df_results = pd.DataFrame(all_results)
         print("-" * 50)
         print(df_results['suspicion_reason'].value_counts())
         print("-" * 50)
 
     else:
-        print("\n✅ All claims passed! No anomalies detected.")
-
-except FileNotFoundError:
-    print("❌ Could not find synthetic_chaos_claims.json. Run anomaly_injector.py first!")
+        print("\n✅ All AI-generated claims passed! No anomalies detected.")
