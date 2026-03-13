@@ -1,0 +1,10 @@
+[
+  {
+    "question": "What is the role of the Multi-Head Attention mechanism?",
+    "ground_truth": "It allows the model to jointly attend to information from different representation subspaces at different positions."
+  },
+  {
+    "question": "Does the Transformer use recurrence or convolutions?",
+    "ground_truth": "No, the Transformer relies entirely on an attention mechanism, dispensing with recurrence and convolutions entirely."
+  }
+]

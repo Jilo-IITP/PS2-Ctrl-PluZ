@@ -1,0 +1,18 @@
+
+services:
+  rag-db:
+    image: pgvector/pgvector:pg16
+    container_name: veritas-pgvector
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: veritas_pg_pass
+      POSTGRES_DB: veritas_rag
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+    # This ensures your vectors aren't deleted if the container stops
