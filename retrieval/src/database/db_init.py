@@ -1,9 +1,9 @@
 import os
 import psycopg2
-from dotenv import load_dotenv
+from dotenv import load_dotenv,find_dotenv
 
 # Load credentials from config/.env
-load_dotenv(dotenv_path="config/.env")
+load_dotenv(find_dotenv())
 
 def get_db_connection():
     """Establish a connection to the PostgreSQL container."""

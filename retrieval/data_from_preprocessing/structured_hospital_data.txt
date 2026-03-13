@@ -1,152 +1,146 @@
-Here's the cleaned and structured information from the hospital document:
+Here's the cleaned and structured information from the provided blood report:
 
 ---
 
-## Patient Info
+### Patient Info
 
-*   **Individuals Checked Up:**
-    *   Sachin Khamitkar
-    *   Pandurang Khamitkar
-    *   Shashikala Khamitkar
+*   **Name:** Ashutosh Shah
+*   **Age/Gender:** 46 Years Male
+*   **Report Date/Time:** 06-Jul-2023 10:37 AM
+*   **Referring Doctor:** Dr. Simple Bhuptani
+*   **Receipt No:** 3628
+*   **UHID:** 6915
 
----
+### Billing/Charges
 
-## Billing/Charges
-
-**Invoice Details:**
-*   **Invoice Number:** 2602196
-*   **Invoice Date:** July 25, 2021
-*   **Booking ID:** 4582993581
-*   **Sample Collection Date:** July 24, 2021
-*   **SAC Code:** 999316
-
-**Bill From (Service Provider):**
-*   **Organization:** Expedient Healthcare Marketing Pvt Ltd
-*   **Address:** Plot No. 518, Udyog Vihar, Phase 3, Gurugram, Haryana, India
-*   **CIN Number:** U93000HR2O13PTCO51132
-
-**Customer Billing Details:**
-*   **Customer Name:** Sachin Khamitkar
-*   **Address:** Flat No- 503 Swami Vivekanand Nagar, Famous Chowk, New Sangvi, Pune, Maharashtra 412206
-*   **GST No:** Not Applicable
-
-**Billing Items:**
-
-| Patient Name        | Test Description                                    | Amount (₹) |
-| :------------------ | :-------------------------------------------------- | :--------- |
-| Sachin Khamitkar    | Healthy India 2021 Full Body Checkup With Vitamin Screening | 5,350.00   |
-| Pandurang Khamitkar | Healthy India 2021 Full Body Checkup With Vitamin Screening | 5,490.00   |
-| Shashikala Khamitkar| Healthy India 2021 Full Body Checkup With Vitamin Screening | 5,490.00   |
-
-**Summary:**
-*   **Total Amount:** ₹16,330.00
-*   **Grand Total:** ₹16,330.00
-*   **Paid Amount:** ₹16,330.00
-
----
-
-## Medications
-
-None found.
-
----
-
-## Diagnosis
-
-No specific diagnosis found; services listed are for a preventative full body checkup and vitamin screening.
-
----
-
-Here's the cleaned and structured information from the hospital document:
-
----
-
-### Patient Information
-
-*   **Name:** Raja Tyagi
-*   **Age/Gender:** 26 years / Male
-*   **Date:** 03 Nov 2023
-*   **Address:** H.No: 26, A-Block, Behind DPS, Sector 30, Noida, Uttar Pradesh 201301
-*   **Attending Physician:** Dr. Sangeeta (MD-Physician)
-
-### Diagnosis
-
-*   **Chief Complaints:** Fever since 2 days, Cold
-*   **Allergies:** No drug allergy
-*   **Diagnosis:** Tiredness, Viral Fever (suspected)
-
-### Diagnostic Tests
-
-| Test Name                      | Notes           |
-| :----------------------------- | :-------------- |
-| Complete Haemogram             | Immediate       |
-| Dengue Profile (IgM & NS1)     | Quantitative, Immediate |
-| CBC                            |                 |
-| CRP Test                       |                 |
-| Typhidot IgG IgM               |                 |
-| MP QBC                         |                 |
+No explicit billing items or charges found in the provided text.
 
 ### Medications
 
-| Sl. | Medicine Name                 | Dosage  | Frequency | Duration | Instructions |
-| :-- | :---------------------------- | :------ | :-------- | :------- | :----------- |
-| 1.  | AZEE FILM COATED TAB 250mg    | 1 tab   | 1-0-1     | 5 days   | After Food   |
-|     | *(Azithromycin Dihydrate 250mg)* |         |           |          |              |
+No medications are listed in the provided text.
+
+### Diagnosis
+
+No explicit diagnosis is provided. This document contains a Routine Hematology Report with test results.
 
 ---
 
-Here is the cleaned and structured information from the provided hospital document:
+### Routine Hematology Report
+
+| Parameter            | Result   | Normal Range         | Unit       |
+| :------------------- | :------- | :------------------- | :--------- |
+| Hemoglobin           | 14.8     | 15-18                | g/dL       |
+| Hematocrit (PCV)     | 49.4     | 39-54                | %          |
+| RBC Count            | 5.35     | 4.5-6.5              | million/mcL |
+| WBC Count            | 9,900    | 4,000-10,000         | /mcL       |
+| Platelet Count       | 359,000  | 150,000-400,000      | /mcL       |
+| MCHC                 | 29.7     | 30-36                | g/dL       |
+| MCH                  | 27.4     | 27-32                | pg         |
+| MCV                  | 92.4     | 75-96                | fL         |
+| RDW                  | 13.0     | 11-16                | %          |
+| Platelets in Smear   | Adequate |                      |            |
+| Malarial Parasites   | Not Detected | Not Detected         |            |
+
+### Differential WBC Count
+
+| Parameter    | Result | Normal Range | Unit |
+| :----------- | :----- | :----------- | :--- |
+| Band Forms   | 0      | 0-5          | %    |
+| Neutrophils  | 64     | 40-75        | %    |
+| Lymphocytes  | 29     | 20-50        | %    |
+| Eosinophils  | 2      | 1-6          | %    |
+| Monocytes    | 5      | 2-10         | %    |
+| Basophils    | 0      | 0-5          | %    |
 
 ---
 
-## Patient Info
+**Report Signed By:** Dr. Simple MD
+**Operator Name:** RPP Apple Jing
 
-*   **Name:** Surya Singh
-*   **Date:** 30-08-2023
-*   **Age:** 24 Years
-*   **Patient ID:** 19335171
-*   **Gender:** Male
-*   **Height:** 175 cm
-*   **Weight:** 62 kg
-*   **Drug Allergies:** No known Allergies
-*   **Prescribing Doctor:** Dr. Girish Ghanate (MBBS, General Medicine)
-*   **MediBuddy ID:** KMC 126501
-*   **Prescription ID:** 520830977
+Here's the cleaned and structured information from your hospital document:
 
-## Billing/Charges
+---
 
-*   *No explicit billing items or charges found in the document.*
+## [Patient Info]
 
-## Medications
+*   **Name:** Lakshmi Shah
+*   **Age:** 46
+*   **Date:** 21/11/2023 (Assumption based on "211ele&")
 
-| S.No. | Medicine                  | Dosage Pattern | Instructions | Duration |
-| :---- | :------------------------ | :------------- | :----------- | :------- |
-| 1     | TABLET AZITHROMYCIN (250mg) | Daily: 1-0-1   | After Meal   | 3 Days   |
-| 2     | TABLET SINAREST (180mg)   | Daily: 1-0-1   | After Meal   | 3 Days   |
-| 3     | TABLET DOLO PARACETAMOL (650mg) | Daily: 1-0-1   | After Meal   | 3 Days   |
+## [Diagnosis]
 
-## Diagnosis
+*   **Doctor:** Dr. Miral H. Naik, MS DNB (Ophthalmology), Fellow LVPEI (Hyderabad)
+*   **Prescription:**
 
-*   **Primary Diagnosis:** Viral Fever
-*   **Description:** Fever, cold, myalgia
+| Eye | Sph     | Cyl     | Axis | VA  |
+| :-- | :------ | :------ | :--- | :-- |
+| RE  | -2.00   | -4.50   | 180  | 6/6 |
+| LE  | -2.50   | +0.75   | 90   | 6/6 |
 
-**Recommended Lab Tests:**
+*   **Near IPD:** 60
+*   **Wearing Instructions (Select one or more):**
+    *   Constant Wear
+    *   Reading Only
+    *   Computer Only
+    *   Occasional Wear
+*   **Instructions for Optician:**
+    *   Please make the glasses as per the prescription.
+    *   Get the glasses checked after they are made.
+    *   Dear optician, please take PD (Pupillary Distance) for distance & near.
+    *   Please note the height of the reading segment.
+    *   Please ensure correct centering of the lens.
+    *   Do not give too big a frame / too small either, as they [sentence trails off].
+    *   BVD (Back Vertex Distance) (Likely a fitting instruction)
 
-| S.No. | Test Name                                                          |
-| :---- | :----------------------------------------------------------------- |
-| 1     | RT PCR FOR COVID 19                                                |
-| 2     | Fever Profile (CBC, ESR, Complete Urine Examination, Smear for Malarial Parasite, Widal, SGPT) |
-| 3     | Dengue Antigen NS1, IgG & IgM                                      |
+## [Medications]
 
-**Doctor's Advice:**
+*   *No medications found in the provided text.*
 
-1.  Steam inhalation before sleep.
-2.  Get RT-PCR tested if symptoms don't reduce.
-3.  Keep checking oxygen saturation every 2 hourly.
-4.  Isolate yourself.
-5.  Avoid cold water.
-6.  Hospitalized if you feel symptoms are worsening.
-7.  Do not panic.
+## [Billing/Charges]
 
-**Follow Up:** 3 Days
+*(The following are options/features that would typically be itemized on a bill, rather than specific charges or prices)*
+
+| Category            | Item/Option             |
+| :------------------ | :---------------------- |
+| **Lens Material**   | CR-39                   |
+|                     | Polycarbonate           |
+| **Lens Design**     | Kryptok Bifocal         |
+|                     | Executive Bifocal       |
+|                     | D-Bifocal               |
+|                     | Progressive             |
+| **Lens Features**   | Photochromatic          |
+|                     | Anti-Glare Coating      |
+|                     | Crizal (Coating)        |
+|                     | Hi-Index                |
+|                     | Aspheric                |
+
+---
+
+Here's the cleaned and structured output from the 'teeth.pdf' document:
+
+---
+
+### [Patient Info]
+
+*   **Patient Name:** Shri/Smt. Jialaa B
+
+### [Billing/Charges]
+
+*   **Receipt No:** 13011
+*   **Date:** 24/06/20XX
+*   **Payment Details:**
+
+| Item                       | Amount (INR) |
+| :------------------------- | :----------- |
+| Oral Diagnosis & Radiology | 600          |
+
+*   **Total Amount Received:** Rs. 600 (Rupees Six Hundred)
+
+### [Medications]
+
+*   No medications are listed in this document.
+
+### [Diagnosis]
+
+*   The document indicates that a service for "Oral Diagnosis & Radiology" was rendered, implying a diagnostic consultation took place. However, no specific diagnostic findings or results are detailed in this record.
 

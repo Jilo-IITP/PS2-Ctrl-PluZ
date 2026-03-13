@@ -141,7 +141,7 @@ def build_dictionaries(ptp_df, mue_df, hcpcs_df, ncd_df):
     return ptp_dict, mue_limits, gender_codes, ncd_dict
 
 if __name__ == "__main__":
-    base_dir = r"C:\Lavi\Learn\Hackathons\Jilo\data"
+    base_dir = r"..\data"
     
     # CMS files usually have headers on row 2 (skiprows=1), verify this for NCD/HCPCS if they error out
     # Change skiprows to 2 to bypass the copyright and title rows

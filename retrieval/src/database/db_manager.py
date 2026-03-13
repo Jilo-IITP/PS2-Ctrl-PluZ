@@ -4,9 +4,9 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from typing import List, Dict
 import os
 import json
-from dotenv import load_dotenv
+from dotenv import load_dotenv,find_dotenv
 
-load_dotenv(dotenv_path="config/.env")
+load_dotenv(find_dotenv())
 
 class VectorDBManager:
     def __init__(self):

@@ -7,7 +7,7 @@ import json
 import pandas as pd
 
 # 1. Load the fast caches
-base_dir = r"C:\Lavi\Learn\Hackathons\Jilo\data"
+base_dir = r"C..\data"
 ptp_df = get_cached_df("cache_ptp.pkl", base_dir, "ccipra*", skiprows=1)
 mue_df = get_cached_df("cache_mue.pkl", base_dir, "MCR_MUE*", skiprows=1)
 hcpcs_df = get_cached_df("cache_hcpcs.pkl", base_dir, "Data_HCPCS.txt", skiprows=0)

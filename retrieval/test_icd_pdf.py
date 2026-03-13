@@ -115,7 +115,7 @@ def run_icd_pdf_integration():
     print(f"1. Extracting raw text from PDF: {file_path} (This might take a minute)...")
     
     # Define your cache path
-    cache_file = "data/icd_10_master_extracted.txt"
+    cache_file = "../data/icd_10_master_extracted.txt"
 
     if os.path.exists(cache_file):
         print("Found cached text file! Bypassing 2500-page PDF extraction...")

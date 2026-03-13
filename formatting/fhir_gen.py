@@ -16,7 +16,8 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(CURRENT_DIR) 
 
 # Pointing to the text file we just updated
-INPUT_FILE = os.path.join(PROJECT_ROOT, "data", "input", "structured_hospital_data.txt")
+file_path_1 = "data/input/lele_abhav_noobde.txt"
+file_path_2 = "retrieval/data_from_preprocessing/structured_hospital_data.txt"
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "data", "output")
 
 CODING_DATABASE = {
@@ -87,20 +88,31 @@ def build_fhir_bundle(patient_obj, invoice_date, patient_id):
 
 def main():
     load_dotenv()
+  
     API_KEY = os.getenv("GEMINI_API_KEY")
     if not API_KEY:
         raise ValueError("API key not found! Please check your .env file.")
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     
-    print(f"1. Reading raw file: {INPUT_FILE}")
-    if not os.path.exists(INPUT_FILE):
-        raise FileNotFoundError(f"File not found at: {INPUT_FILE}")
-        
-    raw_text = extract_text_from_file(INPUT_FILE)
+    paths = [file_path_1, file_path_2]
+    for p in paths:
+        if not os.path.exists(p):
+            raise FileNotFoundError(f"Bhai, file nahi mili at: {p}")
+    
+    text_1 = extract_text_from_file(file_path_1)
+    text_2 = extract_text_from_file(file_path_2)
+
+    combined_raw_text = f"""
+    --- SOURCE 1 (Input Data) ---
+    {text_1}
+    
+    --- SOURCE 2 (Retrieved/Preprocessed Data) ---
+    {text_2}
+    """
 
     print("2. Sending text to Gemini AI for structural extraction...")
-    ai_document = run_ai_extraction(raw_text, API_KEY)
+    ai_document = run_ai_extraction(combined_raw_text, API_KEY)
     
     invoice_date = ai_document.invoice_date
     print(f"   -> AI found Invoice Date: {invoice_date}")

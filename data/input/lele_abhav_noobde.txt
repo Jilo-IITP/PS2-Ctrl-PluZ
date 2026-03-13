@@ -1,0 +1,20 @@
+=== VERITAS AI: NORMALIZED CLINICAL CONTEXT ===
+
+Source Entity: Myopia
+--------------------------------------------------
+  Result 1 [ICD: H52 | Score: 0.8925]: Disorders of refraction and accommodation
+  Context: **Excludes1:** degenerative myopia (H44.2-) **H52.10 Myopia, unspecified eye** **H52.11 Myopia, right eye** **H52.12 Myopia, left eye** **H52.13 Myopia, bilateral** **H52.2 Astigmatism** **H52.20 Unspecified astigmatism** **H52.201 Unspecified astigmatism, right eye**
+
+  Result 2 [ICD: H52 | Score: 0.6572]: Disorders of refraction and accommodation
+  Context: **H52 Disorders of refraction and accommodation** **H52.0 Hypermetropia** **H52.00 Hypermetropia, unspecified eye** **H52.01 Hypermetropia, right eye** **H52.02 Hypermetropia, left eye** **H52.03 Hypermetropia, bilateral** **H52.1 Myopia** **Excludes1:** degenerative myopia (H44.2-)
+
+
+Source Entity: Astigmatism
+--------------------------------------------------
+  Result 1 [ICD: H52 | Score: 0.8485]: Disorders of refraction and accommodation
+  Context: **H52.211 Irregular astigmatism, right eye** **H52.212 Irregular astigmatism, left eye** **H52.213 Irregular astigmatism, bilateral** **H52.219 Irregular astigmatism, unspecified eye** **H52.22 Regular astigmatism** **H52.221 Regular astigmatism, right eye**
+
+  Result 2 [ICD: H52 | Score: 0.8306]: Disorders of refraction and accommodation
+  Context: **H52.221 Regular astigmatism, right eye** **H52.222 Regular astigmatism, left eye** **H52.223 Regular astigmatism, bilateral** **H52.229 Regular astigmatism, unspecified eye** **H52.3 Anisometropia and aniseikonia** **H52.31 Anisometropia** **H52.32 Aniseikonia** **H52.4 Presbyopia**
+
+

@@ -84,19 +84,30 @@ if __name__ == "__main__":
     
     # Now this will actually work
     API_KEY = os.getenv("GEMINI_API_KEY")
-    
     if not API_KEY:
         raise ValueError("API key not found! Please check your .env file.")
     
     # 2 & 3. Fixed the typo ('intput' -> 'input') AND used forward slashes
-    test_file = "data/input/structured_hospital_data.txt" 
+    file_path_1 = "data/input/lele_abhav_noobde.txt"
+    file_path_2 = "retrieval/data_from_preprocessing/structured_hospital_data.txt"
     
     # Make sure this file actually exists before running!
-    if not os.path.exists(test_file):
-        raise FileNotFoundError(f"Bhai, file nahi mili at: {test_file}")
+    paths = [file_path_1, file_path_2]
+    for p in paths:
+        if not os.path.exists(p):
+            raise FileNotFoundError(f"Bhai, file nahi mili at: {p}")
     
-    raw_text = extract_text_from_file(test_file)
-    structured_output = run_ai_extraction(raw_text, API_KEY)
+    text_1 = extract_text_from_file(file_path_1)
+    text_2 = extract_text_from_file(file_path_2)
+
+    combined_raw_text = f"""
+    --- SOURCE 1 (Input Data) ---
+    {text_1}
+    
+    --- SOURCE 2 (Retrieved/Preprocessed Data) ---
+    {text_2}
+    """
+    structured_output = run_ai_extraction(combined_raw_text, API_KEY)
     
     print("\n--- AI EXTRACTED STRUCTURED DATA ---")
     print(structured_output.model_dump_json(indent=2))
