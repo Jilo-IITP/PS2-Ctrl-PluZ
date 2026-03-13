@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+body {
+  background-color: #fafaf9; /* This is Tailwind's stone-50 (beige) */
+  margin: 0;
+}

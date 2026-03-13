@@ -80,23 +80,22 @@ def run_ai_extraction(raw_text: str, api_key: str) -> HospitalDocument:
 
 # Ensure you set your API key in your environment variables
 # export GEMINI_API_KEY="your-api-key"
-if __name__ == "__main__":
+# if __name__ == "__main__":
     
-    # Now this will actually work
-    API_KEY = os.getenv("GEMINI_API_KEY")
+#     # Now this will actually work
+#     API_KEY = os.getenv("GEMINI_API_KEY")
     
-    if not API_KEY:
-        raise ValueError("API key not found! Please check your .env file.")
+#     if not API_KEY:
+#         raise ValueError("API key not found! Please check your .env file.")
     
-    # 2 & 3. Fixed the typo ('intput' -> 'input') AND used forward slashes
-    test_file = "data/input/structured_hospital_data.txt" 
+#     test_file = "data/input/structured_hospital_data.txt" 
     
-    # Make sure this file actually exists before running!
-    if not os.path.exists(test_file):
-        raise FileNotFoundError(f"Bhai, file nahi mili at: {test_file}")
+#     # Make sure this file actually exists before running!
+#     if not os.path.exists(test_file):
+#         raise FileNotFoundError(f"Bhai, file nahi mili at: {test_file}")
     
-    raw_text = extract_text_from_file(test_file)
-    structured_output = run_ai_extraction(raw_text, API_KEY)
+#     raw_text = extract_text_from_file(test_file)
+#     structured_output = run_ai_extraction(raw_text, API_KEY)
     
-    print("\n--- AI EXTRACTED STRUCTURED DATA ---")
-    print(structured_output.model_dump_json(indent=2))
+#     print("\n--- AI EXTRACTED STRUCTURED DATA ---")
+#     print(structured_output.model_dump_json(indent=2))
