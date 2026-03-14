@@ -4,10 +4,9 @@ from typing import List
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 
-# 1. EXACT FOLDER PATH (Fixed the double '=' typo)
-BASE_DIR = "" 
-INPUT_FOLDER = os.path.join(BASE_DIR, "preprocessing", "hospital_pdfs")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+INPUT_FOLDER = os.path.join(BASE_DIR, "preprocessing", "hospital_pdfs")
 app = FastAPI(title="RCM Ingestion API")
 
 app.add_middleware(

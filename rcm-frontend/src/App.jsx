@@ -4,10 +4,13 @@ import ExtractionDashboard from './features/ExtractionDashboard';
 import FhirViewer from './features/FHIRviewer';
 import ReconciliationDashboard from './features/ReconciliationDashboard';
 import LandingExtraInfo from './features/LandingExtraInfo';
+import axios from 'axios';
+import { Loader2 } from 'lucide-react';
 
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const steps = [
     { id: 1, label: 'Ingestion' },
@@ -16,10 +19,33 @@ function App() {
     { id: 4, label: 'Reconciliation' }
   ];
 
-  // This function takes the final array from DocumentUpload and moves to step 2
-  const handleFilesSubmit = (files) => {
-    setUploadedFiles(files);
-    setCurrentStep(2); 
+  // This function takes the final array from DocumentUpload, sends it to the backend, and moves to step 2
+  const handleFilesSubmit = async (files) => {
+    setIsProcessing(true);
+    
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append('pdf_files', file); 
+    });
+
+    try {
+      const response = await axios.post('http://localhost:8000/process-pdfs', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      console.log("Backend Response:", response.data);
+      
+      // Save the files array for the next steps
+      setUploadedFiles(files); 
+      
+      setIsProcessing(false);
+      setCurrentStep(2); 
+      
+    } catch (error) {
+      console.error("Backend connection failed", error);
+      alert("Error connecting to backend API. Is FastAPI running?");
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -98,8 +124,15 @@ function App() {
                     </p>
                   </div>
                   
-                  {/* CRITICAL FIX: The prop is onFileUpload to match your DocumentUpload.js code */}
-                  <DocumentUpload onFileUpload={handleFilesSubmit} />
+                  {isProcessing ? (
+                    <div className="flex flex-col items-center justify-center p-12 bg-white rounded-3xl shadow-sm border border-slate-200">
+                      <Loader2 className="w-12 h-12 text-teal-600 animate-spin mb-4" />
+                      <h2 className="text-xl font-bold text-slate-800">Running OCR & Gemini...</h2>
+                      <p className="text-slate-500 mt-2 text-center">Processing PDFs page by page. This might take a minute.</p>
+                    </div>
+                  ) : (
+                    <DocumentUpload onFileUpload={handleFilesSubmit} />
+                  )}
                 </div>
               )}
 
@@ -107,7 +140,7 @@ function App() {
                 <ExtractionDashboard 
                   files={uploadedFiles} 
                   onConfirm={() => setCurrentStep(3)} 
-                  onBack={() => setCurrentStep(1)} // <-- ADD THIS
+                  onBack={() => setCurrentStep(1)} 
                 />
               )}
 
@@ -115,7 +148,7 @@ function App() {
                 <FhirViewer 
                   files={uploadedFiles}
                   onProceed={() => setCurrentStep(4)} 
-                  onBack={() => setCurrentStep(2)} // <-- ADD THIS
+                  onBack={() => setCurrentStep(2)} 
                 />
               )}
 
@@ -126,25 +159,12 @@ function App() {
                     setUploadedFiles([]);
                     setCurrentStep(1);
                   }} 
-                  onBack={() => setCurrentStep(3)} // <-- ADD THIS
+                  onBack={() => setCurrentStep(3)} 
                 />
               )}
             </div>
           </div>
         </main>
-{/* 
-        <footer className="mt-10 flex items-center justify-between px-6 text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em]">
-          <p>Secure Multi-Tenant Batch Processing</p>
-          <div className="flex gap-6">
-            <span className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-              System Ready
-            </span>
-            <span className="text-teal-600/60 font-black">JIO HACKATHON 2026</span>
-          </div>
-        </footer> */}
-
-                
       </div>
       <LandingExtraInfo />
     </div>
