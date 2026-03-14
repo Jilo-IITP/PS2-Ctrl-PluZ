@@ -58,7 +58,7 @@ const ExtractionDashboard = ({ files = [], onConfirm, onBack }) => {
         <div className="text-center">
           <h2 className="text-xl font-black text-slate-800 tracking-tight flex items-center justify-center gap-2">
             <Activity className="w-5 h-5 text-teal-600" />
-            AI AUDIT DASHBOARD
+            EXTRACTION DASHBOARD
           </h2>
           <p className="text-[10px] text-teal-600 font-bold uppercase tracking-widest mt-1">
             NLP Extraction & Coding

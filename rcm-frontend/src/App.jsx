@@ -11,7 +11,7 @@ function App() {
 
   const steps = [
     { id: 1, label: 'Ingestion' },
-    { id: 2, label: 'AI Audit' },
+    { id: 2, label: 'Extraction' },
     { id: 3, label: 'FHIR Bundle' },
     { id: 4, label: 'Reconciliation' }
   ];
@@ -91,7 +91,7 @@ function App() {
                     <div className="inline-block px-4 py-1.5 bg-teal-50 text-teal-700 rounded-full text-xs font-bold mb-4 border border-teal-100 uppercase tracking-wider">
                       Step 01: Multi-Doc Ingestion
                     </div>
-                    <h2 className="text-3xl font-extrabold text-slate-800 mb-3 italic">Upload Medical Batch</h2>
+                    <h2 className="text-3xl font-extrabold text-slate-800 mb-3 ">Upload Medical Batch</h2>
                     <p className="text-slate-500 text-base leading-relaxed">
                       Drop multiple PDFs (EOBs, Discharge Summaries, Claims). 
                       The engine will parse and normalize each into a unified <span className="text-teal-600 font-semibold">FHIR R4</span> stream.
