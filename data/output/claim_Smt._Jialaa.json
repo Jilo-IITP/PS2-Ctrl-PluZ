@@ -1,22 +1,22 @@
 {
   "resourceType": "Bundle",
-  "id": "0ef32c4f-9653-413d-800a-1f14a3255344",
+  "id": "d51e41ae-a0b7-4615-bb31-5931924a069a",
   "type": "collection",
   "entry": [
     {
-      "fullUrl": "urn:uuid:f0f586ee-4d7a-40ab-9bba-5d0b96c17d65",
+      "fullUrl": "urn:uuid:38551333-b86b-42e2-a59c-6b050b2225c6",
       "resource": {
         "resourceType": "Patient",
-        "id": "f0f586ee-4d7a-40ab-9bba-5d0b96c17d65",
+        "id": "38551333-b86b-42e2-a59c-6b050b2225c6",
         "text": {
           "status": "generated",
-          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Lakshmi Shah</div>"
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Smt. Jialaa</div>"
         },
         "name": [
           {
-            "family": "Shah",
+            "family": "Jialaa",
             "given": [
-              "Lakshmi"
+              "Smt."
             ]
           }
         ],
@@ -24,13 +24,13 @@
       }
     },
     {
-      "fullUrl": "urn:uuid:e153f6e1-55aa-4bf9-a84d-8f8fafee44cf",
+      "fullUrl": "urn:uuid:8d400439-6216-44a9-8074-66b93c0fa4f7",
       "resource": {
         "resourceType": "Claim",
-        "id": "e153f6e1-55aa-4bf9-a84d-8f8fafee44cf",
+        "id": "8d400439-6216-44a9-8074-66b93c0fa4f7",
         "text": {
           "status": "generated",
-          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Claim for Lakshmi Shah</div>"
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Claim for Smt. Jialaa</div>"
         },
         "status": "active",
         "type": {
@@ -43,11 +43,11 @@
         },
         "use": "claim",
         "patient": {
-          "reference": "urn:uuid:f0f586ee-4d7a-40ab-9bba-5d0b96c17d65"
+          "reference": "urn:uuid:38551333-b86b-42e2-a59c-6b050b2225c6"
         },
         "created": "1970-01-01",
         "provider": {
-          "display": "Dr. Miral H. Naik"
+          "display": "Unknown Provider"
         },
         "priority": {
           "coding": [
@@ -57,17 +57,11 @@
             }
           ]
         },
-        "diagnosis": [
+        "item": [
           {
             "sequence": 1,
-            "diagnosisCodeableConcept": {
-              "text": "Myopia"
-            }
-          },
-          {
-            "sequence": 2,
-            "diagnosisCodeableConcept": {
-              "text": "Astigmatism"
+            "productOrService": {
+              "text": "Oral Diagnosis & Radiology"
             }
           }
         ]

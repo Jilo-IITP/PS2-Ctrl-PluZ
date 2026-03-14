@@ -46,7 +46,7 @@ class FHIRAnomalyDetector:
         for entry in self.data.get('entry', []):
             resource = entry.get('resource', {})
             if resource.get('resourceType') == 'Patient':
-                pat = Patient.model_validate(resource)
+                pat = Patient.parse_obj(resource)
                 p_map[f"Patient/{pat.id}"] = pat
         return p_map
 
@@ -55,14 +55,16 @@ class FHIRAnomalyDetector:
         for entry in self.data.get('entry', []):
             resource = entry.get('resource', {})
             if resource.get('resourceType') == 'Claim':
-                claim_obj = Claim.model_validate(resource)
+                claim_obj = Claim.parse_obj(resource)
                 self._check_claim(claim_obj)
         return self.anomalies
 
     def _check_claim(self, claim):
         processed_items = []
         patient_ref = claim.patient.reference if claim.patient else "Unknown"
-        
+        if not claim.item:
+            print(f"⚠️ Warning: Claim {claim.id} has no items. Skipping.")
+            return
         # Grab the specific patient for THIS specific claim
         current_patient = self.patients_map.get(patient_ref)
 

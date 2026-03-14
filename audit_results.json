@@ -1,0 +1,138 @@
+{
+  "resourceType": "OperationOutcome",
+  "id": "validation-results-001",
+  "issue": [
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 2 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 3 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 4 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 1 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 3 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 4 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 1 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 2 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 4 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 1 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 2 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    },
+    {
+      "severity": "error",
+      "code": "business-rule",
+      "details": {
+        "text": "UNBUNDLING_VIOLATION"
+      },
+      "diagnostics": "Line 3 (Code 99386): Code 99386 is bundled into 99386. Cannot be billed together.",
+      "expression": [
+        "Patient Reference: Patient/pat-1000"
+      ]
+    }
+  ]
+}

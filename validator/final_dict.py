@@ -84,8 +84,8 @@ def build_dictionaries(ptp_df, mue_df, hcpcs_df, ncd_df):
     ptp_dict = {}
     if not ptp_df.empty:
         # Assuming CMS standard headers 'COLUMN 1' and 'COLUMN 2'
-        col1 = [c for c in ptp_df.columns if 'COLUMN 1' in c or 'COL 1' in c][0]
-        col2 = [c for c in ptp_df.columns if 'COLUMN 2' in c or 'COL 2' in c][0]
+        col1 = [c for c in ptp_df.columns if '1' in str(c) and ('COL' in str(c).upper() or 'CODE' in str(c).upper())][0]
+        col2 = [c for c in ptp_df.columns if '2' in str(c) and ('COL' in str(c).upper() or 'CODE' in str(c).upper())][0]
         
         # Creates O(1) Set Lookup: { 'Comprehensive_Code': {'Unbundled_Code1', 'Unbundled_Code2'} }
         ptp_dict = ptp_df.groupby(col1)[col2].apply(lambda x: set(x.astype(str).str.strip())).to_dict()

@@ -1,29 +1,38 @@
 {
   "resourceType": "Bundle",
-  "id": "bundle-1000",
+  "id": "38285dbd-f205-4a33-b8f8-197860b0cdaa",
   "type": "collection",
   "entry": [
     {
-      "fullUrl": "http://hackathon.local/fhir/Patient/pat-1000",
+      "fullUrl": "urn:uuid:7e2a4e67-eda9-410a-9a69-a249a35ddd0e",
       "resource": {
         "resourceType": "Patient",
-        "id": "pat-1000",
+        "id": "7e2a4e67-eda9-410a-9a69-a249a35ddd0e",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Dr. Ashutosh Shah</div>"
+        },
         "name": [
           {
             "family": "Shah",
             "given": [
+              "Dr.",
               "Ashutosh"
             ]
           }
         ],
-        "gender": "female"
+        "gender": "male"
       }
     },
     {
-      "fullUrl": "http://hackathon.local/fhir/Claim/claim-1000",
+      "fullUrl": "urn:uuid:b1e966b4-a127-4862-ace3-12818b981733",
       "resource": {
         "resourceType": "Claim",
-        "id": "claim-1000",
+        "id": "b1e966b4-a127-4862-ace3-12818b981733",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Claim for Dr. Ashutosh Shah</div>"
+        },
         "status": "active",
         "type": {
           "coding": [
@@ -35,11 +44,11 @@
         },
         "use": "claim",
         "patient": {
-          "reference": "Patient/pat-1000"
+          "reference": "urn:uuid:7e2a4e67-eda9-410a-9a69-a249a35ddd0e"
         },
-        "created": "2023-11-21",
+        "created": "1970-01-01",
         "provider": {
-          "reference": "Organization/ExpedientHealthcare"
+          "display": "Dr. Simple Bhuptani"
         },
         "priority": {
           "coding": [
@@ -53,13 +62,7 @@
           {
             "sequence": 1,
             "diagnosisCodeableConcept": {
-              "coding": [
-                {
-                  "system": "http://hl7.org/fhir/sid/icd-10-cm",
-                  "code": "Z00.00",
-                  "display": "Encounter for general adult medical examination"
-                }
-              ]
+              "text": "Anemia"
             }
           }
         ],
@@ -70,13 +73,16 @@
               1
             ],
             "productOrService": {
-              "coding": [
-                {
-                  "system": "http://www.ama-assn.org/go/cpt",
-                  "code": "99386"
-                }
-              ],
-              "text": "Routine Hematology Report"
+              "text": "Complete Blood Count (CBC)"
+            }
+          },
+          {
+            "sequence": 2,
+            "diagnosisSequence": [
+              1
+            ],
+            "productOrService": {
+              "text": "Differential WBC Count"
             }
           }
         ]

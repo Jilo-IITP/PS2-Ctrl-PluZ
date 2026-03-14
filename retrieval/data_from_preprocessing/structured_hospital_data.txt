@@ -1,146 +1,131 @@
-Here's the cleaned and structured information from the provided blood report:
+Here's the cleaned and structured information from the 'blood.pdf' document:
 
 ---
 
 ### Patient Info
 
-*   **Name:** Ashutosh Shah
-*   **Age/Gender:** 46 Years Male
-*   **Report Date/Time:** 06-Jul-2023 10:37 AM
-*   **Referring Doctor:** Dr. Simple Bhuptani
-*   **Receipt No:** 3628
-*   **UHID:** 6915
+*   **Patient Name:** Dr. Ashutosh Shah
+*   **Age/Gender:** 40 Years / Male
+*   **Date of Report:** 06-Jul-2023
+*   **Time of Report:** 10:37 AM
+*   **Ordering Physician:** Dr. Simple Bhuptani
 
 ### Billing/Charges
 
-No explicit billing items or charges found in the provided text.
+*   **Receipt Number:** 3628
+*   **Internal ID:** 6915
+*   *Note: No specific billing items or charges are listed in this document.*
 
 ### Medications
 
-No medications are listed in the provided text.
+*   *No medications are listed in this document.*
 
 ### Diagnosis
 
-No explicit diagnosis is provided. This document contains a Routine Hematology Report with test results.
+**Report Type:** Routine Hematology Report
+
+**Complete Blood Count (CBC)**
+
+| Parameter           | Result    | Normal Range           | Unit   | Interpretation |
+| :------------------ | :-------- | :--------------------- | :----- | :------------- |
+| Hemoglobin          | 14.0      | 15.0-18.0              | g/dL   | Low            |
+| Hematocrit (PCV)    | 49.4      | 39-54                  | %      | Normal         |
+| RBC Count           | 5.35      | 4.5-6.5                | M/µL   | Normal         |
+| WBC Count           | 9,900     | 4,000-10,000 (adults)  | /µL    | Normal         |
+| Platelet Count      | 359,000   | 150,000-400,000        | /µL    | Normal         |
+| MCHC                | 29.7      | 30-36                  | g/dL   | Low            |
+| MCH                 | 27.4      | 27-32                  | pg     | Normal         |
+| MCV                 | 92.4      | 75-96                  | fL     | Normal         |
+| RDW                 | 13.0      | 11-16                  | %      | Normal         |
+
+**Differential WBC Count**
+
+| Parameter   | Result | Normal Range | Interpretation |
+| :---------- | :----- | :----------- | :------------- |
+| Band Forms  | 0%     | 0-5%         | Normal         |
+| Neutrophils | 64%    | 40-75%       | Normal         |
+| Lymphocytes | 29%    | 20-50%       | Normal         |
+| Eosinophils | 2%     | 1-6%         | Normal         |
+| Monocytes   | 5%     | 2-10%        | Normal         |
+| Basophils   | 0%     | 0-5%         | Normal         |
+
+**Other Findings:**
+
+*   **Platelets in Smear:** Adequate
+*   **Malarial Parasites:** Not Detected
+
+**Signed By:** Dr. Simple Bhuptani, MD
+**Operator Name:** RPP
+
+Here's the cleaned and structured information from the provided OCR output:
 
 ---
 
-### Routine Hematology Report
-
-| Parameter            | Result   | Normal Range         | Unit       |
-| :------------------- | :------- | :------------------- | :--------- |
-| Hemoglobin           | 14.8     | 15-18                | g/dL       |
-| Hematocrit (PCV)     | 49.4     | 39-54                | %          |
-| RBC Count            | 5.35     | 4.5-6.5              | million/mcL |
-| WBC Count            | 9,900    | 4,000-10,000         | /mcL       |
-| Platelet Count       | 359,000  | 150,000-400,000      | /mcL       |
-| MCHC                 | 29.7     | 30-36                | g/dL       |
-| MCH                  | 27.4     | 27-32                | pg         |
-| MCV                  | 92.4     | 75-96                | fL         |
-| RDW                  | 13.0     | 11-16                | %          |
-| Platelets in Smear   | Adequate |                      |            |
-| Malarial Parasites   | Not Detected | Not Detected         |            |
-
-### Differential WBC Count
-
-| Parameter    | Result | Normal Range | Unit |
-| :----------- | :----- | :----------- | :--- |
-| Band Forms   | 0      | 0-5          | %    |
-| Neutrophils  | 64     | 40-75        | %    |
-| Lymphocytes  | 29     | 20-50        | %    |
-| Eosinophils  | 2      | 1-6          | %    |
-| Monocytes    | 5      | 2-10         | %    |
-| Basophils    | 0      | 0-5          | %    |
-
----
-
-**Report Signed By:** Dr. Simple MD
-**Operator Name:** RPP Apple Jing
-
-Here's the cleaned and structured information from your hospital document:
-
----
-
-## [Patient Info]
+### 1. Patient Info
 
 *   **Name:** Lakshmi Shah
-*   **Age:** 46
-*   **Date:** 21/11/2023 (Assumption based on "211ele&")
-
-## [Diagnosis]
-
-*   **Doctor:** Dr. Miral H. Naik, MS DNB (Ophthalmology), Fellow LVPEI (Hyderabad)
-*   **Prescription:**
-
-| Eye | Sph     | Cyl     | Axis | VA  |
-| :-- | :------ | :------ | :--- | :-- |
-| RE  | -2.00   | -4.50   | 180  | 6/6 |
-| LE  | -2.50   | +0.75   | 90   | 6/6 |
-
+*   **Age:** 42
+*   **Date:** 21/01/2024
 *   **Near IPD:** 60
-*   **Wearing Instructions (Select one or more):**
-    *   Constant Wear
-    *   Reading Only
-    *   Computer Only
-    *   Occasional Wear
-*   **Instructions for Optician:**
-    *   Please make the glasses as per the prescription.
-    *   Get the glasses checked after they are made.
-    *   Dear optician, please take PD (Pupillary Distance) for distance & near.
-    *   Please note the height of the reading segment.
-    *   Please ensure correct centering of the lens.
-    *   Do not give too big a frame / too small either, as they [sentence trails off].
-    *   BVD (Back Vertex Distance) (Likely a fitting instruction)
 
-## [Medications]
+### 2. Billing/Charges
 
-*   *No medications found in the provided text.*
+*(No specific billing items or charges were found in the provided text.)*
 
-## [Billing/Charges]
+### 3. Medications
 
-*(The following are options/features that would typically be itemized on a bill, rather than specific charges or prices)*
+*(No medications were found in the provided text.)*
 
-| Category            | Item/Option             |
-| :------------------ | :---------------------- |
-| **Lens Material**   | CR-39                   |
-|                     | Polycarbonate           |
-| **Lens Design**     | Kryptok Bifocal         |
-|                     | Executive Bifocal       |
-|                     | D-Bifocal               |
-|                     | Progressive             |
-| **Lens Features**   | Photochromatic          |
-|                     | Anti-Glare Coating      |
-|                     | Crizal (Coating)        |
-|                     | Hi-Index                |
-|                     | Aspheric                |
+### 4. Diagnosis & Prescription
 
----
+**Doctor:** Dr. Miral H. Naik
+**Qualifications:** MS DNB (Ophthalmology), Fellow LVPEI (Hyderabad)
 
-Here's the cleaned and structured output from the 'teeth.pdf' document:
+**Refraction Prescription:**
 
----
+| Eye | Segment | Sphere (Sph) | Cylinder (Cyl) | Axis | Visual Acuity (VA) |
+| :-- | :------ | :----------- | :------------- | :--- | :----------------- |
+| RE  | Distant | -2.00        | +0.50          | 180  | 6/6                |
+| LE  | Distant | -2.50        | +0.75          | 160  | 6/6                |
 
-### [Patient Info]
+**Lens Specifications:**
 
-*   **Patient Name:** Shri/Smt. Jialaa B
+*   **Material:** CR-39 / Polycarbonate (Choice)
+*   **Design:** Kryptok Bifocal / Executive Bifocal / D Bifocal / Progressive (Choice)
+*   **Features:** Photochromatic, Anti-Reflective (AR) Coat, Hi-Index, Aspheric
+*   **Usage:** Constant Wear / Reading Only / Computer Only / Occasional Wear (Choice)
+*   **BVD Constant:** Near Separate (Instruction for optician)
 
-### [Billing/Charges]
+**Instructions for Optician/Patient:**
 
-*   **Receipt No:** 13011
-*   **Date:** 24/06/20XX
-*   **Payment Details:**
+*   Please make the glasses as per the prescription.
+*   Get the glasses checked after they are made.
+*   Dear optician, please take PD (pupillary distance) for distance & near, and the height of the reading segment.
+*   Please give correct centering of lens.
+*   Do not give too big frame / too small also, as they... (Sentence incomplete, but implies avoiding inappropriate frame sizes).
 
-| Item                       | Amount (INR) |
-| :------------------------- | :----------- |
-| Oral Diagnosis & Radiology | 600          |
+Here's the cleaned and structured information from the `teeth.pdf` document:
 
-*   **Total Amount Received:** Rs. 600 (Rupees Six Hundred)
+**[Patient Info]**
+*   Name: Smt. Jialaa
 
-### [Medications]
+**[Billing/Charges]**
+*   Issuing Department/Centre: Oral Diagnosis Radiology Centre
+*   Receipt No: 13011
+*   Date: 24/06/20xx
+*   Received From: Smt. Jialaa
+*   Amount Received: Rs. 600 (Rupees Six Hundred)
 
-*   No medications are listed in this document.
+This receipt confirms payment for the following investigation rendered to him/her:
 
-### [Diagnosis]
+| Item/Service                 | Amount (Rs.) |
+| :--------------------------- | :----------- |
+| Oral Diagnosis & Radiology   | 600          |
+| **Total**                    | **600**      |
 
-*   The document indicates that a service for "Oral Diagnosis & Radiology" was rendered, implying a diagnostic consultation took place. However, no specific diagnostic findings or results are detailed in this record.
+**[Medications]**
+*   None mentioned in this document.
+
+**[Diagnosis]**
+*   Investigation Performed: Oral Diagnosis & Radiology
 

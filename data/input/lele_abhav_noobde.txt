@@ -18,3 +18,12 @@ Source Entity: Astigmatism
   Context: **H52.221 Regular astigmatism, right eye** **H52.222 Regular astigmatism, left eye** **H52.223 Regular astigmatism, bilateral** **H52.229 Regular astigmatism, unspecified eye** **H52.3 Anisometropia and aniseikonia** **H52.31 Anisometropia** **H52.32 Aniseikonia** **H52.4 Presbyopia**
 
 
+Source Entity: Anemia
+--------------------------------------------------
+  Result 1 [ICD: D55 | Score: 0.5843]: Anemia due to enzyme disorders
+  Context: Hexokinase deficiency anemia Triose-phosphate isomerase deficiency anemia **D55.3 Anemia due to disorders of nucleotide metabolism** **D55.8 Other anemias due to enzyme disorders** **D55.9 Anemia due to enzyme disorder, unspecified**
+
+  Result 2 [ICD: D53 | Score: 0.5782]: Other nutritional anemias
+  Context: **D53.8 Other specified nutritional anemias** Anemia associated with deficiency of copper Anemia associated with deficiency of molybdenum Anemia associated with deficiency of zinc **Excludes2:** nutritional deficiencies without anemia, such as: copper deficiency NOS (E61.0)
+
+

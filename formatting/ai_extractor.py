@@ -6,18 +6,25 @@ from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 import os
-load_dotenv()
-# --- 1. DEFINE THE STRICT SCHEMA ---
-# The LLM will be forced to map ANY document into this exact structure.
 
+load_dotenv()
+
+# --- 1. DEFINE THE STRICT SCHEMA ---
 class ExtractedService(BaseModel):
     description: str = Field(description="The name of the test, procedure, or medical service provided.")
     amount: Optional[float] = Field(description="The billed amount for this specific service. Null if not found.")
     cpt_code_mentioned: Optional[str] = Field(description="The CPT or SAC code if explicitly mentioned in the text.")
 
+class ExtractedDiagnosis(BaseModel):
+    condition: str = Field(description="The medical condition or diagnosis name.")
+    icd_10_code: Optional[str] = Field(description="The exact ICD-10 code for the condition if found in the text.")
+
 class ExtractedPatient(BaseModel):
     full_name: str = Field(description="The full name of the patient receiving the service.")
-    diagnoses: List[str] = Field(description="List of medical conditions or diagnoses. Empty list if none found.")
+    gender: Optional[str] = Field(description="Gender of the patient (male, female, other, unknown).")
+    age: Optional[str] = Field(description="Age of the patient as a string.")
+    doctor_name: Optional[str] = Field(description="Name of the ordering or attending doctor.")
+    diagnoses: List[ExtractedDiagnosis] = Field(description="List of medical conditions and their codes. Empty list if none found.")
     services: List[ExtractedService] = Field(description="List of services or tests performed on THIS specific patient.")
 
 class HospitalDocument(BaseModel):
@@ -27,7 +34,6 @@ class HospitalDocument(BaseModel):
     patients: List[ExtractedPatient] = Field(description="List of all patients found in the document.")
 
 # --- 2. THE EXTRACTION LOGIC ---
-
 def extract_text_from_file(filepath: str) -> str:
     """Reads both .txt and .pdf files robustly."""
     text = ""
@@ -42,8 +48,6 @@ def extract_text_from_file(filepath: str) -> str:
 
 def run_ai_extraction(raw_text: str, api_key: str) -> HospitalDocument:
     """Passes the raw text to the LLM and forces a Pydantic-validated JSON return."""
-    
-    # Initialize the Gemini Client (or swap for OpenAI/Claude if preferred)
     client = genai.Client(api_key=api_key)
     
     prompt = f"""
@@ -53,7 +57,8 @@ def run_ai_extraction(raw_text: str, api_key: str) -> HospitalDocument:
     CRITICAL RULES:
     1. If there are multiple patients on a single invoice, separate their services strictly into different patient objects.
     2. Convert all dates to YYYY-MM-DD.
-    3. Do NOT invent or hallucinate diagnoses. If none are explicitly stated, return an empty list.
+    3. Do NOT invent or hallucinate diagnoses or codes. Extract exact ICD-10 or CPT codes only if present in the text.
+    4. Link the correct ordering doctor and diagnoses to the corresponding patient.
     
     RAW TEXT:
     {raw_text}
@@ -61,37 +66,28 @@ def run_ai_extraction(raw_text: str, api_key: str) -> HospitalDocument:
     
     print("Calling AI for structured extraction...")
     
-    # We force the LLM to reply using our HospitalDocument Pydantic schema
     response = client.models.generate_content(
         model='gemini-2.5-flash',
         contents=prompt,
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
             response_schema=HospitalDocument,
-            temperature=0.1 # Low temperature for factual extraction
+            temperature=0.1 
         ),
     )
     
-    # Convert the validated JSON string back into a Python Dictionary/Pydantic Object
     extracted_data = HospitalDocument.model_validate_json(response.text)
     return extracted_data
 
 # --- 3. TEST THE PIPELINE ---
-
-# Ensure you set your API key in your environment variables
-# export GEMINI_API_KEY="your-api-key"
 if __name__ == "__main__":
-    
-    # Now this will actually work
     API_KEY = os.getenv("GEMINI_API_KEY")
     if not API_KEY:
         raise ValueError("API key not found! Please check your .env file.")
     
-    # 2 & 3. Fixed the typo ('intput' -> 'input') AND used forward slashes
     file_path_1 = "data/input/lele_abhav_noobde.txt"
     file_path_2 = "retrieval/data_from_preprocessing/structured_hospital_data.txt"
     
-    # Make sure this file actually exists before running!
     paths = [file_path_1, file_path_2]
     for p in paths:
         if not os.path.exists(p):

@@ -3,13 +3,14 @@ import os
 import easyocr
 import google.generativeai as genai
 from pdf2image import convert_from_path
+from dotenv import load_dotenv , find_dotenv
 
 #keys in secrets tab
 
+load_dotenv(find_dotenv()) 
+
 api_key = os.getenv("GEMINI_API_KEY")
-
 genai.configure(api_key=api_key)
-
 #ocr model
 reader = easyocr.Reader(['en'])
 #gemini model
