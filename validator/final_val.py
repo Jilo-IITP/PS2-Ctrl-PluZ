@@ -7,7 +7,12 @@ import json
 import pandas as pd
 
 # 1. Load the fast caches
-base_dir = r"C..\data"
+# Dynamically find the data folder, no matter where the script is run from
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
+base_dir = os.path.join(PROJECT_ROOT, "data")
+
+print(f"📂 Looking for CMS databases in: {base_dir}")
 ptp_df = get_cached_df("cache_ptp.pkl", base_dir, "ccipra*", skiprows=1)
 mue_df = get_cached_df("cache_mue.pkl", base_dir, "MCR_MUE*", skiprows=1)
 hcpcs_df = get_cached_df("cache_hcpcs.pkl", base_dir, "Data_HCPCS.txt", skiprows=0)

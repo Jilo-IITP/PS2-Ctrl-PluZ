@@ -141,8 +141,13 @@ def build_dictionaries(ptp_df, mue_df, hcpcs_df, ncd_df):
     return ptp_dict, mue_limits, gender_codes, ncd_dict
 
 if __name__ == "__main__":
-    base_dir = r"..\data"
-    
+    # Dynamically find the data folder, no matter where the script is run from
+    CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+    PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
+    base_dir = os.path.join(PROJECT_ROOT, "data")
+
+    print(f"📂 Looking for CMS databases in: {base_dir}")
+        
     # CMS files usually have headers on row 2 (skiprows=1), verify this for NCD/HCPCS if they error out
     # Change skiprows to 2 to bypass the copyright and title rows
     ptp_df = get_cached_df("cache_ptp.pkl", base_dir, "ccipra*", skiprows=2)
