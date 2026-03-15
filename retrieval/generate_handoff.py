@@ -85,6 +85,48 @@ def write_handoff_file(mapped_contexts: dict, output_filename: str):
                 f.write(f"  Context: {chunk.get('text', '').replace('\n', ' ')}\n\n")
             f.write("\n")
 
+def generate_handoff_text(mapped_contexts: dict) -> str:
+    print("-> Generating Top-2 contexts in memory...")
+    lines = ["=== VERITAS AI: NORMALIZED CLINICAL CONTEXT ===\n\n"]
+    
+    if not mapped_contexts:
+        lines.append("No valid clinical diagnoses found in source document.\n")
+        return "".join(lines)
+        
+    for entity, chunks in mapped_contexts.items():
+        lines.append(f"Source Entity: {entity}\n")
+        lines.append("-" * 50 + "\n")
+        
+        if not chunks:
+            lines.append("  [NO DATABASE MATCH FOUND]\n\n")
+            continue
+            
+        for i, chunk in enumerate(chunks):
+            meta = chunk.get("metadata", {})
+            icd_code = meta.get('parent_code', 'UNKNOWN')
+            disease = meta.get('disease_family', 'UNKNOWN')
+            score = chunk.get('cross_encoder_score', chunk.get('score', 'N/A'))
+            
+            if isinstance(score, float):
+                score = f"{score:.4f}"
+            
+            lines.append(f"  Result {i+1} [ICD: {icd_code} | Score: {score}]: {disease}\n")
+            lines.append(f"  Context: {chunk.get('text', '').replace('\n', ' ')}\n\n")
+        lines.append("\n")
+    return "".join(lines)
+
+def run_retrieval_pipeline(ocr_text: str) -> str:
+    """End-to-end memory pipeline for retrieval."""
+    diagnoses = extract_diagnoses(ocr_text)
+    print(f"Isolated Entities: {diagnoses}")
+    
+    if diagnoses:
+        context_map = fetch_top_2_chunks(diagnoses)
+    else:
+        context_map = {}
+        
+    return generate_handoff_text(context_map)
+
 if __name__ == "__main__":
     input_file = "./data_from_preprocessing/structured_hospital_data.txt"
     output_file = "../data/input/lele_abhav_noobde.txt"

@@ -1,43 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { CheckCircle, FileText, ArrowRight, ArrowLeft, Activity, ShieldCheck } from 'lucide-react';
 
-const ExtractionDashboard = ({ files = [], onConfirm, onBack }) => {
+const ExtractionDashboard = ({ files = [], apiResults = [], onConfirm, onBack }) => {
   // State to track which file in the batch we are currently viewing
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Generate mock AI data for EACH file so it looks like a real batch process
-  const mockAiDataList = useMemo(() => {
-    return files.map((file, idx) => ({
-      fileName: file.name,
-      invoice_number: `INV-2026-${1000 + idx}`,
-      invoice_date: "2026-03-12",
-      hospital_name: idx % 2 === 0 ? "Expedient Healthcare Pvt Ltd" : "Apollo City Hospital",
-      confidence_score: 98 - (idx * 2), // Slightly varying confidence scores
-      patient: {
-        name: "Pandurang Khamitkar",
-        services: [
-          {
-            description: "Full Body Checkup With Vitamin Screening",
-            amount: 5490.00 + (idx * 150),
-            cpt_code: "99386",
-            icd_10: "Z00.00",
-            match_confidence: "98%"
-          },
-          // Add a second service for some files to make it look dynamic
-          ...(idx % 2 !== 0 ? [{
-            description: "Lipid Panel Blood Test",
-            amount: 1200.00,
-            cpt_code: "80061",
-            icd_10: "E78.5",
-            match_confidence: "95%"
-          }] : [])
-        ]
-      }
-    }));
-  }, [files]);
-
   const currentFile = files[activeIndex];
-  const currentAiData = mockAiDataList[activeIndex];
+  const currentAiData = apiResults[activeIndex] || {};
   
   // Safe object URL for PDF preview
   const pdfUrl = currentFile ? URL.createObjectURL(currentFile) : null;
@@ -175,25 +144,29 @@ const ExtractionDashboard = ({ files = [], onConfirm, onBack }) => {
             </div>
             
             <div className="space-y-3">
-              {currentAiData?.patient?.services.map((svc, idx) => (
-                <div key={idx} className="border border-slate-200 rounded-xl p-4 bg-slate-50/50 hover:bg-slate-50 transition-colors">
-                  <p className="text-sm font-bold text-slate-800 mb-3">{svc.description}</p>
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="bg-white p-2.5 border border-slate-200 rounded-lg shadow-sm">
-                      <p className="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Amount</p>
-                      <p className="font-black text-slate-700">₹{svc.amount}</p>
-                    </div>
-                    <div className="bg-teal-50 p-2.5 border border-teal-200 rounded-lg shadow-sm">
-                      <p className="text-[10px] uppercase tracking-wider text-teal-600 font-bold mb-1">CPT Code</p>
-                      <p className="font-black text-teal-900">{svc.cpt_code}</p>
-                    </div>
-                    <div className="bg-amber-50 p-2.5 border border-amber-200 rounded-lg shadow-sm">
-                      <p className="text-[10px] uppercase tracking-wider text-amber-600 font-bold mb-1">ICD-10 (Diag)</p>
-                      <p className="font-black text-amber-900">{svc.icd_10}</p>
+              {currentAiData?.patient?.services && currentAiData.patient.services.length > 0 ? (
+                currentAiData.patient.services.map((svc, idx) => (
+                  <div key={idx} className="border border-slate-200 rounded-xl p-4 bg-slate-50/50 hover:bg-slate-50 transition-colors">
+                    <p className="text-sm font-bold text-slate-800 mb-3">{svc.description}</p>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="bg-white p-2.5 border border-slate-200 rounded-lg shadow-sm">
+                        <p className="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1">Amount</p>
+                        <p className="font-black text-slate-700">₹{svc.amount}</p>
+                      </div>
+                      <div className="bg-teal-50 p-2.5 border border-teal-200 rounded-lg shadow-sm">
+                        <p className="text-[10px] uppercase tracking-wider text-teal-600 font-bold mb-1">CPT Code</p>
+                        <p className="font-black text-teal-900">{svc.cpt_code}</p>
+                      </div>
+                      <div className="bg-amber-50 p-2.5 border border-amber-200 rounded-lg shadow-sm">
+                        <p className="text-[10px] uppercase tracking-wider text-amber-600 font-bold mb-1">ICD-10 (Diag)</p>
+                        <p className="font-black text-amber-900">{svc.icd_10}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <div className="text-center text-slate-400 text-sm py-4">No services extracted.</div>
+              )}
             </div>
           </div>
 

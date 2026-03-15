@@ -56,6 +56,12 @@ def structure_text_with_gemini(raw_text, filename):
     except Exception as e:
         return f"Gemini API Error: {e}"
 
+def run_pdf_pipeline(pdf_path: str, filename: str) -> str:
+    """Orchestrates the PDF processing directly from early stages without hitting disk for output."""
+    raw_content = process_single_pdf(pdf_path)
+    structured_data = structure_text_with_gemini(raw_content, filename)
+    return structured_data
+
 def main():
     input_folder = "hospital_pdfs"
     # POINT THIS TO YOUR FRIEND'S RETRIEVAL DATA FOLDER

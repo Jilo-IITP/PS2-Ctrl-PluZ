@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { CheckCircle, AlertCircle, ShieldCheck, Send, RefreshCcw, ArrowLeft, ShieldAlert, Activity } from 'lucide-react';
 
-const ReconciliationDashboard = ({ files = [], onRestart, onBack }) => {
-  // Hackathon Trick: Toggle between "Perfect Claim" and "Error Detected"
-  const [showError, setShowError] = useState(false);
-
+const ReconciliationDashboard = ({ files = [], apiResults = [], onRestart, onBack }) => {
   // Grab the dynamic name just like the previous step
   const dynamicFileName = files.length > 0 ? files[0].name.replace('.pdf', '') : "Batch_001";
+  
+  // Aggregate all anomalies from all files in the batch
+  const allIssues = apiResults.flatMap(res => res.validation_report?.issue || []);
+  const hasErrors = allIssues.length > 0;
 
   return (
     <div className="flex flex-col h-full p-4 sm:p-6 animate-in zoom-in-95 duration-500">
@@ -39,32 +40,23 @@ const ReconciliationDashboard = ({ files = [], onRestart, onBack }) => {
       <div className="flex-grow flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar">
         
         {/* Status Banner */}
-        <div className={`p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-sm transition-colors duration-500 border ${showError ? 'bg-red-50/80 border-red-200' : 'bg-teal-50/80 border-teal-200'}`}>
+        <div className={`p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-sm transition-colors duration-500 border ${hasErrors ? 'bg-red-50/80 border-red-200' : 'bg-teal-50/80 border-teal-200'}`}>
           <div className="flex items-center space-x-4">
-            {showError ? (
+            {hasErrors ? (
               <ShieldAlert className="w-12 h-12 text-red-600 drop-shadow-md" />
             ) : (
               <ShieldCheck className="w-12 h-12 text-teal-600 drop-shadow-md" />
             )}
             <div>
-              <h2 className={`text-2xl font-black tracking-tight ${showError ? 'text-red-800' : 'text-teal-800'}`}>
-                {showError ? 'Anomaly Detected: Claim Paused' : 'Batch 100% Reconciled'}
+              <h2 className={`text-2xl font-black tracking-tight ${hasErrors ? 'text-red-800' : 'text-teal-800'}`}>
+                {hasErrors ? 'Anomaly Detected: Claim Paused' : 'Batch 100% Reconciled'}
               </h2>
-              <p className={`text-sm font-medium mt-1 ${showError ? 'text-red-600' : 'text-teal-700'}`}>
-                {showError ? 'Revenue leakage or clinical mismatch detected. Review required.' : 'All clinical and financial rules passed. Ready for TPA submission.'}
+              <p className={`text-sm font-medium mt-1 ${hasErrors ? 'text-red-600' : 'text-teal-700'}`}>
+                {hasErrors ? 'Revenue leakage or clinical mismatch detected. Review required.' : 'All clinical and financial rules passed. Ready for TPA submission.'}
               </p>
             </div>
           </div>
 
-          {/* Hackathon Demo Toggle - Styled to look like a Dev Tool */}
-          <button 
-            onClick={() => setShowError(!showError)}
-            className={`mt-4 sm:mt-0 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest px-3 py-2 rounded-lg transition-all border shadow-sm ${showError ? 'bg-white text-red-600 border-red-200 hover:bg-red-50' : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'}`}
-            title="Toggle Error State for Judges Demo"
-          >
-            <div className={`w-2 h-2 rounded-full animate-pulse ${showError ? 'bg-red-500' : 'bg-slate-400'}`} />
-            Inject Demo Anomaly
-          </button>
         </div>
 
         {/* The Audit Rules Engine UI */}
@@ -75,43 +67,26 @@ const ReconciliationDashboard = ({ files = [], onRestart, onBack }) => {
           </div>
           
           <div className="p-0">
-            {/* Rule 1: Demographic Match (Always Green) */}
-            <div className="flex items-start space-x-4 p-6 border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
-              <CheckCircle className="w-6 h-6 text-emerald-500 mt-0.5 flex-shrink-0" />
-              <div>
-                <h4 className="font-bold text-slate-800 text-sm mb-1">Demographic & Patient Match</h4>
-                <p className="text-xs text-slate-500 leading-relaxed">Patient identity extracted successfully. Age demographic (40-64) matches the CPT 99386 requirement.</p>
-              </div>
-            </div>
-
-            {/* Rule 2: Medical Necessity (Always Green) */}
-            <div className="flex items-start space-x-4 p-6 border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
-              <CheckCircle className="w-6 h-6 text-emerald-500 mt-0.5 flex-shrink-0" />
-              <div>
-                <h4 className="font-bold text-slate-800 text-sm mb-1">Medical Necessity Validation</h4>
-                <p className="text-xs text-slate-500 leading-relaxed">ICD-10 Code <span className="font-mono bg-slate-100 px-1 rounded text-slate-700">Z00.00</span> (Routine checkup) fully justifies the billing of CPT Code <span className="font-mono bg-slate-100 px-1 rounded text-slate-700">99386</span> (Preventative visit).</p>
-              </div>
-            </div>
-
-            {/* Rule 3: Financial Reconciliation (Changes based on toggle) */}
-            <div className={`flex items-start space-x-4 p-6 transition-colors duration-500 ${showError ? 'bg-red-50/50' : 'hover:bg-slate-50/50'}`}>
-              {showError ? (
-                <AlertCircle className="w-6 h-6 text-red-500 mt-0.5 flex-shrink-0" />
-              ) : (
-                <CheckCircle className="w-6 h-6 text-emerald-500 mt-0.5 flex-shrink-0" />
-              )}
-              <div className="w-full">
-                <h4 className={`font-bold text-sm mb-1 ${showError ? 'text-red-800' : 'text-slate-800'}`}>Financial Constraint Check</h4>
-                {showError ? (
-                  <div className="mt-2 text-xs text-red-700 bg-red-100/50 p-3 rounded-lg border border-red-200/50">
-                    <p className="mb-2"><strong className="font-black">Revenue Leakage Warning:</strong> The billed amount for CPT 99386 is <strong>₹5,490</strong>. The standard TPA allowed limit for this code is <strong>₹4,000</strong>.</p>
-                    <p className="font-medium text-red-800">Action Required: Adjust the claim amount or attach special authorization before submission to prevent denial.</p>
-                  </div>
-                ) : (
-                  <p className="text-xs text-slate-500 leading-relaxed">Billed amount (₹5,490) is within acceptable TPA limits for this procedural code. No revenue leakage detected.</p>
-                )}
-              </div>
-            </div>
+             {hasErrors ? (
+               allIssues.map((issue, idx) => (
+                 <div key={idx} className="flex items-start space-x-4 p-6 border-b border-red-100 bg-red-50/50">
+                    <AlertCircle className="w-6 h-6 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div className="w-full">
+                      <h4 className="font-bold text-sm mb-1 text-red-800">{issue.details?.text || "Anomaly Detected"}</h4>
+                      <div className="mt-2 text-xs text-red-700 bg-red-100/50 p-3 rounded-lg border border-red-200/50">
+                        <p className="mb-2"><strong className="font-black">Details:</strong> {issue.diagnostics}</p>
+                        <p className="font-medium text-red-800">Context: {issue.expression?.[0]}</p>
+                      </div>
+                    </div>
+                 </div>
+               ))
+             ) : (
+                <div className="flex flex-col items-center justify-center p-10 space-y-3">
+                   <ShieldCheck className="w-12 h-12 text-teal-500" />
+                   <h4 className="font-bold text-slate-800">All CMS Rules Passed</h4>
+                   <p className="text-sm text-slate-500 text-center">No unbundling, MUE, or medical necessity violations were found in this batch.</p>
+                </div>
+             )}
           </div>
         </div>
 
@@ -126,15 +101,15 @@ const ReconciliationDashboard = ({ files = [], onRestart, onBack }) => {
           </button>
           
           <button 
-            disabled={showError}
+            disabled={hasErrors}
             className={`w-2/3 py-3.5 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 shadow-lg text-sm uppercase tracking-wide ${
-              showError 
+              hasErrors 
                 ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none' 
                 : 'bg-slate-800 hover:bg-slate-900 text-white shadow-slate-800/20'
             }`}
           >
             <Send className="w-4 h-4" />
-            <span>{showError ? 'Resolve Errors to Submit' : 'Submit Batch to TPA'}</span>
+            <span>{hasErrors ? 'Resolve Errors to Submit' : 'Submit Batch to TPA'}</span>
           </button>
         </div>
       </div>

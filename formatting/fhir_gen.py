@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 
 from ai_extractor import run_ai_extraction, extract_text_from_file
 
+import json
+
 from fhir.resources.patient import Patient
 from fhir.resources.claim import Claim, ClaimItem, ClaimDiagnosis
 from fhir.resources.bundle import Bundle, BundleEntry
@@ -114,6 +116,28 @@ def build_fhir_bundle(patient_obj, invoice_date):
         ]
     )
     return bundle
+
+def run_fhir_generation(text_1: str, text_2: str, api_key: str) -> tuple[list[dict], dict]:
+    combined_raw_text = f"""
+    --- SOURCE 1 (Input Data) ---
+    {text_1}
+    
+    --- SOURCE 2 (Retrieved/Preprocessed Data) ---
+    {text_2}
+    """
+    
+    print("-> Sending text to Gemini AI for structural extraction...")
+    ai_document = run_ai_extraction(combined_raw_text, api_key)
+    
+    invoice_date = ai_document.invoice_date
+    bundles = []
+    
+    for _, patient_obj in enumerate(ai_document.patients):
+        bundle = build_fhir_bundle(patient_obj, invoice_date)
+        # return as dict so it's readily JSON-able for the pipeline
+        bundles.append(json.loads(bundle.json()))
+        
+    return bundles, ai_document.model_dump()
 
 def main():
     load_dotenv()

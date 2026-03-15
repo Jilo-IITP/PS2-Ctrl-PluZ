@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Database, ShieldCheck, User, Activity, ArrowRight, ArrowLeft, Code, Copy, CheckCircle2 } from 'lucide-react';
 
-const FhirViewer = ({ files = [], onProceed, onBack }) => {
+const FhirViewer = ({ files = [], apiResults = [], onProceed, onBack }) => {
   const [activeSection, setActiveSection] = useState('bundle');
   const [copied, setCopied] = useState(false);
 
   // Grab the first file's name to make the JSON look dynamic, fallback to default if missing
   const dynamicFileName = files.length > 0 ? files[0].name.replace('.pdf', '') : "Pandurang_Khamitkar";
 
-  // The 100% compliant FHIR JSON
-  const fhirPayload = {
+  // Use the real FHIR bundle from the backend if available
+  const fhirPayload = apiResults.length > 0 && apiResults[0].fhir_bundle ? apiResults[0].fhir_bundle : {
     "resourceType": "Bundle",
     "id": `bundle-${dynamicFileName.substring(0, 5)}`,
     "type": "collection",

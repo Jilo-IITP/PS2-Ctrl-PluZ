@@ -10,6 +10,7 @@ import { Loader2 } from 'lucide-react';
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [apiResults, setApiResults] = useState([]); // Store backend output
   const [isProcessing, setIsProcessing] = useState(false);
 
   const steps = [
@@ -37,6 +38,8 @@ function App() {
       
       // Save the files array for the next steps
       setUploadedFiles(files); 
+      // Save the processed results from backend
+      setApiResults(response.data.results || []);
       
       setIsProcessing(false);
       setCurrentStep(2); 
@@ -139,6 +142,7 @@ function App() {
               {currentStep === 2 && (
                 <ExtractionDashboard 
                   files={uploadedFiles} 
+                  apiResults={apiResults}
                   onConfirm={() => setCurrentStep(3)} 
                   onBack={() => setCurrentStep(1)} 
                 />
@@ -147,6 +151,7 @@ function App() {
               {currentStep === 3 && (
                 <FhirViewer 
                   files={uploadedFiles}
+                  apiResults={apiResults}
                   onProceed={() => setCurrentStep(4)} 
                   onBack={() => setCurrentStep(2)} 
                 />
@@ -155,8 +160,10 @@ function App() {
               {currentStep === 4 && (
                 <ReconciliationDashboard 
                   files={uploadedFiles}
+                  apiResults={apiResults}
                   onRestart={() => {
                     setUploadedFiles([]);
+                    setApiResults([]);
                     setCurrentStep(1);
                   }} 
                   onBack={() => setCurrentStep(3)} 
