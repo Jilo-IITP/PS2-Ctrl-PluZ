@@ -19,7 +19,7 @@ An enterprise-grade Revenue Cycle Management (RCM) pipeline that ingests unstruc
 * **Poppler** (Required for `pdf2image` to convert PDFs to images)
 
 ### Installing Poppler (CRITICAL)
-
+## used for pdf to image conversion
 Poppler is an external system dependency and must be installed for `pdf2image` to work.
 
 **Windows:**
