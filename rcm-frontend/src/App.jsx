@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DocumentUpload from './features/DocumentUpload';
 import ExtractionDashboard from './features/ExtractionDashboard';
 import FhirViewer from './features/FHIRviewer';
@@ -13,6 +13,13 @@ function App() {
   const [apiResults, setApiResults] = useState([]); // Store backend output
   const [isProcessing, setIsProcessing] = useState(false);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, [currentStep]);
+  
   const steps = [
     { id: 1, label: 'Ingestion' },
     { id: 2, label: 'Extraction' },
