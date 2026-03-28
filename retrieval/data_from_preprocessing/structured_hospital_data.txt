@@ -1,102 +1,43 @@
-Here is the cleaned and structured output from the doctor's note:
+Here's the cleaned and structured doctor's note:
 
 ---
 
 ### Patient Info
 
-*   **Name:** Rahul
+*   **Patient Name:** Rahul
 *   **Date:** 31/03/2022
+
+### Billing/Charges
+
+*(No explicit billing items or charges were mentioned in the provided text.)*
+
+### Medications
+
+*   **Planned:**
+    *   IV antibiotics (for suspected Sepsis/UTI)
+    *   Anti-fungals (for suspected Sepsis/UTI)
+
+### Diagnosis
+
+*   **Primary Diagnosis:** Aplastic Anemia with Pancytopenia and Sepsis
 *   **Chief Complaints:**
     *   High-grade fever (104°F) with chills for 7 days.
     *   Severe generalized weakness and drowsiness.
 *   **Clinical Findings:**
-    *   **Vitals:** Tachycardia (Pulse: 138/min), Febrile.
-    *   **Labs:**
-        | Test            | Result     | Notes             |
-        | :-------------- | :--------- | :---------------- |
-        | Hemoglobin (Hb) | 5 gm/dl    | Severe Anemia     |
-        | Platelets       | 8,000      | Critical          |
-        | TLC             | 850        |                   |
-        | Total Bilirubin | 3.7        | Conjugated Jaundice |
-    *   **Liver:** Conjugated Jaundice.
+    *   **Vitals:** Tachycardia (Pulse: 138/min) and febrile.
+    *   **Liver:** Conjugated Jaundice (Total Bilirubin: 3.7)
+*   **Lab Results:**
+
+| Test           | Result      | Comment             |
+| :------------- | :---------- | :------------------ |
+| Hemoglobin (Hb)| 5 gm/dl     | Severe Anemia       |
+| Platelets      | 8,000       | Critical            |
+| TLC            | 850         |                     |
+| Total Bilirubin| 3.7         | Conjugated Jaundice |
+
 *   **Immediate Plan:**
     *   Urgent transfusion of 1 unit of blood and 8 units of RDP (Random Donor Platelets).
-    *   Start IV antibiotics and anti-fungals for suspected Sepsis/UTI.
     *   Monitor vitals and cardiac status (2D ECHO).
 
-### Billing/Charges
-
-*   No explicit billing items or charges were listed in the raw text. Procedures and medications mentioned (blood transfusion, RDP, IV antibiotics, anti-fungals, 2D ECHO) will incur charges.
-
-### Medications
-
-*   IV antibiotics
-*   Anti-fungals
-
-### Diagnosis
-
-*   Aplastic Anemia with Pancytopenia
-*   Sepsis
-
-Here's the cleaned and structured output based on the provided text:
-
 ---
-
-**1. Cleaned Text:**
-
-The financial summary for laboratory and pathological services is as follows:
-
----
-
-**2. Structured Document:**
-
-### Patient Info
-*(No patient-specific information available in the provided text.)*
-
-### Billing/Charges
-The financial summary for laboratory and pathological services is as follows:
-
-| Service Description          | Bill Amount (INR) | Discount (INR) | Total Payable (INR) |
-| :--------------------------- | :---------------- | :------------- | :------------------ |
-| Pathology Charges            | 49,390.00         | 3,951.20       | 45,438.80           |
-| Investigation & Lab (Settlement) | 29,865.00         | NIA            | 2.00*               |
-
-*Note: "NIA" likely indicates "Not Applicable" or "Not Available" for the discount. "2.00\*" for Total Payable appears to be an OCR error or an incomplete value, as it is unusually low given the Bill Amount.*
-
-### Medications
-*(No medication information available in the provided text.)*
-
-### Diagnosis
-*(No diagnosis information available in the provided text.)*
-
-Here's the cleaned and structured blood report summary:
-
-### [Patient Info]
-*   **Admission Period:** 31/03/2022 to 03/04/2022
-
-### [Billing/Charges]
-No specific billing items or charges were detailed in the provided summary.
-
-### [Medications]
-*   **Blood Transfusions Administered:**
-    *   **31/03/2022:** 1 unit of blood and 8 units of Random Donor Platelets (RDP)
-    *   **01/04/2022:** 1 unit of blood
-
-### [Diagnosis]
-Based on laboratory investigations conducted during the admission period, the patient's condition is consistent with:
-*   Pancytopenia
-*   Severe Anemia
-*   Jaundice (indicated by elevated Serum Bilirubin)
-*   Sepsis (indicated by elevated Serum Procalcitonin)
-
-**Laboratory Investigations Summary (Supporting Diagnosis):**
-
-| Test Name                 | Result | Unit   | Interpretation / Comment       |
-| :------------------------ | :----- | :----- | :----------------------------- |
-| Hemoglobin (Hb)           | 5      | gm/dl  | Extremely low                  |
-| Total Leucocyte Count (TLC) | 850    |        | Severely low                   |
-| Platelet Count            | 8,000  |        | Critically low                 |
-| Serum Bilirubin (Total)   | 3.7    | mg/dl  | Elevated                       |
-| Serum Bilirubin (Direct)  | 2.24   | mg/dl  | Elevated                       |
-| Serum Procalcitonin       | 2.33   |        | Elevated                       |
 

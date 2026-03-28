@@ -50,7 +50,8 @@ async def export_html(payload: dict = Body(...)):
     # We use a regex to replace the specific block
     # We find `const formData = {` up to `};` right before `function getVal` or `/* ====`.
     pattern = re.compile(r'const formData = \{.*?\};', re.DOTALL)
-    new_html = pattern.sub(replacement, html_content)
+    # Use lambda to bypass re.sub treating escape characters in the replacement string as regex sequences!
+    new_html = pattern.sub(lambda m: replacement, html_content)
     
     # If regex failed, just append it before </script> as a fallback (though regex should work)
     if replacement not in new_html:

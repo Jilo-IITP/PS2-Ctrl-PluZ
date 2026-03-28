@@ -72,6 +72,9 @@ def _build_preauth_form_json(ai_extract: dict, patient_db: dict = None, hospital
     services = pat.get("services", [])
     diag0 = diagnoses[0] if diagnoses else {}
     hospital_db = hospital_db or {}
+    
+    clinical = pat.get("clinical_details") or {}
+    admission = pat.get("admission_details") or {}
 
     # Try to figure out doctor name from extraction
     doctor_name = pat.get("doctor_name", "")
@@ -113,20 +116,20 @@ def _build_preauth_form_json(ai_extract: dict, patient_db: dict = None, hospital
         "doctor": {
             "name":                 doctor_name,
             "contactNo":            "",
-            "illnessDescription":   diag0.get("condition", ""),
-            "clinicalFindings":     "",
-            "durationDays":         "",
+            "illnessDescription":   clinical.get("illness_description") or diag0.get("condition", ""),
+            "clinicalFindings":     clinical.get("clinical_findings", ""),
+            "durationDays":         clinical.get("duration_of_ailment_days", ""),
             "firstConsultationDate":"",
-            "pastHistory":          "",
-            "provisionalDiagnosis": diag0.get("condition", ""),
+            "pastHistory":          clinical.get("past_history", ""),
+            "provisionalDiagnosis": clinical.get("provisional_diagnosis") or diag0.get("condition", ""),
             "icd10Code":            diag0.get("icd_10_code", ""),
-            "proposedTreatment":    [svc.get("description", "") for svc in services[:3]],
-            "investigationDetails": "",
-            "routeOfDrugAdmin":     "",
-            "surgeryName":          "",
+            "proposedTreatment":    clinical.get("proposed_line_of_treatment") or [svc.get("description", "") for svc in services[:3]],
+            "investigationDetails": clinical.get("investigation_details", ""),
+            "routeOfDrugAdmin":     clinical.get("route_of_drug_administration", ""),
+            "surgeryName":          clinical.get("surgery_name", ""),
             "icd10PcsCode":         "",
             "otherTreatmentDetails":"",
-            "injuryDescription":    "",
+            "injuryDescription":    clinical.get("injury_cause", ""),
             "accident": {
                 "isRTA": "No", "dateOfInjury": "", "reportedToPolice": "No",
                 "firNo": "", "substanceAbuse": "No", "testConducted": "No"
@@ -134,12 +137,12 @@ def _build_preauth_form_json(ai_extract: dict, patient_db: dict = None, hospital
             "maternity": {"G": "", "P": "", "L": "", "A": "", "expectedDeliveryDate": ""}
         },
         "admission": {
-            "dateOfAdmission": "",
-            "timeOfAdmission": "",
-            "isEmergency":     "planned",
-            "expectedDays":    "",
-            "icuDays":         "0",
-            "roomType":        ""
+            "dateOfAdmission": admission.get("date_of_admission", ""),
+            "timeOfAdmission": admission.get("time_of_admission", ""),
+            "isEmergency":     admission.get("is_emergency", "planned"),
+            "expectedDays":    admission.get("expected_days_in_hospital", ""),
+            "icuDays":         admission.get("days_in_icu", "0"),
+            "roomType":        admission.get("room_type", "")
         },
         "costs": {
             "roomRent": "", "investigationCost": "", "icuCharges": "",
