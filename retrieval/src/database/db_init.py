@@ -6,13 +6,13 @@ from dotenv import load_dotenv,find_dotenv
 load_dotenv(find_dotenv())
 
 def get_db_connection():
-    """Establish a connection to the PostgreSQL container."""
     return psycopg2.connect(
         host=os.getenv("DB_HOST"),
         port=os.getenv("DB_PORT"),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
-        dbname=os.getenv("DB_NAME")
+        dbname=os.getenv("DB_NAME"),
+        sslmode='require'
     )
     
 print(os.getenv("DB_PASSWORD"))
