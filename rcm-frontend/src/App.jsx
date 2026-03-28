@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DocumentUpload from './features/DocumentUpload';
 import ExtractionDashboard from './features/ExtractionDashboard';
 import FhirViewer from './features/FHIRviewer';
 import ReconciliationDashboard from './features/ReconciliationDashboard';
 import LandingExtraInfo from './features/LandingExtraInfo';
+import AuthTestPage from './features/auth/AuthTestPage';
+import CrudTestPage from './features/auth/CrudTestPage';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [apiResults, setApiResults] = useState([]); // Store backend output
+  const [apiResults, setApiResults] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showAuthTest, setShowAuthTest] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentStep]);
 
   const steps = [
     { id: 1, label: 'Ingestion' },
@@ -20,48 +27,40 @@ function App() {
     { id: 4, label: 'Reconciliation' }
   ];
 
-  // This function takes the final array from DocumentUpload, sends it to the backend, and moves to step 2
   const handleFilesSubmit = async (files) => {
     setIsProcessing(true);
-    
     const formData = new FormData();
-    files.forEach((file) => {
-      formData.append('pdf_files', file); 
-    });
+    files.forEach((file) => formData.append('pdf_files', file));
 
     try {
       const response = await axios.post('http://localhost:8000/process-pdfs', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-
-      console.log("Backend Response:", response.data);
-      
-      // Save the files array for the next steps
-      setUploadedFiles(files); 
-      // Save the processed results from backend
+      console.log('Backend Response:', response.data);
+      setUploadedFiles(files);
       setApiResults(response.data.results || []);
-      
       setIsProcessing(false);
-      setCurrentStep(2); 
-      
+      setCurrentStep(2);
     } catch (error) {
-      console.error("Backend connection failed", error);
-      alert("Error connecting to backend API. Is FastAPI running?");
+      console.error('Backend connection failed', error);
+      alert('Error connecting to backend API. Is FastAPI running?');
       setIsProcessing(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-[#f7f3f0] py-10 px-4 sm:px-6 lg:px-8 font-sans text-slate-900 relative overflow-hidden">
-      
+
       {/* Decorative Blur Blobs */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-teal-100/40 rounded-full blur-[120px] -z-10" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-amber-100/50 rounded-full blur-[100px] -z-10" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        
+
         <header className="mb-8 bg-white/70 backdrop-blur-md border border-white/40 rounded-3xl shadow-sm">
           <div className="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-8">
+
+            {/* Logo */}
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-600/20">
                 <div className="w-6 h-6 border-2 border-white rounded-md rotate-45 flex items-center justify-center">
@@ -83,54 +82,83 @@ function App() {
               </div>
             </div>
 
-            <nav className="flex items-center">
-              {steps.map((step, idx) => (
-                <React.Fragment key={step.id}>
-                  <div className="flex flex-col items-center">
-                    <div className={`
-                      w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-500
-                      ${currentStep >= step.id 
-                        ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/30' 
-                        : 'bg-white/50 text-slate-400 border border-slate-200/50'}
-                    `}>
-                      {currentStep > step.id ? '✓' : step.id}
+            {/* Right side: Auth Test toggle + Step Nav */}
+            <div className="flex items-center gap-6 flex-wrap">
+
+              {/* Auth Test Toggle Button */}
+              <button
+                onClick={() => setShowAuthTest(v => !v)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 border ${
+                  showAuthTest
+                    ? 'bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/30'
+                    : 'bg-white/50 text-indigo-600 border-indigo-200/60 hover:bg-indigo-50'
+                }`}
+              >
+                🔐 {showAuthTest ? 'Close Auth Test' : 'Auth Test'}
+              </button>
+
+              {/* Step Progress Nav */}
+              <nav className="flex items-center">
+                {steps.map((step, idx) => (
+                  <React.Fragment key={step.id}>
+                    <div className="flex flex-col items-center">
+                      <div className={`
+                        w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-500
+                        ${currentStep >= step.id
+                          ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/30'
+                          : 'bg-white/50 text-slate-400 border border-slate-200/50'}
+                      `}>
+                        {currentStep > step.id ? '✓' : step.id}
+                      </div>
+                      <span className={`text-[9px] uppercase tracking-widest mt-2 font-black ${currentStep >= step.id ? 'text-teal-800' : 'text-slate-400'}`}>
+                        {step.label}
+                      </span>
                     </div>
-                    <span className={`text-[9px] uppercase tracking-widest mt-2 font-black ${currentStep >= step.id ? 'text-teal-800' : 'text-slate-400'}`}>
-                      {step.label}
-                    </span>
-                  </div>
-                  {idx !== steps.length - 1 && (
-                    <div className="px-2 sm:px-4">
-                       <div className={`w-8 sm:w-16 h-[2px] rounded-full transition-colors duration-500 ${currentStep > step.id ? 'bg-teal-600' : 'bg-slate-200/50'}`} />
-                    </div>
-                  )}
-                </React.Fragment>
-              ))}
-            </nav>
+                    {idx !== steps.length - 1 && (
+                      <div className="px-2 sm:px-4">
+                        <div className={`w-8 sm:w-16 h-[2px] rounded-full transition-colors duration-500 ${currentStep > step.id ? 'bg-teal-600' : 'bg-slate-200/50'}`} />
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </nav>
+            </div>
           </div>
         </header>
+
+        {/* Auth Test Page Overlay */}
+        {showAuthTest && (
+          <div className="mb-6 rounded-3xl overflow-hidden border border-indigo-200/40 shadow-2xl flex flex-col gap-10 bg-[#0a0f1e]">
+            <AuthTestPage />
+            
+            {/* Divider */}
+            <div className="w-full h-px bg-slate-800" />
+            
+            <CrudTestPage />
+          </div>
+        )}
 
         <main className="transition-all duration-500">
           <div className="bg-white/40 backdrop-blur-xl rounded-[2.5rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.05)] min-h-[550px] overflow-hidden p-2">
             <div className="bg-white/80 rounded-[2.2rem] h-full min-h-[530px] border border-white/40 shadow-inner relative">
-              
+
               {currentStep === 1 && (
                 <div className="p-10 animate-in fade-in zoom-in-95 duration-700">
                   <div className="max-w-xl mx-auto text-center mb-10">
                     <div className="inline-block px-4 py-1.5 bg-teal-50 text-teal-700 rounded-full text-xs font-bold mb-4 border border-teal-100 uppercase tracking-wider">
                       Step 01: Multi-Doc Ingestion
                     </div>
-                    <h2 className="text-3xl font-extrabold text-slate-800 mb-3 ">Upload Medical Batch</h2>
+                    <h2 className="text-3xl font-extrabold text-slate-800 mb-3">Upload Medical Batch</h2>
                     <p className="text-slate-500 text-base leading-relaxed">
-                      Drop multiple PDFs (EOBs, Discharge Summaries, Claims). 
+                      Drop multiple PDFs (EOBs, Discharge Summaries, Claims).
                       The engine will parse and normalize each into a unified <span className="text-teal-600 font-semibold">FHIR R4</span> stream.
                     </p>
                   </div>
-                  
+
                   {isProcessing ? (
                     <div className="flex flex-col items-center justify-center p-12 bg-white rounded-3xl shadow-sm border border-slate-200">
                       <Loader2 className="w-12 h-12 text-teal-600 animate-spin mb-4" />
-                      <h2 className="text-xl font-bold text-slate-800">Running OCR & Gemini...</h2>
+                      <h2 className="text-xl font-bold text-slate-800">Running OCR &amp; Gemini...</h2>
                       <p className="text-slate-500 mt-2 text-center">Processing PDFs page by page. This might take a minute.</p>
                     </div>
                   ) : (
@@ -140,33 +168,33 @@ function App() {
               )}
 
               {currentStep === 2 && (
-                <ExtractionDashboard 
-                  files={uploadedFiles} 
+                <ExtractionDashboard
+                  files={uploadedFiles}
                   apiResults={apiResults}
-                  onConfirm={() => setCurrentStep(3)} 
-                  onBack={() => setCurrentStep(1)} 
+                  onConfirm={() => setCurrentStep(3)}
+                  onBack={() => setCurrentStep(1)}
                 />
               )}
 
               {currentStep === 3 && (
-                <FhirViewer 
+                <FhirViewer
                   files={uploadedFiles}
                   apiResults={apiResults}
-                  onProceed={() => setCurrentStep(4)} 
-                  onBack={() => setCurrentStep(2)} 
+                  onProceed={() => setCurrentStep(4)}
+                  onBack={() => setCurrentStep(2)}
                 />
               )}
 
               {currentStep === 4 && (
-                <ReconciliationDashboard 
+                <ReconciliationDashboard
                   files={uploadedFiles}
                   apiResults={apiResults}
                   onRestart={() => {
                     setUploadedFiles([]);
                     setApiResults([]);
                     setCurrentStep(1);
-                  }} 
-                  onBack={() => setCurrentStep(3)} 
+                  }}
+                  onBack={() => setCurrentStep(3)}
                 />
               )}
             </div>

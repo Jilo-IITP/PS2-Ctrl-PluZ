@@ -1,0 +1,25 @@
+"""
+core/supabase.py
+Singleton Supabase Admin client for all server-side operations.
+Uses SERVICE_ROLE key — never expose this to the frontend.
+"""
+import os
+from supabase import create_client, Client
+import dotenv
+
+dotenv.load_dotenv()
+
+_client: Client | None = None
+
+
+def get_supabase() -> Client:
+    global _client
+    if _client is None:
+        url = os.getenv("SUPABASE_URL")
+        key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+        if not url or not key:
+            raise RuntimeError(
+                "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in .env"
+            )
+        _client = create_client(url, key)
+    return _client

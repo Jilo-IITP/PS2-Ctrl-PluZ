@@ -1,0 +1,15 @@
+It appears the "RAW TEXT" you provided is an error message indicating that the PDF could not be read, rather than the unstructured OCR output of the hospital document itself.
+
+Therefore, I don't have any patient information, billing details, medications, or diagnoses to clean up, structure, or put into tables.
+
+Please provide the actual OCR output (the text content from 'DBMS-Assignment 1-4 (1).pdf') when it becomes available, and I will be happy to process it according to your instructions.
+
+I apologize, but the "RAW TEXT" you provided is an error message: `Error reading PDF: Unable to get page count. Is poppler installed and in PATH?`
+
+This indicates that the system was unable to extract any content from the PDF document named 'DBMS-Assignment 1-4.pdf'. Therefore, I do not have any hospital document text to clean up, fix typos in, or structure.
+
+If you can provide the actual text content from the hospital document, I would be happy to process it according to your instructions:
+1.  **Clean it up:** Fix typos, remove page numbers and hospital headers.
+2.  **Structure it:** Into sections [Patient Info, Billing/Charges, Medications, Diagnosis].
+3.  **Use Markdown tables:** For any billing items or test result lists.
+

@@ -2,3 +2,5 @@
 __pycache__/
 data/*.pkl
 node_modules/
+preprocessing/hospital_pdfs/*
+!preprocessing/hospital_pdfs/.gitkeep
