@@ -1,187 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import DocumentUpload from './features/DocumentUpload';
-import ExtractionDashboard from './features/ExtractionDashboard';
-import FhirViewer from './features/FHIRviewer';
-import ReconciliationDashboard from './features/ReconciliationDashboard';
-import LandingExtraInfo from './features/LandingExtraInfo';
-import axios from 'axios';
-import { Loader2 } from 'lucide-react';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Auth from './features/Auth';
+import OfficerDashboard from './features/OfficerDashboard';
+import ProcessingPipeline from './features/ProcessingPipeline';
+import { ThemeProvider } from '@/components/ui/theme_provider';
 
 function App() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [apiResults, setApiResults] = useState([]); // Store backend output
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  }, [currentStep]);
-  
-  const steps = [
-    { id: 1, label: 'Ingestion' },
-    { id: 2, label: 'Extraction' },
-    { id: 3, label: 'FHIR Bundle' },
-    { id: 4, label: 'Reconciliation' }
-  ];
-
-  // This function takes the final array from DocumentUpload, sends it to the backend, and moves to step 2
-  const handleFilesSubmit = async (files) => {
-    setIsProcessing(true);
-    
-    const formData = new FormData();
-    files.forEach((file) => {
-      formData.append('pdf_files', file); 
-    });
-
-    try {
-      const response = await axios.post('http://localhost:8000/process-pdfs', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-
-      console.log("Backend Response:", response.data);
-      
-      // Save the files array for the next steps
-      setUploadedFiles(files); 
-      // Save the processed results from backend
-      setApiResults(response.data.results || []);
-      
-      setIsProcessing(false);
-      setCurrentStep(2); 
-      
-    } catch (error) {
-      console.error("Backend connection failed", error);
-      alert("Error connecting to backend API. Is FastAPI running?");
-      setIsProcessing(false);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-[#f7f3f0] py-10 px-4 sm:px-6 lg:px-8 font-sans text-slate-900 relative overflow-hidden">
-      
-      {/* Decorative Blur Blobs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-teal-100/40 rounded-full blur-[120px] -z-10" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-amber-100/50 rounded-full blur-[100px] -z-10" />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        
-        <header className="mb-8 bg-white/70 backdrop-blur-md border border-white/40 rounded-3xl shadow-sm">
-          <div className="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-8">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-600/20">
-                <div className="w-6 h-6 border-2 border-white rounded-md rotate-45 flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 bg-white rounded-full" />
-                </div>
-              </div>
-              <div>
-                <h1 className="text-2xl font-black text-slate-800 tracking-tight leading-none uppercase">
-                  RCM <span className="text-teal-600">Normalize</span>
-                </h1>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[10px] font-bold text-teal-700/60 uppercase tracking-[0.2em]">Batch Processing Engine</span>
-                  {uploadedFiles.length > 0 && (
-                    <span className="bg-teal-100 text-teal-700 px-2 py-0.5 rounded text-[10px] font-bold">
-                      {uploadedFiles.length} DOCUMENTS LOADED
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <nav className="flex items-center">
-              {steps.map((step, idx) => (
-                <React.Fragment key={step.id}>
-                  <div className="flex flex-col items-center">
-                    <div className={`
-                      w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-500
-                      ${currentStep >= step.id 
-                        ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/30' 
-                        : 'bg-white/50 text-slate-400 border border-slate-200/50'}
-                    `}>
-                      {currentStep > step.id ? '✓' : step.id}
-                    </div>
-                    <span className={`text-[9px] uppercase tracking-widest mt-2 font-black ${currentStep >= step.id ? 'text-teal-800' : 'text-slate-400'}`}>
-                      {step.label}
-                    </span>
-                  </div>
-                  {idx !== steps.length - 1 && (
-                    <div className="px-2 sm:px-4">
-                       <div className={`w-8 sm:w-16 h-[2px] rounded-full transition-colors duration-500 ${currentStep > step.id ? 'bg-teal-600' : 'bg-slate-200/50'}`} />
-                    </div>
-                  )}
-                </React.Fragment>
-              ))}
-            </nav>
-          </div>
-        </header>
-
-        <main className="transition-all duration-500">
-          <div className="bg-white/40 backdrop-blur-xl rounded-[2.5rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.05)] min-h-[550px] overflow-hidden p-2">
-            <div className="bg-white/80 rounded-[2.2rem] h-full min-h-[530px] border border-white/40 shadow-inner relative">
-              
-              {currentStep === 1 && (
-                <div className="p-10 animate-in fade-in zoom-in-95 duration-700">
-                  <div className="max-w-xl mx-auto text-center mb-10">
-                    <div className="inline-block px-4 py-1.5 bg-teal-50 text-teal-700 rounded-full text-xs font-bold mb-4 border border-teal-100 uppercase tracking-wider">
-                      Step 01: Multi-Doc Ingestion
-                    </div>
-                    <h2 className="text-3xl font-extrabold text-slate-800 mb-3 ">Upload Medical Batch</h2>
-                    <p className="text-slate-500 text-base leading-relaxed">
-                      Drop multiple PDFs (EOBs, Discharge Summaries, Claims). 
-                      The engine will parse and normalize each into a unified <span className="text-teal-600 font-semibold">FHIR R4</span> stream.
-                    </p>
-                  </div>
-                  
-                  {isProcessing ? (
-                    <div className="flex flex-col items-center justify-center p-12 bg-white rounded-3xl shadow-sm border border-slate-200">
-                      <Loader2 className="w-12 h-12 text-teal-600 animate-spin mb-4" />
-                      <h2 className="text-xl font-bold text-slate-800">Running OCR & Gemini...</h2>
-                      <p className="text-slate-500 mt-2 text-center">Processing PDFs page by page. This might take a minute.</p>
-                    </div>
-                  ) : (
-                    <DocumentUpload onFileUpload={handleFilesSubmit} />
-                  )}
-                </div>
-              )}
-
-              {currentStep === 2 && (
-                <ExtractionDashboard 
-                  files={uploadedFiles} 
-                  apiResults={apiResults}
-                  onConfirm={() => setCurrentStep(3)} 
-                  onBack={() => setCurrentStep(1)} 
-                />
-              )}
-
-              {currentStep === 3 && (
-                <FhirViewer 
-                  files={uploadedFiles}
-                  apiResults={apiResults}
-                  onProceed={() => setCurrentStep(4)} 
-                  onBack={() => setCurrentStep(2)} 
-                />
-              )}
-
-              {currentStep === 4 && (
-                <ReconciliationDashboard 
-                  files={uploadedFiles}
-                  apiResults={apiResults}
-                  onRestart={() => {
-                    setUploadedFiles([]);
-                    setApiResults([]);
-                    setCurrentStep(1);
-                  }} 
-                  onBack={() => setCurrentStep(3)} 
-                />
-              )}
-            </div>
-          </div>
-        </main>
-      </div>
-      <LandingExtraInfo />
-    </div>
+    <ThemeProvider defaultTheme="system" storageKey="rcm-ui-theme">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Auth />} />
+          <Route path="/dashboard" element={<OfficerDashboard />} />
+          <Route path="/process" element={<ProcessingPipeline />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
