@@ -1,145 +1,168 @@
-import React, { useState, useRef } from 'react';
-import { UploadCloud, FileText, X, CheckCircle } from 'lucide-react';
+import React, { useState, useRef } from "react"
+import { UploadCloud, FileText, X, CheckCircle, AlertCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Card, CardContent } from "@/components/ui/card"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
-const DocumentUpload = ({ onFileUpload }) => {
-  const [dragActive, setDragActive] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState([]); // Changed to an array
-  const inputRef = useRef(null);
+export default function DocumentUpload({ onFileUpload }) {
+  const [dragActive, setDragActive] = useState(false)
+  const [selectedFiles, setSelectedFiles] = useState([])
+  const [error, setError] = useState(null)
+  const inputRef = useRef(null)
 
-  // Handle drag events
   const handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
+    e.preventDefault()
+    e.stopPropagation()
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true)
+    } else if (e.type === "dragleave") {
+      setDragActive(false)
     }
-  };
+  }
 
-  // Handle drop event
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
+  const parseFiles = (filesList) => {
+    if (!filesList || filesList.length === 0) return
+    setError(null)
     
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      // Filter for PDFs only and convert FileList to Array
-      const newFiles = Array.from(e.dataTransfer.files).filter(file => file.type === 'application/pdf');
-      
-      if (newFiles.length !== e.dataTransfer.files.length) {
-         alert("Bhai, some files were ignored. PDF only!");
-      }
-      
-      // Append new files to the existing array
-      setSelectedFiles((prev) => [...prev, ...newFiles]);
+    // Quick validation
+    const newFiles = Array.from(filesList).filter((file) => file.type === "application/pdf")
+    if (newFiles.length !== filesList.length) {
+      setError("Some files were rejected. Only standard PDF documents are allowed.")
     }
-  };
+    
+    // Prevent duplicates by name
+    setSelectedFiles((prev) => {
+      const existingNames = new Set(prev.map(f => f.name))
+      const uniqueNewFiles = newFiles.filter(f => !existingNames.has(f.name))
+      return [...prev, ...uniqueNewFiles]
+    })
+  }
 
-  // Handle manual file selection
+  const handleDrop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragActive(false)
+    if (e.dataTransfer.files) parseFiles(e.dataTransfer.files)
+  }
+
   const handleChange = (e) => {
-    e.preventDefault();
-    if (e.target.files && e.target.files.length > 0) {
-      const newFiles = Array.from(e.target.files).filter(file => file.type === 'application/pdf');
-      
-      if (newFiles.length !== e.target.files.length) {
-        alert("Bhai, some files were ignored. PDF only!");
-      }
-      
-      setSelectedFiles((prev) => [...prev, ...newFiles]);
-    }
-  };
+    e.preventDefault()
+    if (e.target.files) parseFiles(e.target.files)
+  }
 
-  // Trigger file input click
-  const onButtonClick = () => {
-    inputRef.current.click();
-  };
-
-  // Remove specific file by index
   const removeFile = (indexToRemove) => {
-    setSelectedFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
-  };
+    setSelectedFiles((prev) => prev.filter((_, index) => index !== indexToRemove))
+  }
 
-  // Submit to parent (or backend)
   const handleProcess = () => {
-    if (selectedFiles.length > 0) {
-      onFileUpload(selectedFiles); // Passing the array to App.js
+    if (selectedFiles.length > 0 && onFileUpload) {
+      onFileUpload(selectedFiles)
     }
-  };
+  }
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-sm border border-stone-200">
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-stone-800">Upload Medical Batch</h2>
-        <p className="text-stone-500 text-sm mt-1">
-          Securely import multiple discharge summaries, bills, or lab reports (PDF only) for AI extraction.
-        </p>
-      </div>
+    <div className="w-full">
+      {error && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Invalid File Type</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
-      {/* Drag & Drop Zone - ALWAYS visible so users can keep adding files */}
-      <div
-        className={`relative flex flex-col items-center justify-center w-full h-48 mb-6 border-2 border-dashed rounded-lg cursor-pointer transition-colors duration-200 ease-in-out ${
-          dragActive ? 'border-teal-500 bg-teal-50' : 'border-stone-300 bg-stone-50 hover:bg-stone-100'
+      {/* Full-width Drag & Drop Zone */}
+      <Card
+        className={`relative flex flex-col items-center justify-center w-full min-h-[300px] border-2 border-dashed transition-all duration-200 ease-in-out cursor-pointer overflow-hidden ${
+          dragActive 
+            ? "border-primary bg-primary/5 " 
+            : "border-border bg-card/50 hover:bg-muted/50"
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
-        onClick={onButtonClick}
+        onClick={() => inputRef.current?.click()}
       >
-        <input 
-          ref={inputRef}
-          type="file" 
-          multiple // Enables selecting multiple files in the system dialog
-          accept=".pdf" 
-          onChange={handleChange} // Fixed typo here
-          className="hidden" 
-          id="file-upload"
-        />
+        <CardContent className="flex flex-col items-center p-8 text-center space-y-4">
+          <input
+            ref={inputRef}
+            type="file"
+            multiple
+            accept=".pdf"
+            onChange={handleChange}
+            className="hidden"
+            id="file-upload"
+          />
 
-        <UploadCloud className={`w-12 h-12 mb-4 ${dragActive ? 'text-teal-500' : 'text-stone-400'}`} />
-        <p className="mb-2 text-sm text-stone-600">
-          <span className="font-semibold text-teal-600">Click to upload</span> or drag and drop
-        </p>
-        <p className="text-xs text-stone-500">Add multiple PDF documents (Max 10MB each)</p>
-      </div>
+          <div className={`p-4 rounded-full transition-colors ${dragActive ? "bg-primary/20" : "bg-muted"}`}>
+            <UploadCloud className={`w-10 h-10 ${dragActive ? "text-primary" : "text-muted-foreground"}`} />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold">
+              <span className="text-primary hover:underline">Click to browse</span> or drag and drop
+            </h3>
+            <p className="text-sm text-muted-foreground mt-1 font-medium">
+              Standard PDF documents only (Max 10MB per file recommend)
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
-      {/* Dynamic File List Preview */}
+      {/* Dynamic File List Section */}
       {selectedFiles.length > 0 && (
-        <div className="flex flex-col space-y-3 mb-6 max-h-64 overflow-y-auto pr-2">
-          {selectedFiles.map((file, index) => (
-            <div key={index} className="flex items-center justify-between p-3 bg-teal-50 border border-teal-100 rounded-lg">
-              <div className="flex items-center space-x-3 text-teal-700 overflow-hidden">
-                <FileText className="w-6 h-6 flex-shrink-0" />
-                <div className="truncate">
-                  <p className="text-sm font-medium truncate">{file.name}</p>
-                  <p className="text-xs opacity-80">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+        <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-bold tracking-tight flex items-center gap-2">
+              Staged Documents
+              <Badge variant="secondary">{selectedFiles.length} Queue</Badge>
+            </h3>
+            <Button onClick={handleProcess} size="default" className="hidden md:flex gap-2 font-bold shadow-md shadow-primary/20">
+              <CheckCircle className="w-4 h-4" />
+              Run AI Pipeline
+            </Button>
+          </div>
+
+          <ScrollArea className="h-auto max-h-[40vh] w-full rounded-md border bg-card p-4 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {selectedFiles.map((file, index) => (
+                <div 
+                  key={`${file.name}-${index}`} 
+                  className="flex items-center justify-between p-3 rounded-xl border bg-background hover:bg-muted transition-colors group"
+                >
+                  <div className="flex items-center space-x-3 overflow-hidden">
+                    <div className="p-2 bg-primary/10 rounded-lg text-primary shrink-0">
+                      <FileText className="w-5 h-5" />
+                    </div>
+                    <div className="truncate">
+                      <p className="text-sm font-bold truncate pr-4 text-foreground">{file.name}</p>
+                      <p className="text-xs text-muted-foreground font-medium">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeFile(index);
+                    }}
+                    className="shrink-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                    <span className="sr-only">Remove file</span>
+                  </Button>
                 </div>
-              </div>
-              <button 
-                onClick={() => removeFile(index)}
-                className="p-1.5 text-teal-700 hover:bg-teal-200 hover:text-red-500 rounded-full transition-colors flex-shrink-0"
-                title="Remove file"
-              >
-                <X className="w-4 h-4" />
-              </button>
+              ))}
             </div>
-          ))}
+          </ScrollArea>
+
+          <Button onClick={handleProcess} size="lg" className="w-full mt-6 md:hidden gap-2 font-bold">
+            <CheckCircle className="w-5 h-5" />
+            Run AI Pipeline
+          </Button>
         </div>
       )}
-
-      {/* Process Button - Only shows if there are files */}
-      {selectedFiles.length > 0 && (
-        <button
-          onClick={handleProcess}
-          className="w-full py-3 px-4 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 shadow-md"
-        >
-          <CheckCircle className="w-5 h-5" />
-          <span>Process {selectedFiles.length} {selectedFiles.length === 1 ? 'Document' : 'Documents'} with AI Engine</span>
-        </button>
-      )}
     </div>
-  );
-};
-
-export default DocumentUpload;
+  )
+}
