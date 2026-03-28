@@ -128,8 +128,9 @@ def run_retrieval_pipeline(ocr_text: str) -> str:
     return generate_handoff_text(context_map)
 
 if __name__ == "__main__":
-    input_file = "./data_from_preprocessing/structured_hospital_data.txt"
-    output_file = "../data/input/lele_abhav_noobde.txt"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    input_file = os.path.join(script_dir, "data_from_preprocessing", "structured_hospital_data.txt")
+    output_file = os.path.join(script_dir, "..", "data", "input", "reti_output.txt")
     
     # Read the OCR text
     with open(input_file, "r", encoding="utf-8") as f:

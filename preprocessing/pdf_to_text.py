@@ -52,6 +52,7 @@ def structure_text_with_gemini(raw_text, filename):
     """
     try:
         response = model.generate_content(prompt)
+        #print(response.text)
         return response.text
     except Exception as e:
         return f"Gemini API Error: {e}"
@@ -63,11 +64,13 @@ def run_pdf_pipeline(pdf_path: str, filename: str) -> str:
     return structured_data
 
 def main():
-    input_folder = "hospital_pdfs"
-    # POINT THIS TO YOUR FRIEND'S RETRIEVAL DATA FOLDER
-    output_folder = "../retrieval/data_from_preprocessing" 
+    # Use absolute paths relative to this script's directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    input_folder = os.path.join(script_dir, "hospital_pdfs")
+    
+    # Point to the retrieval data folder relative to this script
+    output_folder = os.path.abspath(os.path.join(script_dir, "..", "retrieval", "data_from_preprocessing"))
     output_file = os.path.join(output_folder, "structured_hospital_data.txt")
-    #output_file = "structured_hospital_data.txt"
 
     if not os.path.exists(input_folder):
         os.makedirs(input_folder)

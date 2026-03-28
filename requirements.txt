@@ -42,3 +42,4 @@ opencv-python
 psycopg2-binary>=2.9.11
 langchain-postgres>=0.0.17
 python-dotenv>=1.0.0
+supabase>=2.4.0

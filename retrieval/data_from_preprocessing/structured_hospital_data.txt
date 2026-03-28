@@ -1,140 +1,68 @@
-Here's the cleaned and structured hospital document:
+Here's the cleaned and structured information from the hospital bill:
 
 ---
 
-### [Patient Info]
-*   **Patient Name:** Ashutosh Shah
-*   **Age/Gender:** 40 Years / Male
-*   **Date of Report:** 06-Jul-2023
-*   **Time of Report:** 10:37 am
-*   **Receipt No:** 3628
-*   **UHID:** 6915
-*   **Ordering Physician:** Dr. Simple Bhutani
-*   **Report Approved By:** Dr. Simple Bhutani, MD
-*   **Operator Name:** RPP
+### Hospital Details
 
-### [Billing/Charges]
-No specific billing items or charges are listed in this document.
+*   **Hospital Name:** MEDIVERSAL MULTI SUPER SPECIALITY HOSPITAL (A Unit Of Mediversal Healthcare Pvt Ltd)
+*   **Bill Summary:** Final Bill Summary
+*   **Bill Number:** FP24002947
+*   **Bill Date:** 05/03/2022
+*   **GSTIN:** 29AACCM80A4RIZP
 
-### [Medications]
-No medications are listed in this document.
+### Patient Information
 
-### [Diagnosis]
+*   **UHID:** MDV2022001807
+*   **Patient Name:** N/A (Information missing from raw text; "Medi Assist" is identified as the TPA)
+*   **Age/Sex:** 59 Y/Female
+*   **Admission No.:** EMR2022000278
+*   **Mobile Number:** N/A (Information missing)
+*   **Address:** N/A (Information missing)
+*   **Category:** ITPA LTD
+*   **Consultants:** Not Specified
+*   **TPA:** Medi Assist Insurance TPA
+*   **Corporate:** Corporate Pvt Ltd
 
-**Routine Hematology Report**
+### Admission & Discharge Summary
 
-| PARAMETER         | RESULT     | NORMAL RANGE            |
-| :---------------- | :--------- | :---------------------- |
-| Hemoglobin        | 14 g/dL    | 15-18 g/dL              |
-| Hematocrit (PCV)  | 49.4 %     | 39-54 %                 |
-| RBC Count         | 5.35 mil/cumm | 4.5-6.5 mil/cumm        |
-| WBC Count         | 9,900 /cumm | 4,000-10,000 /cumm      |
-| Platelet Count    | 3,59,000 /cumm | 150,000-400,000 /cumm |
-| MCHC              | 29.7 g/dL  | 30-36 g/dL              |
-| MCH               | 27.4 pg    | 27-32 pg                |
-| MCV               | 92.4 fL    | 75-96 fL                |
-| RDW               | 13.0 %     | 11-16 %                 |
+*   **Admission Date:** 01/03/2022 16:00:00
+*   **Discharge Date:** 05/03/2022 01:22:23
 
-**Differential WBC Count**
+### Ward & Room History
 
-| PARAMETER     | RESULT | NORMAL RANGE |
-| :------------ | :----- | :----------- |
-| Band Forms    | 0 %    | 0-5 %        |
-| Neutrophils   | 64 %   | 40-75 %      |
-| Lymphocytes   | 29 %   | 20-50 %      |
-| Eosinophils   | 2 %    | 1-6 %        |
-| Monocytes     | 5 %    | 2-10 %       |
-| Basophils     | 0 %    | 0-5 %        |
+| Ward       | Room Name    | Bed No. | Date/Time          | Status     |
+| :--------- | :----------- | :------ | :----------------- | :--------- |
+| ICCU 2     | ICCU 1       | 415     | 01/03/2022 16:00:00 | Admitted   |
+| ICCU 3 HDU | ICCU 3 HDU   | 322     | 05/03/2022 01:22:23 | Discharged |
 
-**Other Observations:**
-*   **Platelets in Smear:** Adequate
-*   **Malarial Parasites:** Not Detected
+### Diagnosis / Procedure
 
----
+*   **Package (IPD):** Permanent Pacemaker Implantation Double Chamber (2 ICU + 1 Opted category)
 
-Here is the cleaned and structured information from the 'eyes.pdf' document:
+### Billing/Charges
 
----
+| Sr. No. | Service Name                                                              | Bill Amount  | Discount Amount | Total Amount |
+| :------ | :------------------------------------------------------------------------ | :----------- | :-------------- | :----------- |
+| 1       | Bed Charges                                                               | 8,500.00     | 2.00            | 8,498.00     |
+| 2       | Pathology                                                                 | 18,865.00    | 0.00            | 18,865.00    |
+| 3       | Diagnostic                                                                | 11,000.00    | 0.00            | 11,000.00    |
+| 4       | Day Care Procedure                                                        | 1,485.00     | 0.00            | 1,485.00     |
+| 5       | Implant                                                                   | 252,520.00   | 0.00            | 252,520.00   |
+| 6       | Pharmacy                                                                  | 3,884.63     | 0.00            | 3,884.63     |
+| 7       | Dieticians Charges                                                        | 500.00       | 0.00            | 500.00       |
+| 8       | Point Of Care Services                                                    | 3,476.00     | 0.00            | 3,476.00     |
+| 9       | Medical Records                                                           | 500.00       | 0.00            | 500.00       |
+| 10      | Admission Charges                                                         | 300.00       | 0.00            | 300.00       |
+| 11      | Doctors Visit /Consultation (CN002)                                       | 3,900.00     | 0.00            | 3,900.00     |
+| 12      | Package(IPD) - Permanent Pacemaker Implantation Double Chamber (2 ICU + 1 Opted category) | 101,200.00   | 0.00            | 101,200.00   |
+|         | **Total**                                                                 | **406,131.00** | **2.00**        | **406,129.00** |
 
-## Hospital Document: Eye Prescription
+### Financial Summary
 
-**1. Patient Information**
-
-*   **Name:** Lakshmi Shah
-*   **Age:** 40
-*   **Date:** 21/11/2023
-
-**2. Diagnosis / Eye Prescription**
-
-The patient has a refractive error requiring corrective lenses.
-
-| Eye | Sph    | Cyl    | Axis | VA (Visual Acuity) |
-| :-- | :----- | :----- | :--- | :----------------- |
-| RE  | -2.00  | -4.50  | 180  | 6/12               |
-| LE  | -2.50  | +0.00  | 160  | 6/6                |
-
-*   **Near IPD (Interpupillary Distance):** 60
-
-**3. Medications**
-
-*   No specific medications are listed in this document.
-
-**4. Prescription Options & Instructions (Relevant for Billing/Charges)**
-
-**Prescribing Doctor:**
-
-*   **Name:** Dr. Miral H. Naik
-*   **Qualifications:** MS DNB (Ophthalmology), Fellow LVPEI (Hyderabad)
-
-**Lens Specifications & Features:**
-
-*   **Lens Material:** CR-39 / Polycarbonate
-*   **Bifocal/Progressive Options:**
-    *   Kryptok Bifocal
-    *   Executive BF / D Bifocal
-    *   Progressive
-    *   Constant Near / Separate Near (specific lens design or usage option)
-*   **Coatings/Treatments:**
-    *   Photochromatic
-    *   Anti-Glare (AG)
-    *   Hi-Index
-    *   Aspheric
-*   **Usage Type:**
-    *   Constant Wear
-    *   Reading Only
-    *   Computer Only
-    *   Occasional Wear
-
-**Instructions for Optician:**
-
-*   Please make the glasses as per the prescription.
-*   Get the glasses checked after they are made.
-*   Please take Pupillary Distance (PD) for both distance and near vision.
-*   Measure the height of the reading segment.
-*   Ensure correct centering of the lens.
-*   Do not provide a frame that is too big or too small.
-
-Here is the cleaned and structured document:
-
-**1. Patient Info**
-*   **Name:** Jialaa
-
-**2. Billing/Charges**
-*   **Issuer:** Oral Diagnosis & Radiology Centre
-*   **Receipt No:** 13011
-*   **Date:** 24/06/20XX
-*   **Amount Received:** Rs. 600 (Rupees Six Hundred)
-*   **Received From:** Jialaa
-
-**Service Details:**
-
-| Item | Description                                       | Amount (Rs.) |
-| :--- | :------------------------------------------------ | :----------- |
-| 1.   | Investigation for Oral Diagnosis & Radiology Centre | 600          |
-
-**3. Medications**
-*   No medications are listed in this document.
-
-**4. Diagnosis**
-*   No specific medical diagnosis is provided in this document. The service rendered was for "Oral Diagnosis & Radiology".
+*   **Total Bill Amount:** 406,131.00
+*   **Total Discount Amount:** 2.00
+*   **Advance Received:** 10,000.00
+*   **Refund Amount:** 3,871.00
+*   **Net TPA/Corporate Amount:** 400,000.00
+*   **Amount To Be Received:** 0.00
 

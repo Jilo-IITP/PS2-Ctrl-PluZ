@@ -1,0 +1,5 @@
+=== VERITAS AI: NORMALIZED CLINICAL CONTEXT ===
+
+No valid clinical diagnoses found in source document.
+
+
