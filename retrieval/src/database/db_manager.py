@@ -24,7 +24,8 @@ class VectorDBManager:
             port=os.getenv("DB_PORT"),
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
-            dbname=os.getenv("DB_NAME")
+            dbname=os.getenv("DB_NAME"),
+            sslmode='require'
         )
 
     def insert_document(self, title: str, source_type: str, source_url: str) -> str:
