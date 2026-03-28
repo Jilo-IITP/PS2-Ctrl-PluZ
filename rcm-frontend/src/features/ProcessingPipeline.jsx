@@ -25,26 +25,38 @@ export default function ProcessingPipeline() {
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
 
   useEffect(() => {
+    if (hasAutoTriggered) return;
+
+    // SCENARIO 1: Coming from Dashboard with multiple DOCUMENT RESULTS
+    if (location.state?.results && location.state?.files) {
+      setHasAutoTriggered(true);
+      setUploadedFiles(location.state.files);
+      setApiResults(location.state.results);
+      setCurrentStep(2);
+      return;
+    }
+
+    // SCENARIO 2: Coming from Dashboard with a single PRELOADED DOCUMENT
+    if (preloadedDocument) {
+      setHasAutoTriggered(true);
+      if (preloadedDocument.status === 'processed') {
+        setUploadedFiles([preloadedDocument.rawFile || { name: preloadedDocument.name }]);
+        setCurrentStep(2);
+      } else if (preloadedDocument.rawFile) {
+        setUploadedFiles([preloadedDocument.rawFile]);
+        handleFilesSubmit([preloadedDocument.rawFile]);
+      } else {
+        setCurrentStep(1);
+      }
+      return;
+    }
+  }, [location.state, preloadedDocument, hasAutoTriggered]);
+
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentStep]);
 
-  useEffect(() => {
-    if (preloadedDocument && !hasAutoTriggered) {
-      setHasAutoTriggered(true);
-      if (preloadedDocument.status === 'processed') {
-        // If it was already processed, jump straight to extraction results (requires stored results, but mock it for now)
-        setCurrentStep(2);
-        setUploadedFiles([preloadedDocument.rawFile || { name: preloadedDocument.name }]);
-        // To accurately view processed docs, you'd need the real JSON. We're mocking an empty hit right now.
-      } else if (preloadedDocument.rawFile) {
-        // If it's a new upload, hit the API automatically!
-        handleFilesSubmit([preloadedDocument.rawFile]);
-      } else {
-        // Fallback
-        setCurrentStep(1);
-      }
-    }
-  }, [preloadedDocument, hasAutoTriggered]);
+
 
   // If a preloaded document was supplied, we might need to trigger the process automatically 
   // or mock the process if we don't have the actual file blob ready to send to Python backend.
@@ -140,7 +152,13 @@ export default function ProcessingPipeline() {
       {/* Main Application Workspace */}
       <main className="flex-1 container mx-auto px-4 py-8">
           {currentStep === 1 && (
-            <div className="max-w-4xl mx-auto animate-in fade-in duration-500 fade-in-0">
+            <div className="max-w-4xl mx-auto animate-in fade-in duration-500">
+              {location.state?.files && !hasAutoTriggered && (
+                 <Badge variant="outline" className="mb-4 bg-yellow-500/10 text-yellow-500 border-yellow-500/20 py-1">
+                   <Loader2 className="w-3 h-3 mr-2 animate-spin" />
+                   Synchronizing Ingestion Context...
+                 </Badge>
+              )}
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold tracking-tight mb-2">Batch Document Ingestion</h2>
                 <p className="text-muted-foreground">
@@ -168,8 +186,14 @@ export default function ProcessingPipeline() {
             <ExtractionDashboard 
               files={uploadedFiles} 
               apiResults={apiResults}
+              isBatch={apiResults.length === 1 && uploadedFiles.length > 1}
               onConfirm={() => setCurrentStep(3)} 
-              onBack={() => setCurrentStep(1)} 
+              onBack={() => {
+                setUploadedFiles([]);
+                setApiResults([]);
+                setCurrentStep(1);
+                navigate('/dashboard');
+              }} 
             />
           )}
 

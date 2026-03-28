@@ -24,10 +24,10 @@ const ReconciliationDashboard = ({ files = [], apiResults = [], onRestart, onBac
 
         <div className="text-center hidden sm:block">
           <h2 className="text-xl font-bold tracking-tight flex items-center justify-center gap-2">
-            <Activity className="w-5 h-5 text-primary" />
+            <Activity className="w-5 h-5 text-foreground" />
             FINAL ADJUDICATION
           </h2>
-          <p className="text-[10px] text-primary font-bold uppercase tracking-widest mt-1">
+          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
             Pre-Submission Rules Engine
           </p>
         </div>
@@ -47,7 +47,7 @@ const ReconciliationDashboard = ({ files = [], apiResults = [], onRestart, onBac
               <AlertTitle className="text-xl font-bold tracking-tight mb-1">
                 {hasErrors ? 'Anomaly Detected: Claim Auto-Paused' : 'Batch 100% Reconciled Successfully'}
               </AlertTitle>
-              <AlertDescription className={`text-xs font-semibold ${hasErrors ? 'text-destructive' : 'text-primary'}`}>
+              <AlertDescription className={`text-xs font-semibold ${hasErrors ? 'text-destructive' : 'text-foreground'}`}>
                 {hasErrors ? 'Revenue leakage or clinical mismatch detected. Manual review required to proceed.' : 'All clinical and financial rules passed. The payload is fully compliant and ready for automated TPA submission.'}
               </AlertDescription>
            </div>

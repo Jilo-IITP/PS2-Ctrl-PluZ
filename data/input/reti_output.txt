@@ -1,6 +1,113 @@
 === VERITAS AI: NORMALIZED CLINICAL CONTEXT ===
 
-No valid clinical diagnoses found in source document.
+Source Entity: Cholelithiasis
+--------------------------------------------------
+  Result 1 [ICD: D57 | Score: 0.7996]: Sickle-cell disorders
+  Context: **Use additional** code to identify complications, such as: cholelithiasis (K80.-) priapism (N48.32) **D57.459 Sickle-cell thalassemia beta plus with crisis, unspecified** HbS-beta plus with crisis with unspecified complication Sickle-cell beta plus with crisis with unspecified complication
+
+  Result 2 [ICD: K80 | Score: 0.7581]: Cholelithiasis
+  Context: **K80 Cholelithiasis** **Excludes1:** retained cholelithiasis following cholecystectomy (K91.86) **K80.0 Calculus of gallbladder with acute cholecystitis** Any condition listed in K80.2 with acute cholecystitis
+
+
+Source Entity: Cholecystitis
+--------------------------------------------------
+  Result 1 [ICD: K81 | Score: 0.8319]: Cholecystitis
+  Context: **K81 Cholecystitis** **Use additional** code if applicable for associated gangrene of gallbladder (K82.A1), or perforation of gallbladder (K82.A2) **Excludes1:** cholecystitis with cholelithiasis (K80.-) **K81.0 Acute cholecystitis** Abscess of gallbladder Angiocholecystitis
+
+  Result 2 [ICD: K81 | Score: 0.7751]: Cholecystitis
+  Context: Abscess of gallbladder Angiocholecystitis Emphysematous (acute) cholecystitis Empyema of gallbladder Gangrene of gallbladder Gangrenous cholecystitis Suppurative cholecystitis **K81.1 Chronic cholecystitis** **K81.2 Acute cholecystitis with chronic cholecystitis**
+
+
+Source Entity: Hepatic steatosis
+--------------------------------------------------
+  Result 1 [ICD: K76 | Score: 0.1322]: Other diseases of liver
+  Context: portal vein thrombosis (I81) toxic liver disease (K71.-) **K76.0 Fatty (change of) liver, not elsewhere classified** Metabolic dysfunction-associated steatotic liver disease (MASLD) Nonalcoholic fatty liver disease (NAFLD) **Excludes1:** nonalcoholic steatohepatitis (NASH) (K75.81)
+
+  Result 2 [ICD: K75 | Score: 0.0790]: Other inflammatory liver diseases
+  Context: **K75.81 Nonalcoholic steatohepatitis (NASH)** Metabolic dysfunction-associated steatohepatitis (MASH) **Use additional** code, if applicable, hepatic fibrosis (K74.0-) **K75.89 Other specified inflammatory liver diseases** **K75.9 Inflammatory liver disease, unspecified** Hepatitis NOS
+
+
+Source Entity: Intrahepatic cholelithiasis
+--------------------------------------------------
+  Result 1 [ICD: K80 | Score: 0.1181]: Cholelithiasis
+  Context: Gallstone (impacted) of hepatic duct (without cholangitis or cholecystitis) Hepatic cholelithiasis (without cholangitis or cholecystitis) Hepatic colic (recurrent) (without cholangitis or cholecystitis) **K80.50 Calculus of bile duct without cholangitis or cholecystitis without obstruction**
+
+  Result 2 [ICD: Q44 | Score: 0.0460]: Congenital malformations of gallbladder, bile ducts and liver
+  Context: Intrahepatic gallbladder **Q44.2 Atresia of bile ducts** **Q44.3 Congenital stenosis and stricture of bile ducts** **Q44.4 Choledochal cyst** **Q44.5 Other congenital malformations of bile ducts** Accessory hepatic duct Biliary duct duplication Congenital malformation of bile duct NOS
+
+
+Source Entity: Hepatomegaly
+--------------------------------------------------
+  Result 1 [ICD: R16 | Score: 0.8925]: Hepatomegaly and splenomegaly, not elsewhere classified
+  Context: **R16 Hepatomegaly and splenomegaly, not elsewhere classified** **R16.0 Hepatomegaly, not elsewhere classified** Hepatomegaly NOS **R16.1 Splenomegaly, not elsewhere classified** Splenomegaly NOS **R16.2 Hepatomegaly with splenomegaly, not elsewhere classified** Hepatosplenomegaly NOS
+
+  Result 2 [ICD: B27 | Score: 0.5751]: Infectious mononucleosis
+  Context: **B27.01 Gammaherpesviral mononucleosis with polyneuropathy** **B27.02 Gammaherpesviral mononucleosis with meningitis** **B27.09 Gammaherpesviral mononucleosis with other complications** Hepatomegaly in gammaherpesviral mononucleosis **B27.1 Cytomegaloviral mononucleosis**
+
+
+Source Entity: Hyponatremia
+--------------------------------------------------
+  Result 1 [ICD: P74 | Score: 0.8229]: Other transitory neonatal electrolyte and metabolic disturbances
+  Context: **P74.21 Hypernatremia of newborn** **P74.22 Hyponatremia of newborn** **P74.3 Disturbances of potassium balance of newborn** **P74.31 Hyperkalemia of newborn** **P74.32 Hypokalemia of newborn** **P74.4 Other transitory electrolyte disturbances of newborn** **P74.41 Alkalosis of newborn**
+
+  Result 2 [ICD: E87 | Score: 0.4267]: Other disorders of fluid, electrolyte and acid-base balance
+  Context: **E87.1 Hypo-osmolality and hyponatremia** Sodium [Na] deficiency **Excludes1:** syndrome of inappropriate secretion of antidiuretic hormone (E22.2) **E87.2 Acidosis** **Excludes1:** diabetic acidosis - see categories E08-E10, E11, E13 with ketoacidosis **E87.20 Acidosis, unspecified**
+
+
+Source Entity: Lymphopenia
+--------------------------------------------------
+  Result 1 [ICD: C91 | Score: 0.0097]: Lymphoid leukemia
+  Context: **C91.Z0 Other lymphoid leukemia not having achieved remission** Other lymphoid leukemia with failed remission Other lymphoid leukemia NOS **C91.Z1 Other lymphoid leukemia, in remission** **C91.Z2 Other lymphoid leukemia, in relapse** **C91.9 Lymphoid leukemia, unspecified**
+
+  Result 2 [ICD: C91 | Score: 0.0075]: Lymphoid leukemia
+  Context: Lymphoplasmacytic leukemia Richter syndrome **Excludes1:** lymphoplasmacytic lymphoma (C83.0-) **C91.10 Chronic lymphocytic leukemia of B-cell type not having achieved remission** Chronic lymphocytic leukemia of B-cell type with failed remission Chronic lymphocytic leukemia of B-cell type NOS
+
+
+Source Entity: Hypoalbuminemia
+--------------------------------------------------
+  Result 1 [ICD: E60 | Score: 0.1205]: Dietary zinc deficiency
+  Context: **E60 Dietary zinc deficiency**
+
+  Result 2 [ICD: R77 | Score: 0.0644]: Other abnormalities of plasma proteins
+  Context: **R77 Other abnormalities of plasma proteins** **Excludes1:** disorders of plasma-protein metabolism (E88.0-) **R77.0 Abnormality of albumin** **R77.1 Abnormality of globulin** Hyperglobulinemia NOS **R77.2 Abnormality of alphafetoprotein** **R77.8 Other specified abnormalities of plasma proteins**
+
+
+Source Entity: Neutrophilia
+--------------------------------------------------
+  Result 1 [ICD: D72 | Score: 0.2021]: Other disorders of white blood cells
+  Context: Neutrophilic leukemoid reaction **D72.824 Basophilia** **D72.825 Bandemia** Bandemia without diagnosis of specific infection **Excludes1:** confirmed infection - code to infection leukemia (C91.-, C92.-, C93.-, C94.-, C95.-) **D72.828 Other elevated white blood cell count**
+
+  Result 2 [ICD: D47 | Score: 0.1126]: Other neoplasms of uncertain behavior of lymphoid, hematopoietic and related tissue
+  Context: Mastocytoma NOS Mastocytosis NOS **D47.1 Chronic myeloproliferative disease** Chronic neutrophilic leukemia Myeloproliferative disease, unspecified **Excludes1:** atypical chronic myeloid leukemia BCR/ABL-negative (C92.2-) chronic myeloid leukemia BCR/ABL-positive (C92.1-)
+
+
+Source Entity: Leukocytosis
+--------------------------------------------------
+  Result 1 [ICD: D72 | Score: 0.3283]: Other disorders of white blood cells
+  Context: **D72.828 Other elevated white blood cell count** **D72.829 Elevated white blood cell count, unspecified** Elevated leukocytes, unspecified Leukocytosis, unspecified **D72.89 Other specified disorders of white blood cells** Abnormality of white blood cells NEC
+
+  Result 2 [ICD: D72 | Score: 0.1462]: Other disorders of white blood cells
+  Context: Decreased leukocytes, unspecified Leukocytopenia, unspecified Leukopenia **D72.82 Elevated white blood cell count** **Excludes1:** eosinophilia (D72.1) **D72.820 Lymphocytosis (symptomatic)** Elevated lymphocytes **D72.821 Monocytosis (symptomatic)** **Excludes1:** infectious mononucleosis (B27.-)
+
+
+Source Entity: Hyperchloremia
+--------------------------------------------------
+  Result 1 [ICD: E87 | Score: 0.8106]: Other disorders of fluid, electrolyte and acid-base balance
+  Context: TACO **E87.79 Other fluid overload** **E87.8 Other disorders of electrolyte and fluid balance, not elsewhere classified** Electrolyte imbalance NOS Hyperchloremia Hypochloremia
+
+  Result 2 [ICD: P74 | Score: 0.6303]: Other transitory neonatal electrolyte and metabolic disturbances
+  Context: **P74.41 Alkalosis of newborn** Hyperbicarbonatemia **P74.42 Disturbances of chlorine balance of newborn** **P74.421 Hyperchloremia of newborn** Hyperchloremic metabolic acidosis **Excludes2:** late metabolic acidosis of the newborn (P74.0) **P74.422 Hypochloremia of newborn**
+
+
+Source Entity: Hyperbilirubinemia
+--------------------------------------------------
+  Result 1 [ICD: P59 | Score: 0.5167]: Neonatal jaundice from other and unspecified causes
+  Context: **P59 Neonatal jaundice from other and unspecified causes** **Excludes1:** jaundice due to inborn errors of metabolism (E70-E88) kernicterus (P57.-) **P59.0 Neonatal jaundice associated with preterm delivery** Hyperbilirubinemia of prematurity
+
+  Result 2 [ICD: P39 | Score: 0.3967]: Other infections specific to the perinatal period
+  Context: Gilbert syndrome (E80.4) hereditary hemolytic anemias (D55-D58)
+
+
 
 
 === VERITAS AI: NORMALIZED CLINICAL CONTEXT ===

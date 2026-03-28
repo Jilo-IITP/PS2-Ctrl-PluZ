@@ -10,14 +10,16 @@ class HospitalCreate(BaseModel):
     name: str
     location: str
     email_id: Optional[str] = None
-    contact_number: Optional[str] = None
+    rohini_id: Optional[str] = None
+    
 
 
 class HospitalUpdate(BaseModel):
     name: Optional[str] = None
     location: Optional[str] = None
     email_id: Optional[str] = None
-    contact_number: Optional[str] = None
+    rohini_id: Optional[str] = None
+    
 
 
 class HospitalOut(BaseModel):
@@ -25,5 +27,6 @@ class HospitalOut(BaseModel):
     name: str
     location: Optional[str] = None
     email_id: Optional[str] = None
-    contact_number: Optional[str] = None
+    rohini_id: Optional[str] = None
+    
     created_at: Optional[str] = None

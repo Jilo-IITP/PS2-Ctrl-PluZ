@@ -49,7 +49,7 @@ export default function Auth() {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md animate-in slide-in-from-bottom-8 duration-500">
         <div className="flex justify-center mb-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-foreground text-background font-bold shadow-lg shadow-foreground/10">
             <ShieldCheck className="w-6 h-6" />
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function Auth() {
           </CardHeader>
           <CardContent>
             {error && <Alert variant="destructive" className="mb-4 text-xs"><AlertDescription>{error}</AlertDescription></Alert>}
-            {message && <Alert className="mb-4 text-xs bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-900/20 dark:border-emerald-900/50 dark:text-emerald-400"><AlertDescription>{message}</AlertDescription></Alert>}
+            {message && <Alert className="mb-4 text-xs bg-muted text-foreground border-border"><AlertDescription>{message}</AlertDescription></Alert>}
 
             <form onSubmit={handleAuth} className="space-y-6">
               <div className="space-y-2">
