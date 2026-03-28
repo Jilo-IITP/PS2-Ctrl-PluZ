@@ -58,22 +58,22 @@ const FhirViewer = ({ files = [], apiResults = [], onProceed, onBack }) => {
 
         <div className="text-center hidden sm:block">
           <h2 className="text-xl font-bold tracking-tight flex items-center justify-center gap-2">
-            <Code className="w-5 h-5 text-primary" />
+            <Code className="w-5 h-5 text-foreground" />
             FHIR R4 BUNDLE
           </h2>
-          <p className="text-[10px] text-primary font-bold uppercase tracking-widest mt-1">
+          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
             Interoperability Standard Ready
           </p>
         </div>
 
-        <Button onClick={onProceed} className="font-bold shadow-md shadow-primary/20">
+        <Button onClick={onProceed} className="font-bold shadow-md shadow-foreground/10">
           Run Reconciliation
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
 
-      <Alert className="mb-6 bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-900/20 dark:border-emerald-900/50 dark:text-emerald-400">
-        <ShieldCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+      <Alert className="mb-6 bg-muted text-foreground border-border">
+        <ShieldCheck className="h-5 w-5 text-foreground" />
         <AlertTitle className="text-sm font-bold uppercase tracking-wide">Payload Generated Successfully</AlertTitle>
         <AlertDescription className="text-xs font-semibold">
           Data has been mapped strictly to global HL7 interoperability standards.
@@ -98,7 +98,7 @@ const FhirViewer = ({ files = [], apiResults = [], onProceed, onBack }) => {
             </div>
             
             <div className="flex items-center gap-3">
-               <Badge variant="outline" className="text-[10px] uppercase font-bold text-emerald-400 border-emerald-400/20 bg-emerald-400/10 rounded-sm">
+               <Badge variant="outline" className="text-[10px] uppercase font-bold text-foreground border-border bg-muted rounded-sm">
                   <CheckCircle2 className="w-3 h-3 mr-1" /> Valid
                </Badge>
                <Button 
@@ -107,13 +107,13 @@ const FhirViewer = ({ files = [], apiResults = [], onProceed, onBack }) => {
                   onClick={copyToClipboard}
                   className="h-7 text-xs font-mono text-zinc-400 hover:text-white hover:bg-zinc-800"
                >
-                  {copied ? <CheckCircle2 className="w-3 h-3 text-emerald-400 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
+                  {copied ? <CheckCircle2 className="w-3 h-3 text-foreground mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
                   {copied ? 'Copied' : 'Copy'}
                </Button>
             </div>
           </div>
           
-          <div className="p-5 overflow-y-auto flex-grow text-[13px] font-mono text-emerald-300 custom-scrollbar">
+          <div className="p-5 overflow-y-auto flex-grow text-[13px] font-mono text-zinc-300 custom-scrollbar">
             <pre className="whitespace-pre-wrap leading-relaxed">
               {JSON.stringify(fhirPayload, null, 2)}
             </pre>

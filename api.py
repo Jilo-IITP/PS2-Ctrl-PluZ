@@ -26,7 +26,7 @@ sys.path.append(os.path.join(BASE_DIR, "retrieval"))
 sys.path.append(os.path.join(BASE_DIR, "formatting"))
 sys.path.append(os.path.join(BASE_DIR, "validator"))
 
-from preprocessing.pdf_to_text import run_pdf_pipeline
+from preprocessing.pdf_to_text import run_pdf_pipeline, process_single_pdf, structure_text_with_gemini
 from retrieval.generate_handoff import run_retrieval_pipeline
 from formatting.fhir_gen import run_fhir_generation
 from validator.final_val import load_all_dictionaries, run_validation
@@ -180,6 +180,8 @@ async def process_medical_batch(pdf_files: List[UploadFile] = File(...)):
     return {"status": "success", "results": results, "message": f"Processed {len(pdf_files)} documents."}
 
 
+
+
 @app.get("/api/fhir-result/{doc_id}")
 async def get_fhir_result(doc_id: str):
     if doc_id not in CACHE:
@@ -193,6 +195,15 @@ async def get_validation_report(doc_id: str):
         raise HTTPException(status_code=404, detail="Document ID not found in cache.")
     return CACHE[doc_id]["validation_report"]
 
+
+@app.get("/api/generate-mediassist")
+async def generate_mediassist():
+    try:
+        from formatting.mediassist_json_gen import generate_mediassist_json
+        data = generate_mediassist_json()
+        return {"status": "success", "data": data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/ping")
 async def ping():

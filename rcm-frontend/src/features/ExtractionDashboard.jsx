@@ -7,8 +7,28 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-const ExtractionDashboard = ({ files = [], apiResults = [], onConfirm, onBack }) => {
+const ExtractionDashboard = ({ files = [], apiResults = [], isBatch = false, onConfirm, onBack }) => {
   const [activeFileId, setActiveFileId] = useState(`file-0`);
+
+  const handleExportMediAssist = async () => {
+    try {
+      const resp = await fetch('http://localhost:8000/api/generate-mediassist');
+      const json = await resp.json();
+      if(json.status === 'success') {
+         const blob = new Blob([JSON.stringify(json.data, null, 2)], { type: 'application/json' });
+         const url = URL.createObjectURL(blob);
+         const a = document.createElement('a');
+         a.href = url;
+         a.download = `MediAssist_Export.json`;
+         a.click();
+      } else {
+         alert('Export failed.');
+      }
+    } catch (err) {
+       console.error(err);
+       alert('Export failed. Check backend console.');
+    }
+  };
 
   return (
     <div className="flex flex-col h-full animate-in fade-in zoom-in-95 duration-500">
@@ -22,18 +42,23 @@ const ExtractionDashboard = ({ files = [], apiResults = [], onConfirm, onBack })
 
         <div className="text-center hidden sm:block">
           <h2 className="text-xl font-bold tracking-tight flex items-center justify-center gap-2">
-            <Activity className="w-5 h-5 text-primary" />
+            <Activity className="w-5 h-5 text-foreground" />
             EXTRACTION DASHBOARD
           </h2>
-          <p className="text-[10px] text-primary font-bold uppercase tracking-widest mt-1">
-            NLP Extraction & Coding
+          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
+            {isBatch ? 'BATCH CONTEXTUAL EXTRACTION' : 'NLP EXTRACTION & CODING'}
           </p>
         </div>
 
-        <Button onClick={onConfirm} className="font-bold shadow-md shadow-primary/20">
-          Approve Batch ({files.length})
-          <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
+        <div className="flex gap-3">
+          <Button variant="outline" onClick={handleExportMediAssist} className="font-bold border-muted-foreground text-xs uppercase tracking-widest hidden sm:flex">
+             Generate MediAssist JSON
+          </Button>
+          <Button onClick={onConfirm} className="font-bold shadow-md shadow-foreground/10">
+            Approve Batch ({files.length})
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
       </div>
 
       <Tabs value={activeFileId} onValueChange={setActiveFileId} className="w-full flex-grow flex flex-col">
@@ -43,7 +68,7 @@ const ExtractionDashboard = ({ files = [], apiResults = [], onConfirm, onBack })
               <TabsTrigger 
                 key={idx} 
                 value={`file-${idx}`}
-                className="flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm data-[state=active]:text-primary"
+                className="flex items-center gap-2 data-[state=active]:bg-foreground data-[state=active]:text-background data-[state=active]:shadow-sm"
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span className="truncate max-w-[120px] text-xs font-semibold">{file.name}</span>
@@ -53,7 +78,7 @@ const ExtractionDashboard = ({ files = [], apiResults = [], onConfirm, onBack })
         )}
 
         {files.map((currentFile, idx) => {
-          const currentAiData = apiResults[idx] || {};
+          const currentAiData = isBatch ? (apiResults[0] || {}) : (apiResults[idx] || {});
           const pdfUrl = currentFile ? URL.createObjectURL(currentFile) : null;
           const confidenceScore = currentAiData?.confidence_score || 0;
 
@@ -66,7 +91,7 @@ const ExtractionDashboard = ({ files = [], apiResults = [], onConfirm, onBack })
                 <Card className="flex flex-col overflow-hidden shadow-sm h-full">
                   <div className="bg-muted p-3 border-b flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-background border rounded-md flex items-center justify-center text-primary">
+                      <div className="w-8 h-8 bg-background border rounded-md flex items-center justify-center text-foreground">
                         <FileText className="w-4 h-4" />
                       </div>
                       <div>
@@ -98,7 +123,7 @@ const ExtractionDashboard = ({ files = [], apiResults = [], onConfirm, onBack })
                        <div>
                           <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Extraction Status</p>
                           <div className="flex items-center gap-2 mt-1text-foreground">
-                            <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                            <ShieldCheck className="w-5 h-5 text-foreground" />
                             <span className="text-lg font-bold">Verified by AI</span>
                           </div>
                        </div>
@@ -113,7 +138,7 @@ const ExtractionDashboard = ({ files = [], apiResults = [], onConfirm, onBack })
                   </Card>
 
                   {/* Header Info */}
-                  <Card className="shadow-sm border-l-4 border-l-primary">
+                  <Card className="shadow-sm border-l-4 border-l-foreground">
                     <CardHeader className="p-5 pb-0">
                       <CardTitle className="text-xs font-bold uppercase tracking-wide border-b pb-2">Claim Metadata</CardTitle>
                     </CardHeader>
@@ -144,7 +169,7 @@ const ExtractionDashboard = ({ files = [], apiResults = [], onConfirm, onBack })
                     <CardHeader className="p-5 flex flex-row items-center justify-between pb-2 border-b">
                       <CardTitle className="text-xs font-bold uppercase tracking-wide">Coded Services</CardTitle>
                       <Badge variant="secondary" className="text-[10px] uppercase tracking-wider font-bold">
-                        <CheckCircle2 className="w-3 h-3 mr-1.5" /> RAG Active
+                        <CheckCircle2 className="w-3 h-3 mr-1.5" /> {isBatch ? 'BATCH RECONCILIATION ACTIVE' : 'RAG ACTIVE'}
                       </Badge>
                     </CardHeader>
                     <CardContent className="p-0">

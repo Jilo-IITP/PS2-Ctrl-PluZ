@@ -1,68 +1,20 @@
-Here's the cleaned and structured information from the hospital bill:
+It seems there was an error reading the PDF, and the content provided is an error message rather than the hospital document itself:
 
----
+```
+Error reading PDF: Unable to get page count. Is poppler installed and in PATH?
+```
 
-### Hospital Details
+I cannot clean up or structure the hospital document without the actual text content. Please provide the raw text from '2.pdf' when it becomes available, and I will be happy to assist you then!
 
-*   **Hospital Name:** MEDIVERSAL MULTI SUPER SPECIALITY HOSPITAL (A Unit Of Mediversal Healthcare Pvt Ltd)
-*   **Bill Summary:** Final Bill Summary
-*   **Bill Number:** FP24002947
-*   **Bill Date:** 05/03/2022
-*   **GSTIN:** 29AACCM80A4RIZP
+The "RAW TEXT" you provided:
 
-### Patient Information
+```
+Error reading PDF: Unable to get page count. Is poppler installed and in PATH?
+```
 
-*   **UHID:** MDV2022001807
-*   **Patient Name:** N/A (Information missing from raw text; "Medi Assist" is identified as the TPA)
-*   **Age/Sex:** 59 Y/Female
-*   **Admission No.:** EMR2022000278
-*   **Mobile Number:** N/A (Information missing)
-*   **Address:** N/A (Information missing)
-*   **Category:** ITPA LTD
-*   **Consultants:** Not Specified
-*   **TPA:** Medi Assist Insurance TPA
-*   **Corporate:** Corporate Pvt Ltd
+This is an error message from a PDF processing tool, not the unstructured OCR output of the hospital document. It indicates that the system attempting to read the PDF encountered an issue and couldn't extract any text.
 
-### Admission & Discharge Summary
+Therefore, I don't have any content to clean up, structure into sections, or put into Markdown tables.
 
-*   **Admission Date:** 01/03/2022 16:00:00
-*   **Discharge Date:** 05/03/2022 01:22:23
-
-### Ward & Room History
-
-| Ward       | Room Name    | Bed No. | Date/Time          | Status     |
-| :--------- | :----------- | :------ | :----------------- | :--------- |
-| ICCU 2     | ICCU 1       | 415     | 01/03/2022 16:00:00 | Admitted   |
-| ICCU 3 HDU | ICCU 3 HDU   | 322     | 05/03/2022 01:22:23 | Discharged |
-
-### Diagnosis / Procedure
-
-*   **Package (IPD):** Permanent Pacemaker Implantation Double Chamber (2 ICU + 1 Opted category)
-
-### Billing/Charges
-
-| Sr. No. | Service Name                                                              | Bill Amount  | Discount Amount | Total Amount |
-| :------ | :------------------------------------------------------------------------ | :----------- | :-------------- | :----------- |
-| 1       | Bed Charges                                                               | 8,500.00     | 2.00            | 8,498.00     |
-| 2       | Pathology                                                                 | 18,865.00    | 0.00            | 18,865.00    |
-| 3       | Diagnostic                                                                | 11,000.00    | 0.00            | 11,000.00    |
-| 4       | Day Care Procedure                                                        | 1,485.00     | 0.00            | 1,485.00     |
-| 5       | Implant                                                                   | 252,520.00   | 0.00            | 252,520.00   |
-| 6       | Pharmacy                                                                  | 3,884.63     | 0.00            | 3,884.63     |
-| 7       | Dieticians Charges                                                        | 500.00       | 0.00            | 500.00       |
-| 8       | Point Of Care Services                                                    | 3,476.00     | 0.00            | 3,476.00     |
-| 9       | Medical Records                                                           | 500.00       | 0.00            | 500.00       |
-| 10      | Admission Charges                                                         | 300.00       | 0.00            | 300.00       |
-| 11      | Doctors Visit /Consultation (CN002)                                       | 3,900.00     | 0.00            | 3,900.00     |
-| 12      | Package(IPD) - Permanent Pacemaker Implantation Double Chamber (2 ICU + 1 Opted category) | 101,200.00   | 0.00            | 101,200.00   |
-|         | **Total**                                                                 | **406,131.00** | **2.00**        | **406,129.00** |
-
-### Financial Summary
-
-*   **Total Bill Amount:** 406,131.00
-*   **Total Discount Amount:** 2.00
-*   **Advance Received:** 10,000.00
-*   **Refund Amount:** 3,871.00
-*   **Net TPA/Corporate Amount:** 400,000.00
-*   **Amount To Be Received:** 0.00
+Please provide the actual unstructured OCR output from the 'Connect the Dots (1).pdf' document, and I will be happy to assist with the requested cleanup and structuring.
 

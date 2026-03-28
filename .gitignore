@@ -4,3 +4,5 @@ data/*.pkl
 node_modules/
 preprocessing/hospital_pdfs/*
 !preprocessing/hospital_pdfs/.gitkeep
+rcm-frontend/.env.local
+.env.local
