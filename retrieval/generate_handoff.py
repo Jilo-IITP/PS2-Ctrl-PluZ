@@ -6,8 +6,12 @@ from get_chunks import StandaloneRetriever
 
 from dotenv import load_dotenv, find_dotenv; load_dotenv(find_dotenv())
 
+# Support both GOOGLE_API_KEY and GEMINI_API_KEY
+if "GOOGLE_API_KEY" not in os.environ and "GEMINI_API_KEY" in os.environ:
+    os.environ["GOOGLE_API_KEY"] = os.environ["GEMINI_API_KEY"]
+
 if "GOOGLE_API_KEY" not in os.environ:
-    raise ValueError("GOOGLE_API_KEY environment variable not set.")
+    raise ValueError("GOOGLE_API_KEY or GEMINI_API_KEY environment variable not set.")
 
 def extract_diagnoses(ocr_text: str) -> list[str]:
     print("-> Pinging Gemini 2.5 Flash for NER extraction...")

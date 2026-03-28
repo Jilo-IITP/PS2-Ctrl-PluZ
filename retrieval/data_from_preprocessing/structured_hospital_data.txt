@@ -66,3 +66,41 @@ Here's the cleaned and structured information from the hospital bill:
 *   **Net TPA/Corporate Amount:** 400,000.00
 *   **Amount To Be Received:** 0.00
 
+Here's the cleaned and structured output from the hospital document:
+
+---
+
+### Patient Info
+
+*   **Consultant:** Dr. Roy, M.B.B.S.
+
+### Lab Results
+
+| Test Name                         | Result   | Unit       | Reference Range / Notes |
+| :-------------------------------- | :------- | :--------- | :---------------------- |
+| HAEMOGLOBIN (Method: Cyanmethaemoglobin) | 12       | g/dL       |                         |
+| TOTAL LEUCOCYTE COUNT (TLC)       | 7200     | /mm³       |                         |
+| RED BLOOD CELL COUNT (RBC)        | 3.50     | x10^6/µL   |                         |
+| PACKED CELL VOLUME (PCV)          | 36       | %          |                         |
+| MCV (Mean Corpuscular Volume)     | 110.8    | fL         |                         |
+| MCH (Mean Corpuscular HB)         | 34.6     | pg         | Ref: 29-32 pg (inferred) |
+| MCHC (Mean Corpuscular HB Conc)   | 31.23    | g/dL       | Ref: 30-33 g/dL (inferred) |
+| PLATELET COUNT                    | 95,000   | /mm³       |                         |
+| RDW SD                            | (Not provided) |          |                         |
+| **DIFFERENTIAL LEUCOCYTE COUNT (DLC)** |          |            |                         |
+| NEUTROPHILS                       | 60       | %          |                         |
+| EOSINOPHILS                       | 4.7      | %          |                         |
+| LYMPHOCYTES                       | 29       | %          |                         |
+| MONOCYTES                         | 4        | %          |                         |
+| BASOPHILS                         | (Not provided) | %          |                         |
+
+### Notes/Interpretation
+
+*   Results of the tests are unexpected and need to be correlated clinically.
+*   If concerned, it is advised to immediately request a recheck.
+*   All reports advise contacting the lab for the patient's results.
+
+---
+
+**Note:** The original text did not contain information for 'Billing/Charges', 'Medications', or a specific 'Diagnosis'. Some parts of the raw OCR output were highly corrupted and interpreted to the best possible clinical coherence (e.g., specific reference ranges and the percentages for Differential Leucocyte Count).
+
