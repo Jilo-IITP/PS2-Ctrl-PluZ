@@ -20,11 +20,11 @@ const DashboardHeader = ({ userProfile, onLogout }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full text-muted-foreground hover:bg-muted border shadow-sm bg-background">
-                <Info className="w-3.5 h-3.5" />
+              <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground hover:bg-muted border shadow-sm bg-background">
+                <Info className="w-4 h-4" />
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
@@ -40,12 +40,12 @@ const DashboardHeader = ({ userProfile, onLogout }) => {
             </DialogContent>
           </Dialog>
 
-          <div className="flex flex-col items-end">
-            <p className="text-[9px] font-bold uppercase tracking-widest text-foreground">{userProfile?.hospital_name || 'Medical Center'}</p>
+          <div className="flex flex-col items-end mr-2">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-foreground">{userProfile?.hospital_name || 'Medical Center'}</p>
           </div>
           <ThemeToggle />
-          <Button variant="outline" size="sm" onClick={onLogout} className="h-7 text-[9px] px-2 uppercase tracking-widest font-bold hidden sm:flex">
-            <LogOut className="w-3 h-3 mr-1.5" /> End Session
+          <Button variant="outline" size="sm" onClick={onLogout} className="text-[10px] uppercase tracking-widest font-bold hidden sm:flex">
+            <LogOut className="w-3 h-3 mr-2" /> End Session
           </Button>
         </div>
       </div>

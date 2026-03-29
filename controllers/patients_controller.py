@@ -94,9 +94,11 @@ async def update_patient(patient_id: str, tpa_id: str, data: dict) -> dict:
             .eq("tpa_id", tpa_id)
             .execute()
         )
-        # Refetch the updated row since default update doesn't always return the payload
-        updated_res = supabase.table("patients").select("*").eq("id", patient_id).single().execute()
-        return updated_res.data
+        if not res.data:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Patient not found")
+        return res.data[0]
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail=str(e))
 
@@ -111,43 +113,8 @@ async def delete_patient(patient_id: str, tpa_id: str):
             .eq("tpa_id", tpa_id)
             .execute()
         )
-    except Exception as e:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-
-async def upsert_patient_amount(patient_id: str, tpa_id: str, description: str, amount: float) -> dict:
-    supabase = get_supabase()
-    try:
-        res = supabase.table("patients").select("amount").eq("id", patient_id).eq("tpa_id", tpa_id).single().execute()
-        patient_data = res.data
-        if not patient_data:
+        if not res.data:
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Patient not found")
-        
-        current_amounts = patient_data.get("amount") or {}
-        current_amounts[description] = amount
-        
-        update_res = supabase.table("patients").update({"amount": current_amounts}).eq("id", patient_id).execute()
-        return update_res.data[0]
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail=str(e))
-
-
-async def delete_patient_amount(patient_id: str, tpa_id: str, description: str) -> dict:
-    supabase = get_supabase()
-    try:
-        res = supabase.table("patients").select("amount").eq("id", patient_id).eq("tpa_id", tpa_id).single().execute()
-        patient_data = res.data
-        if not patient_data:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Patient not found")
-        
-        current_amounts = patient_data.get("amount") or {}
-        if description in current_amounts:
-            del current_amounts[description]
-            update_res = supabase.table("patients").update({"amount": current_amounts}).eq("id", patient_id).execute()
-            return update_res.data[0]
-        return res.data
     except HTTPException:
         raise
     except Exception as e:

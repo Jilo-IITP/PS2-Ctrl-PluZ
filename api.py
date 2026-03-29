@@ -85,18 +85,6 @@ async def generate_mediassist():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/api/mediassist-template")
-async def get_mediassist_template():
-    try:
-        template_path = os.path.join(BASE_DIR, "formatting", "medi_assist.html")
-        if not os.path.exists(template_path):
-            raise HTTPException(status_code=404, detail="Template not found")
-        with open(template_path, "r", encoding="utf-8") as f:
-            content = f.read()
-        return {"status": "success", "template": content}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
 @app.get("/ping")
 async def ping():
     return {"status": "Backend is alive!"}

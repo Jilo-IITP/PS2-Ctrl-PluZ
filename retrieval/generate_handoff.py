@@ -85,9 +85,8 @@ def write_handoff_file(mapped_contexts: dict, output_filename: str):
                 if isinstance(score, float):
                     score = f"{score:.4f}"
                 
-                text_content = chunk.get('text', '').replace('\n', ' ')
                 f.write(f"  Result {i+1} [ICD: {icd_code} | Score: {score}]: {disease}\n")
-                f.write(f"  Context: {text_content}\n\n")
+                f.write(f"  Context: {chunk.get('text', '').replace('\n', ' ')}\n\n")
             f.write("\n")
 
 def generate_handoff_text(mapped_contexts: dict) -> str:
@@ -115,9 +114,8 @@ def generate_handoff_text(mapped_contexts: dict) -> str:
             if isinstance(score, float):
                 score = f"{score:.4f}"
             
-            text_content = chunk.get('text', '').replace('\n', ' ')
             lines.append(f"  Result {i+1} [ICD: {icd_code} | Score: {score}]: {disease}\n")
-            lines.append(f"  Context: {text_content}\n\n")
+            lines.append(f"  Context: {chunk.get('text', '').replace('\n', ' ')}\n\n")
         lines.append("\n")
     return "".join(lines)
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PatientCard from './PatientCard';
 
-const RegistryGrid = ({ patients, loading, onSelectPatient, onEditPatient, onDeletePatient }) => {
+const RegistryGrid = ({ patients, loading, onSelectPatient }) => {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
@@ -18,7 +18,7 @@ const RegistryGrid = ({ patients, loading, onSelectPatient, onEditPatient, onDel
         </div>
       ) : (
         patients.map((patient) => (
-          <PatientCard key={patient.id} patient={patient} onSelect={onSelectPatient} onEdit={onEditPatient} onDelete={onDeletePatient} />
+          <PatientCard key={patient.id} patient={patient} onSelect={onSelectPatient} />
         ))
       )}
     </div>

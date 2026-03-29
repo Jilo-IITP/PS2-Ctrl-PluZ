@@ -5,40 +5,34 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-const ReconciliationDashboard = ({ files = [], apiResults = [], patient, onRestart, onBack }) => {
+const ReconciliationDashboard = ({ files = [], apiResults = [], onRestart, onBack }) => {
   const dynamicFileName = files.length > 0 ? files[0].name.replace('.pdf', '') : "Batch_001";
   
   // Aggregate all anomalies from all files in the batch
   const allIssues = apiResults.flatMap(res => res.validation_report?.issue || []);
   const hasErrors = allIssues.length > 0;
 
-  const handleUpdateStep = async (newStep) => {
-    if (!patient) return;
-    try {
-      const res = await fetch(`http://localhost:8000/patients/${patient.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ step: newStep })
-      });
-      if (!res.ok) throw new Error("Update failed");
-      onRestart(); // Go back to dashboard on success
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update workflow state.");
-    }
-  };
-
   return (
     <div className="flex flex-col h-full animate-in zoom-in-95 duration-500">
       
       {/* TOP NAVIGATION BAR */}
-      <div className="flex items-center justify-between mb-4 pb-3 border-b">
-        <Button variant="ghost" size="sm" onClick={onBack} className="text-muted-foreground font-bold h-7 px-2 text-xs">
-          <ArrowLeft className="w-3.5 h-3.5 mr-1.5" />
+      <div className="flex items-center justify-between mb-6 pb-4 border-b">
+        <Button variant="ghost" onClick={onBack} className="text-muted-foreground font-bold">
+          <ArrowLeft className="w-4 h-4 mr-2" />
           Back
         </Button>
 
-        <Badge variant="outline" className="px-3 py-1 uppercase tracking-widest font-bold text-[10px]">
+        <div className="text-center hidden sm:block">
+          <h2 className="text-xl font-bold tracking-tight flex items-center justify-center gap-2">
+            <Activity className="w-5 h-5 text-foreground" />
+            FINAL ADJUDICATION
+          </h2>
+          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
+            Pre-Submission Rules Engine
+          </p>
+        </div>
+
+        <Badge variant="outline" className="px-4 py-1.5 uppercase tracking-widest font-bold">
           {files.length} {files.length === 1 ? 'Doc' : 'Docs'} Queued
         </Badge>
       </div>
@@ -93,44 +87,22 @@ const ReconciliationDashboard = ({ files = [], apiResults = [], patient, onResta
              )}
           </CardContent>
           <CardFooter className="p-4 border-t bg-muted/20 flex gap-4 mt-auto">
-            <Button variant="outline" onClick={onRestart} className="font-bold shrink-0">
-              <RefreshCcw className="w-4 h-4 mr-2" /> Cancel & Return
-            </Button>
-            
-            <div className="flex-1 flex gap-2">
-              {!patient ? (
-                <Button disabled={hasErrors} className="w-full font-bold shadow-md">
-                  <Send className="w-4 h-4 mr-2" />
-                  {hasErrors ? 'Resolve Errors First' : 'Submit Payload'}
-                </Button>
-              ) : patient.step === 'pre auth' ? (
-                <>
-                  <Button disabled={hasErrors} variant="destructive" className="flex-1 font-bold shadow-md" onClick={() => handleUpdateStep('discharged')}>
-                    <Send className="w-4 h-4 mr-2" /> Deny & Discharge
-                  </Button>
-                  <Button disabled={hasErrors} className="flex-1 font-bold shadow-md" onClick={() => handleUpdateStep('admitted')}>
-                    <CheckCircle className="w-4 h-4 mr-2" /> Approve Admission
-                  </Button>
-                </>
-              ) : patient.step === 'admitted' ? (
-                <>
-                  <Button disabled={hasErrors} variant="secondary" className="flex-1 font-bold shadow-md" onClick={() => handleUpdateStep('discharged')}>
-                    <Send className="w-4 h-4 mr-2" /> Discharge Patient
-                  </Button>
-                  <Button disabled={hasErrors} className="flex-1 font-bold shadow-md" onClick={() => handleUpdateStep('setteled')}>
-                    <CheckCircle className="w-4 h-4 mr-2" /> Settle Claim
-                  </Button>
-                </>
-              ) : patient.step === 'discharged' ? (
-                <Button disabled={hasErrors} className="w-full font-bold shadow-md" onClick={() => handleUpdateStep('setteled')}>
-                  <CheckCircle className="w-4 h-4 mr-2" /> Settle Claim
-                </Button>
-              ) : (
-                <Button disabled={hasErrors} className="w-full font-bold shadow-md" onClick={() => handleUpdateStep('setteled')}>
-                  <CheckCircle className="w-4 h-4 mr-2" /> Mark as Settled
-                </Button>
-              )}
-            </div>
+            <Button 
+                variant="outline" 
+                onClick={onRestart}
+                className="w-1/3 font-bold"
+              >
+                <RefreshCcw className="w-4 h-4 mr-2" />
+                New Batch
+              </Button>
+              
+              <Button 
+                disabled={hasErrors}
+                className={`w-2/3 font-bold shadow-md shadow-primary/20 ${hasErrors ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <Send className="w-4 h-4 mr-2" />
+                {hasErrors ? 'Resolve Errors First' : 'Submit Payload via FHIR API'}
+              </Button>
           </CardFooter>
         </Card>
       </div>

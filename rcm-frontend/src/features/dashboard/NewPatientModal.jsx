@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Plus, Fingerprint } from 'lucide-react';
 
-const NewPatientModal = ({ isOpen, onOpenChange, formData, onChange, onSubmit, isEditMode = false }) => {
+const NewPatientModal = ({ isOpen, onOpenChange, formData, onChange, onSubmit }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -45,7 +45,7 @@ const NewPatientModal = ({ isOpen, onOpenChange, formData, onChange, onSubmit, i
 
         <DialogFooter className="p-6 border-t bg-muted/10 shrink-0">
           <Button form="registry-form" type="submit" className="w-full font-bold uppercase tracking-widest rounded-sm">
-            {isEditMode ? 'Save Changes' : 'Commit Registry Entry'}
+            Synchronize Patient
           </Button>
         </DialogFooter>
       </DialogContent>
