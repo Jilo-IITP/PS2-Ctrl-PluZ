@@ -4,18 +4,21 @@ import Auth from './features/Auth';
 import OfficerDashboard from './features/OfficerDashboard';
 import ProcessingPipeline from './features/ProcessingPipeline';
 import { ThemeProvider } from '@/components/ui/theme_provider';
+import { PatientProvider } from './context/PatientContext';
 
 function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="rcm-ui-theme">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Auth />} />
-          <Route path="/dashboard" element={<OfficerDashboard />} />
-          <Route path="/process" element={<ProcessingPipeline />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
+      <PatientProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Auth />} />
+            <Route path="/dashboard" element={<OfficerDashboard />} />
+            <Route path="/process" element={<ProcessingPipeline />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </PatientProvider>
     </ThemeProvider>
   );
 }

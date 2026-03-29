@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { usePatients } from '../../context/PatientContext';
 
 const API_BASE = 'http://localhost:8000';
 
 export function useDashboardLogic() {
+  const { patients, setPatients, isFetched, setIsFetched, userProfile, setUserProfile } = usePatients();
   const navigate = useNavigate();
   const [session, setSession] = useState(null);
-  const [patients, setPatients] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!isFetched);
   const [activePatientId, setActivePatientId] = useState(null);
   const [isNewPatientOpen, setIsNewPatientOpen] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [processingStatus, setProcessingStatus] = useState("");
 
@@ -26,15 +26,22 @@ export function useDashboardLogic() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: cur } }) => {
       setSession(cur);
-      if (cur) { fetchProfile(cur); fetchPatients(cur); }
+      if (cur) {
+        if (!userProfile) fetchProfile(cur);
+        if (!isFetched) fetchPatients(cur);
+        else setLoading(false);
+      }
       else { setLoading(false); }
     });
     const { data: authListener } = supabase.auth.onAuthStateChange((_e, s) => {
       setSession(s);
-      if (s) { fetchProfile(s); fetchPatients(s); }
+      if (s) {
+        if (!userProfile) fetchProfile(s);
+        if (!isFetched) fetchPatients(s);
+      }
     });
     return () => authListener.subscription.unsubscribe();
-  }, []);
+  }, [isFetched]);
 
   const fetchProfile = async (s) => {
     const res = await fetch(`${API_BASE}/users/me`, { headers: { 'Authorization': `Bearer ${s.access_token}` } });
@@ -66,6 +73,7 @@ export function useDashboardLogic() {
         return { ...pat, documents: docs };
       }));
       setPatients(enhanced);
+      setIsFetched(true);
     } catch (err) { console.error(err); } finally { setLoading(false); }
   };
 
@@ -101,14 +109,25 @@ export function useDashboardLogic() {
 
   const handleFileAttached = async (e, patientId, stage) => {
     const files = Array.from(e.target.files);
-    const newDocs = files.map(f => ({ id: `t-${Math.random()}`, name: f.name, stage, status: 'pending', url: URL.createObjectURL(f), rawFile: f }));
+    // Keep rawFile in memory so we can re-use it for pipeline without downloading
+    const newDocs = files.map(f => ({ 
+      id: `t-${Math.random()}`, 
+      name: f.name, 
+      stage, 
+      status: 'pending', 
+      url: URL.createObjectURL(f), 
+      rawFile: f 
+    }));
     setPatients(ps => ps.map(p => p.id === patientId ? { ...p, documents: [...p.documents, ...newDocs] } : p));
     for (const f of files) {
       const fd = new FormData();
       fd.append("file", f, `${stage}__${f.name}`);
       const res = await fetch(`${API_BASE}/documents/?patient_id=${patientId}`, { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` }, body: fd });
       const up = await res.json();
-      setPatients(ps => ps.map(p => p.id === patientId ? { ...p, documents: p.documents.map(d => d.name === f.name && d.stage === stage ? { ...d, id: up.id, url: up.file_url, rawFile: f } : d) } : p));
+      setPatients(ps => ps.map(p => p.id === patientId ? { 
+        ...p, 
+        documents: p.documents.map(d => d.name === f.name && d.stage === stage ? { ...d, id: up.id, url: up.file_url, rawFile: f } : d) 
+      } : p));
     }
   };
 
@@ -126,6 +145,8 @@ export function useDashboardLogic() {
     const sDocs = patient.documents.filter(d => d.stage === stage);
     setLoading(true);
     setProcessingStatus("Aggregating Records...");
+    
+    // Check if we already have the rawFile in memory (session memory)
     const blobs = await Promise.all(sDocs.map(async d => {
       if (d.rawFile) return d.rawFile;
       const r = await fetch(d.url);
