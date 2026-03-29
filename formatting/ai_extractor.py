@@ -50,10 +50,42 @@ class ExtractedPatient(BaseModel):
     clinical_details: Optional[ExtractedClinicalDetails] = Field(default=None, description="Clinical history and treatment plans.")
 
 class HospitalDocument(BaseModel):
-    invoice_number: Optional[str] = Field(description="The main invoice or bill number.")
-    invoice_date: str = Field(description="The date of the invoice in YYYY-MM-DD format. Default to 1970-01-01 if missing.")
-    hospital_name: Optional[str] = Field(description="The name of the hospital or billing company.")
-    patients: List[ExtractedPatient] = Field(description="List of all patients found in the document.")
+
+    invoice_number: Optional[str] = Field(
+        description="The main invoice or bill number."
+    )
+
+    invoice_date: str = Field(
+        description="The date of the invoice in YYYY-MM-DD format. Default to 1970-01-01 if missing."
+    )
+
+    hospital_name: Optional[str] = Field(
+        description="The name of the hospital or billing company."
+    )
+
+    patients: List[ExtractedPatient] = Field(
+        description="List of all patients found in the document."
+    )
+
+    attached_files: List[str] = Field(
+        default_factory=list,
+        description=(
+            "List of document/report types that are explicitly mentioned as attached in the OCR text. "
+            "Examples: 'Lab Report', 'Discharge Summary', 'Prescription', 'Radiology Report', 'Invoice Copy'. "
+            "Only include items that are clearly present in the input."
+        )
+    )
+
+    missing_files: List[str] = Field(
+        default_factory=list,
+        description=(
+            "List of important medical or billing documents that are NOT present in the OCR text "
+            "but are typically required for a valid insurance claim. "
+            "Infer based on context (e.g., if surgery is mentioned but no operative report is present). "
+            "Examples: 'Operative Report', 'Doctor Prescription', 'Investigation Report', 'Discharge Summary'. "
+            "Do NOT hallucinate randomly—only include if strongly implied as missing."
+        )
+    )
 
 # --- 2. THE EXTRACTION LOGIC ---
 def extract_text_from_file(filepath: str) -> str:
@@ -81,7 +113,7 @@ def run_ai_extraction(raw_text: str, api_key: str) -> HospitalDocument:
     2. Convert all dates to YYYY-MM-DD.
     3. Do NOT invent or hallucinate diagnoses or codes. Extract exact ICD-10 or CPT codes only if present in the text.
     4. Link the correct ordering doctor and diagnoses to the corresponding patient.
-    5. list the original document types that is given in raw text
+    5. list the original document types attached in input data of raw text if u feel any report is missing and belive it should be attached for a valid insurance claim put it in result also put the aleardy attached reports
     
     RAW TEXT:
     {raw_text}

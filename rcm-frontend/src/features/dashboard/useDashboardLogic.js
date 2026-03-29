@@ -16,7 +16,7 @@ export function useDashboardLogic() {
   const [processingStatus, setProcessingStatus] = useState("");
 
   const [patientForm, setPatientForm] = useState({
-    name: "", gender: "", contact: "", dob: "", age: "", policy_number: "", employee_id: "", insurer_id: "", medical_claim: false, occupation: "", address: ""
+    aadhar_no: ""
   });
 
   const [hospitalForm, setHospitalForm] = useState({
@@ -86,17 +86,54 @@ export function useDashboardLogic() {
     fetchProfile(session);
   };
 
+  /**
+   * handleCreatePatient
+   * Updated to only send aadhar_no. Backend handles lookup and TPA association.
+   */
   const handleCreatePatient = async (e) => {
     e.preventDefault();
-    const res = await fetch(`${API_BASE}/patients/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
-      body: JSON.stringify({ ...patientForm, age: patientForm.age ? parseInt(patientForm.age) : null })
-    });
-    const newPat = await res.json();
-    setPatients([{ ...newPat, documents: [] }, ...patients]);
-    setIsNewPatientOpen(false);
-    setPatientForm({ name: "", gender: "", contact: "", dob: "", age: "", policy_number: "", employee_id: "", insurer_id: "", medical_claim: false, occupation: "", address: "" });
+    try {
+      setLoading(true);
+      setProcessingStatus("Synchronizing Patient Registry...");
+      
+      const res = await fetch(`${API_BASE}/patients/`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${session.access_token}` 
+        },
+        body: JSON.stringify({ 
+          aadhar_no: patientForm.aadhar_no 
+        })
+      });
+      
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.detail || "Failed to create/update patient");
+      }
+      
+      const newPat = await res.json();
+      
+      // Update local state: Replace if already exists in list, otherwise add to top
+      setPatients(prev => {
+        const exists = prev.findIndex(p => p.aadhar_no === newPat.aadhar_no);
+        if (exists !== -1) {
+          const updated = [...prev];
+          updated[exists] = { ...newPat, documents: prev[exists].documents || [] };
+          return updated;
+        }
+        return [{ ...newPat, documents: [] }, ...prev];
+      });
+      
+      setIsNewPatientOpen(false);
+      setPatientForm({ aadhar_no: "" });
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    } finally {
+      setLoading(false);
+      setProcessingStatus("");
+    }
   };
 
   const handleFileAttached = async (e, patientId, stage) => {

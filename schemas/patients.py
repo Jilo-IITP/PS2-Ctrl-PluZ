@@ -7,7 +7,7 @@ from typing import Optional
 
 
 class PatientCreate(BaseModel):
-    name: str
+    name: Optional[str] = None
     gender: Optional[str] = None
     contact: Optional[str] = None
     dob: Optional[str] = None          # ISO date string YYYY-MM-DD
@@ -18,6 +18,7 @@ class PatientCreate(BaseModel):
     medical_claim: Optional[bool] = False
     occupation: Optional[str] = None
     address: Optional[str] = None
+    aadhar_no: Optional[str] = None
 
 
 class PatientUpdate(BaseModel):
@@ -33,12 +34,13 @@ class PatientUpdate(BaseModel):
     occupation: Optional[str] = None
     address: Optional[str] = None
     step: Optional[str] = None
+    aadhar_no: Optional[str] = None
 
 
 class PatientOut(BaseModel):
     id: str
     tpa_id: Optional[str] = None
-    name: str
+    name: Optional[str] = None
     gender: Optional[str] = None
     contact: Optional[str] = None
     dob: Optional[str] = None
@@ -50,4 +52,5 @@ class PatientOut(BaseModel):
     occupation: Optional[str] = None
     address: Optional[str] = None
     step: Optional[str] = None
+    aadhar_no: Optional[str] = None
     created_at: Optional[str] = None

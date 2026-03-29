@@ -9,20 +9,45 @@ from core.supabase import get_supabase
 
 async def create_patient(data: dict, tpa_id: str) -> dict:
     supabase = get_supabase()
-    # Sanitize data: convert empty strings to None for optional fields 
-    # (prevents 'invalid input syntax for type date: ""' errors)
+    # Sanitize data: convert empty strings to None
     sanitized_data = {k: (None if v == "" else v) for k, v in data.items()}
+    
+    # Check if we should perform an upsert based on aadhar_no
+    aadhar_no = sanitized_data.get("aadhar_no")
+    if aadhar_no:
+        try:
+            # Check if a patient with this aadhar_no already exists
+            existing = supabase.table("patients").select("*").eq("aadhar_no", aadhar_no).execute()
+            if existing.data:
+                existing_patient = existing.data[0]
+                patient_id = existing_patient["id"]
+                
+                # Update existing patient with new tpa_id and other provided data
+                # Only update fields that are provided (not None) to avoid data loss
+                update_data = {k: v for k, v in sanitized_data.items() if v is not None}
+                update_data["tpa_id"] = tpa_id
+                
+                res = supabase.table("patients").update(update_data).eq("id", patient_id).execute()
+                if res.data:
+                    return res.data[0]
+        except Exception as e:
+            print(f"[WARN] controllers.patients_controller.create_patient (upsert check): {e}")
+
     row = {**sanitized_data, "tpa_id": tpa_id}
+    # If name is still missing for a new patient, provide a default
+    if not row.get("name"):
+        if aadhar_no:
+            row["name"] = f"Patient {aadhar_no}"
+        else:
+            row["name"] = "Unknown Patient"
+
     try:
         res = supabase.table("patients").insert(row).execute()
         if not res.data:
-            # For some reason no data was returned, let's treat it as a successful but empty return 
-            # OR better, throw an error to see why it didn't return (usually PostgREST behavior)
             raise ValueError(f"Insert successful but no row data returned from Supabase. Result: {res}")
         return res.data[0]
     except Exception as e:
         print(f"[ERROR] controllers.patients_controller.create_patient: {e}")
-        # Return the actual error detail to the frontend for debugging
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 

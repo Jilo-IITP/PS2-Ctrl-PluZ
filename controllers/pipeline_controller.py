@@ -253,21 +253,21 @@ async def process_full_pipeline(
             
             # 3. Process the bytes in memory using our fast function
             raw_content = process_single_pdf(file_bytes, file_name) 
-            structured_text = structure_text_with_gemini(raw_content, file_name)
-            
-            if structured_text.startswith("Error"):
-                raise Exception(structured_text)
-                
-            combined_structured += structured_text + "\n\n"
+            combined_structured += raw_content
             
             # 4. UPDATE the existing document row with the extracted text
             supabase.table("documents").update({
-                "extracted_text": structured_text 
+                "extracted_text": raw_content 
             }).eq("id", doc_uuid).execute()
 
         except Exception as e:
             print(f"❌ Failed processing {file_name}: {e}")
             raise HTTPException(status_code=500, detail=str(e))
+        
+    combined_structured = structure_text_with_gemini(combined_structured, file_name)
+            
+    if combined_structured.startswith("Error"):
+        raise Exception(combined_structured)
             
     # ==========================================
     # STEP 2: BATCH RETRIEVAL (VERITAS)
@@ -303,9 +303,9 @@ async def process_full_pipeline(
         mapped_services.append({
             "description": svc.get("description", ""),
             "amount": svc.get("amount", 0),
-            "cpt_code": svc.get("cpt_code_mentioned", ""),
-            "icd_10": diagnoses[0].get("icd_10_code", "") if diagnoses else "",
-            "match_confidence": "98%",
+            # "cpt_code": svc.get("cpt_code_mentioned", ""),
+            # "icd_10": diagnoses[0].get("icd_10_code", "") if diagnoses else "",
+            # "match_confidence": "98%",
         })
 
     # ==========================================
@@ -365,6 +365,7 @@ async def process_full_pipeline(
         "fhir_bundle": fhir_bundle,
         "validation_report": validation_report,
         "ai_extract": ai_extract,
+        "recommendation": {'attached_files': ai_extract["attached_files"], 'missing_files': ai_extract["missing_files"]}
     }
 
     return [result]

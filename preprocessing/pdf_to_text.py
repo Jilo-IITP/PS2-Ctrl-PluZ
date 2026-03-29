@@ -50,8 +50,8 @@ def structure_text_with_gemini(raw_text, filename):
     It is unstructured OCR output. Please:
     1. Clean it up (fix typos, remove page numbers and hospital headers).
     2. Structure it into sections: [Patient Info, Billing/Charges, Medications, Diagnosis].
-    3. Use Markdown tables for any billing items or test result lists.
-    **Document Identification:** From the merged content, identify and list the original document types (e.g., Bill, Blood Report, Discharge Summary). Use specific markers from the text (like 'Invoice #123' or 'Lab Date: March 20') to show where each document was found.
+    3. Use Markdown tables for any billing items as billing is sensitive make sure to extract is precisely and verify logically and make sure the final payable amount is correct.
+    4. **Document Identification:** From the merged content, identify and list the original document types (e.g., Bill, Blood Report, Discharge Summary). Use specific markers from the text (like 'Invoice #123' or 'Lab Date: March 20') to show where each document was found.
 
     RAW TEXT:
     {raw_text}
