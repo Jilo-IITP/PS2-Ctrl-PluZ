@@ -77,7 +77,7 @@ export default function ProcessingPipeline() {
     files.forEach((file) => formData.append('pdf_files', file));
 
     try {
-      const response = await axios.post('http://localhost:8000/process-pdfs', formData, {
+      const response = await axios.post('http://localhost:8000/pipeline/process-pdfs', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setUploadedFiles(files); 
