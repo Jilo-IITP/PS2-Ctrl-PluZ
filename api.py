@@ -29,7 +29,7 @@ from routers.settlement import router as settlement_router
 from validator.final_val import load_all_dictionaries
 
 dotenv.load_dotenv()
-
+CMS_DICTS = {}
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initializes global resources on startup."""

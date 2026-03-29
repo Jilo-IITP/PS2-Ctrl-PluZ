@@ -2,7 +2,8 @@
 import os
 import easyocr
 import google.generativeai as genai
-from pdf2image import convert_from_path
+# from pdf2image import convert_from_path
+from pdf2image import convert_from_bytes
 from dotenv import load_dotenv , find_dotenv
 
 #keys in secrets tab
@@ -16,26 +17,31 @@ reader = easyocr.Reader(['en'])
 #gemini model
 model = genai.GenerativeModel('models/gemini-2.5-flash')
 
-def process_single_pdf(pdf_path):
-    """Converts PDF to text using EasyOCR."""
-    print(f"--- Extracting text from: {os.path.basename(pdf_path)} ---")
+from pdf2image import convert_from_bytes
+import numpy as np
+# Assuming your reader is initialized globally at the top of your file
+# reader = easyocr.Reader(['en'])
+
+def process_single_pdf(file_bytes: bytes, filename: str):
+    """Converts PDF bytes directly to text using EasyOCR in memory."""
+    print(f"--- Extracting text from: {filename} ---")
 
     try:
-        images = convert_from_path(pdf_path)
+        # Load PDF directly from the downloaded bytes (No disk I/O!)
+        images = convert_from_bytes(file_bytes)
     except Exception as e:
         return f"Error reading PDF: {e}"
 
     raw_text = ""
-    for i, image in enumerate(images):
-        temp_img = f"temp_page_{i}.jpg"
-        image.save(temp_img)
-
-        # Run EasyOCR
-        result = reader.readtext(temp_img, detail=0)
+    for image in images:
+        # EasyOCR can read numpy arrays directly. 
+        # This skips the slow image.save() and os.remove() steps entirely.
+        img_array = np.array(image)
+        
+        result = reader.readtext(img_array, detail=0)
         if result:
             raw_text += " ".join(result) + " "
 
-        os.remove(temp_img)
     return raw_text
 
 def structure_text_with_gemini(raw_text, filename):

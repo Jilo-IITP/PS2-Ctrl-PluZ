@@ -7,25 +7,28 @@ from controllers import pipeline_controller
 
 router = APIRouter(prefix="/pipeline", tags=["Pipeline"])
 
+from pydantic import BaseModel
+
+class PipelineRequest(BaseModel):
+    document_ids: List[str]
+    patient_id: str
+    tpa_id: Optional[str] = None
+
 @router.post("/preauth")
 async def run_preauth(
     request: Request,
-    patient_id: str = Form(...),
-    files: List[UploadFile] = File(...),
-    tpa_id: Optional[str] = Form(None),
+    payload: PipelineRequest
 ):
     cms_dicts = request.app.state.cms_dicts
-    return await pipeline_controller.run_preauth_pipeline(files, patient_id, cms_dicts, tpa_id=tpa_id)
+    return await pipeline_controller.run_preauth_pipeline(payload, cms_dicts)
 
 @router.post("/admitted")
 async def run_admitted(
     request: Request,
-    patient_id: str = Form(...),
-    files: List[UploadFile] = File(...),
-    tpa_id: Optional[str] = Form(None),
+    payload: PipelineRequest
 ):
     cms_dicts = request.app.state.cms_dicts
-    return await pipeline_controller.run_admitted_pipeline(files, patient_id, cms_dicts, tpa_id=tpa_id)
+    return await pipeline_controller.run_admitted_pipeline(payload, cms_dicts)
 
 @router.post("/export-html")
 async def export_html(payload: dict = Body(...)):

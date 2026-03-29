@@ -137,18 +137,25 @@ export function useDashboardLogic() {
     const pipelineStage = dbStepToStage(patient.step);
     setProcessingStatus(`Running ${pipelineStage === 'preAuth' ? 'Pre-Auth' : 'Admitted'} Pipeline...`);
 
-    const bfd = new FormData();
-    blobs.forEach(f => bfd.append("files", f)); 
-    bfd.append("patient_id", patient.id);
-    // Pass tpa_id for FHIR DB upsert
-    if (session?.user?.id) bfd.append("tpa_id", session.user.id);
+    const payload = {
+      document_ids: sDocs.map(d => d.id).filter(id => id && !id.startsWith('t-')),
+      patient_id: patient.id,
+      tpa_id: session?.user?.id || null
+    };
 
     try {
       let endpoint = '';
       if (pipelineStage === 'preAuth') endpoint = `${API_BASE}/pipeline/preauth`;
       else endpoint = `${API_BASE}/pipeline/admitted`;
 
-      const res = await fetch(endpoint, { method: 'POST', body: bfd });
+      const res = await fetch(endpoint, { 
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token || ''}`
+        },
+        body: JSON.stringify(payload) 
+      });
       if (!res.ok) {
         const errBody = await res.json().catch(() => ({ detail: 'Unknown error' }));
         throw new Error(errBody.detail || `API returned ${res.status}`);
