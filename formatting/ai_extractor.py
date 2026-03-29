@@ -81,6 +81,7 @@ def run_ai_extraction(raw_text: str, api_key: str) -> HospitalDocument:
     2. Convert all dates to YYYY-MM-DD.
     3. Do NOT invent or hallucinate diagnoses or codes. Extract exact ICD-10 or CPT codes only if present in the text.
     4. Link the correct ordering doctor and diagnoses to the corresponding patient.
+    5. list the original document types that is given in raw text
     
     RAW TEXT:
     {raw_text}
@@ -99,6 +100,8 @@ def run_ai_extraction(raw_text: str, api_key: str) -> HospitalDocument:
     )
     
     extracted_data = HospitalDocument.model_validate_json(response.text)
+    print("current changes hehehehhehehehehhehehheheheh")
+    print(extracted_data)
     return extracted_data
 
 # --- 3. TEST THE PIPELINE ---

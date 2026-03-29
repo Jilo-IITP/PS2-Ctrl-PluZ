@@ -1,32 +1,5 @@
 === VERITAS AI: NORMALIZED CLINICAL CONTEXT ===
 
-Source Entity: Chills
---------------------------------------------------
-  Result 1 [ICD: R68 | Score: 0.7203]: Other general symptoms and signs
-  Context: **R68.82 Decreased libido** Decreased sexual desire **R68.83 Chills (without fever)** Chills NOS **Excludes1:** chills with fever (R50.9) **R68.84 Jaw pain** Mandibular pain Maxilla pain **Excludes1:** temporomandibular joint arthralgia (M26.62-) **R68.89 Other general symptoms and signs**
-
-  Result 2 [ICD: R50 | Score: 0.2458]: Fever of other and unknown origin
-  Context: **R50 Fever of other and unknown origin** **Excludes1:** chills without fever (R68.83) febrile convulsions (R56.0-) fever of unknown origin during labor (O75.2) fever of unknown origin in newborn (P81.9) hypothermia due to illness (R68.0) malignant hyperthermia due to anesthesia (T88.3)
-
-
-Source Entity: Asthenia
---------------------------------------------------
-  Result 1 [ICD: R53 | Score: 0.1274]: Malaise and fatigue
-  Context: **R53 Malaise and fatigue** **R53.0 Neoplastic (malignant) related fatigue** **Code first** associated neoplasm **R53.1 Weakness** Asthenia NOS **Excludes1:** age-related weakness (R54) muscle weakness (generalized) (M62.81) sarcopenia (M62.84) senile asthenia (R54) **R53.2 Functional quadriplegia**
-
-  Result 2 [ICD: R55 | Score: 0.0843]: Syncope and collapse
-  Context: **R55 Syncope and collapse** Blackout Fainting Vasovagal attack **Excludes1:** cardiogenic shock (R57.0) carotid sinus syncope (G90.01) heat syncope (T67.1) neurocirculatory asthenia (F45.8) neurogenic orthostatic hypotension (G90.3) orthostatic hypotension (I95.1) postprocedural shock (T81.1-)
-
-
-Source Entity: Aplastic Anemia
---------------------------------------------------
-  Result 1 [ICD: D63 | Score: 0.7923]: Anemia in chronic diseases classified elsewhere
-  Context: **D63 Anemia in chronic diseases classified elsewhere** **D63.0 Anemia in neoplastic disease** **Code first** neoplasm (C00-D49) **Excludes1:** aplastic anemia due to antineoplastic chemotherapy (D61.1) **Excludes2:** anemia due to antineoplastic chemotherapy (D64.81)
-
-  Result 2 [ICD: D61 | Score: 0.7910]: Other aplastic anemias and other bone marrow failure syndromes
-  Context: **D61.1 Drug-induced aplastic anemia** **Use additional** code for adverse effect, if applicable, to identify drug (T36-T50 with fifth or sixth character 5) **D61.2 Aplastic anemia due to other external agents**
-
-
 Source Entity: Somnolence
 --------------------------------------------------
   Result 1 [ICD: R40 | Score: 0.8978]: Somnolence, stupor and coma
@@ -36,13 +9,58 @@ Source Entity: Somnolence
   Context: **R40.0 Somnolence** Drowsiness **Excludes1:** coma (R40.2-) **R40.1 Stupor** Catatonic stupor Semicoma **Excludes1:** catatonic schizophrenia (F20.2) coma (R40.2-) depressive stupor (F31.-, F32.-, F33.-) dissociative stupor (F44.2) manic stupor (F30.2) **R40.2 Coma** **Code first** any associated:
 
 
-Source Entity: Pyrexia
+Source Entity: Chills
 --------------------------------------------------
-  Result 1 [ICD: O86 | Score: 0.3108]: Other puerperal infections
-  Context: Infection of urethra following delivery **O86.29 Other urinary tract infection following delivery** **O86.4 Pyrexia of unknown origin following delivery** Puerperal infection NOS following delivery Puerperal pyrexia NOS following delivery **Excludes2:** pyrexia during labor (O75.2)
+  Result 1 [ICD: R68 | Score: 0.7203]: Other general symptoms and signs
+  Context: **R68.82 Decreased libido** Decreased sexual desire **R68.83 Chills (without fever)** Chills NOS **Excludes1:** chills with fever (R50.9) **R68.84 Jaw pain** Mandibular pain Maxilla pain **Excludes1:** temporomandibular joint arthralgia (M26.62-) **R68.89 Other general symptoms and signs**
 
-  Result 2 [ICD: O75 | Score: 0.1847]: Other complications of labor and delivery, not elsewhere classified
-  Context: Obstetric shock following labor and delivery **O75.2 Pyrexia during labor, not elsewhere classified** **O75.3 Other infection during labor** Sepsis during labor **Use additional** code (B95-B97), to identify infectious agent **O75.4 Other complications of obstetric surgery and procedures**
+  Result 2 [ICD: R50 | Score: 0.2458]: Fever of other and unknown origin
+  Context: **R50 Fever of other and unknown origin** **Excludes1:** chills without fever (R68.83) febrile convulsions (R56.0-) fever of unknown origin during labor (O75.2) fever of unknown origin in newborn (P81.9) hypothermia due to illness (R68.0) malignant hyperthermia due to anesthesia (T88.3)
+
+
+Source Entity: Generalized weakness
+--------------------------------------------------
+  Result 1 [ICD: R53 | Score: 0.9324]: Malaise and fatigue
+  Context: **R53 Malaise and fatigue** **R53.0 Neoplastic (malignant) related fatigue** **Code first** associated neoplasm **R53.1 Weakness** Asthenia NOS **Excludes1:** age-related weakness (R54) muscle weakness (generalized) (M62.81) sarcopenia (M62.84) senile asthenia (R54) **R53.2 Functional quadriplegia**
+
+  Result 2 [ICD: M62 | Score: 0.9023]: Other disorders of muscle
+  Context: **M62.81 Muscle weakness (generalized)** **Excludes1:** muscle weakness in sarcopenia (M62.84) **M62.82 Rhabdomyolysis** **Excludes1:** traumatic rhabdomyolysis (T79.6) **M62.83 Muscle spasm** **M62.830 Muscle spasm of back** **M62.831 Muscle spasm of calf** Charley-horse
+
+
+Source Entity: Fever
+--------------------------------------------------
+  Result 1 [ICD: R50 | Score: 0.8664]: Fever of other and unknown origin
+  Context: FNHTR Posttransfusion fever **R50.9 Fever, unspecified** Fever NOS Fever of unknown origin [FUO] Fever with chills Fever with rigors Hyperpyrexia NOS Persistent fever Pyrexia NOS
+
+  Result 2 [ICD: A95 | Score: 0.8190]: Yellow fever
+  Context: **A95 Yellow fever** **A95.0 Sylvatic yellow fever** Jungle yellow fever **A95.1 Urban yellow fever** **A95.9 Yellow fever, unspecified**
+
+
+Source Entity: Tachycardia
+--------------------------------------------------
+  Result 1 [ICD: I47 | Score: 0.8211]: Paroxysmal tachycardia
+  Context: **I47 Paroxysmal tachycardia** **Code first** tachycardia complicating: abortion or ectopic or molar pregnancy (O00-O07, O08.8) obstetric surgery and procedures (O75.4) **Excludes1:** tachycardia NOS (R00.0) sinoauricular tachycardia NOS (R00.0) sinus [sinusal] tachycardia NOS (R00.0)
+
+  Result 2 [ICD: I47 | Score: 0.5614]: Paroxysmal tachycardia
+  Context: IST **I47.19 Other supraventricular tachycardia** Atrial (paroxysmal) tachycardia Atrioventricular [AV] (paroxysmal) tachycardia Atrioventricular re-entrant (nodal) tachycardia [AVNRT] [AVRT] Junctional (paroxysmal) tachycardia Nodal (paroxysmal) tachycardia **I47.2 Ventricular tachycardia**
+
+
+Source Entity: Aplastic anemia
+--------------------------------------------------
+  Result 1 [ICD: D64 | Score: 0.8816]: Other anemias
+  Context: Antineoplastic chemotherapy induced anemia **Excludes2:** anemia in neoplastic disease (D63.0) aplastic anemia due to antineoplastic chemotherapy (D61.1) **D64.89 Other specified anemias** Infantile pseudoleukemia **D64.9 Anemia, unspecified**
+
+  Result 2 [ICD: D63 | Score: 0.8784]: Anemia in chronic diseases classified elsewhere
+  Context: **D63 Anemia in chronic diseases classified elsewhere** **D63.0 Anemia in neoplastic disease** **Code first** neoplasm (C00-D49) **Excludes1:** aplastic anemia due to antineoplastic chemotherapy (D61.1) **Excludes2:** anemia due to antineoplastic chemotherapy (D64.81)
+
+
+Source Entity: Severe anemia
+--------------------------------------------------
+  Result 1 [ICD: D62 | Score: 0.4372]: Acute posthemorrhagic anemia
+  Context: **D62 Acute posthemorrhagic anemia** **Excludes1:** anemia due to chronic blood loss (D50.0) blood loss anemia NOS (D50.0) congenital anemia from fetal blood loss (P61.3)
+
+  Result 2 [ICD: D56 | Score: 0.2091]: Thalassemia
+  Context: hydrops fetalis due to isoimmunization (P56.0) hydrops fetalis not due to immune hemolysis (P83.2) **D56.1 Beta thalassemia** Beta thalassemia major Cooley's anemia Homozygous beta thalassemia Severe beta thalassemia Thalassemia intermedia Thalassemia major
 
 
 Source Entity: Pancytopenia
@@ -54,22 +72,13 @@ Source Entity: Pancytopenia
   Context: **D61.81 Pancytopenia** **Excludes1:** pancytopenia (due to) (with) aplastic anemia (D61.9) pancytopenia (due to) (with) bone marrow infiltration (D61.82) pancytopenia (due to) (with) congenital (pure) red cell aplasia (D61.01) pancytopenia (due to) (with) hairy cell leukemia (C91.4-)
 
 
-Source Entity: Conjugated Jaundice
+Source Entity: Conjugated hyperbilirubinemia
 --------------------------------------------------
-  Result 1 [ICD: P59 | Score: 0.5101]: Neonatal jaundice from other and unspecified causes
+  Result 1 [ICD: P59 | Score: 0.0953]: Neonatal jaundice from other and unspecified causes
   Context: Hyperbilirubinemia of prematurity Jaundice due to delayed conjugation associated with preterm delivery **P59.1 Inspissated bile syndrome** **P59.2 Neonatal jaundice from other and unspecified hepatocellular damage** **Excludes1:** congenital viral hepatitis (P35.3)
 
-  Result 2 [ICD: P59 | Score: 0.0453]: Neonatal jaundice from other and unspecified causes
-  Context: **Excludes1:** congenital viral hepatitis (P35.3) **P59.20 Neonatal jaundice from unspecified hepatocellular damage** **P59.29 Neonatal jaundice from other hepatocellular damage** Neonatal giant cell hepatitis Neonatal (idiopathic) hepatitis **P59.3 Neonatal jaundice from breast milk inhibitor**
-
-
-Source Entity: Tachycardia
---------------------------------------------------
-  Result 1 [ICD: A41 | Score: 0.9340]: Other sepsis
-  Context: sepsis (due to) (in) anthrax (A22.7) sepsis (due to) (in) candidal (B37.7) sepsis (due to) (in) Erysipelothrix (A26.7) sepsis (due to) (in) extraintestinal yersiniosis (A28.2) sepsis (due to) (in) gonococcal (A54.86) sepsis (due to) (in) herpesviral (B00.7) sepsis (due to) (in) listerial (A32.7)
-
-  Result 2 [ICD: A41 | Score: 0.9030]: Other sepsis
-  Context: sepsis (due to) (in) listerial (A32.7) sepsis (due to) (in) melioidosis (A24.1) sepsis (due to) (in) meningococcal (A39.2-A39.4) sepsis (due to) (in) plague (A20.7) sepsis (due to) (in) tularemia (A21.7) toxic shock syndrome (A48.3) **A41.0 Sepsis due to Staphylococcus aureus**
+  Result 2 [ICD: P59 | Score: 0.0749]: Neonatal jaundice from other and unspecified causes
+  Context: **P59 Neonatal jaundice from other and unspecified causes** **Excludes1:** jaundice due to inborn errors of metabolism (E70-E88) kernicterus (P57.-) **P59.0 Neonatal jaundice associated with preterm delivery** Hyperbilirubinemia of prematurity
 
 
 Source Entity: Sepsis
