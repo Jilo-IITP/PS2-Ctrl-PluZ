@@ -3,7 +3,11 @@ schemas/patients.py
 Pydantic models for patient CRUD.
 """
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Union
+
+class PatientAmountItem(BaseModel):
+    description: str
+    amount: Union[int, float]
 
 
 class PatientCreate(BaseModel):
@@ -35,6 +39,7 @@ class PatientUpdate(BaseModel):
     address: Optional[str] = None
     step: Optional[str] = None
     aadhar_no: Optional[str] = None
+    amount: Optional[dict] = None
 
 
 class PatientOut(BaseModel):
@@ -53,4 +58,5 @@ class PatientOut(BaseModel):
     address: Optional[str] = None
     step: Optional[str] = None
     aadhar_no: Optional[str] = None
+    amount: Optional[dict] = None
     created_at: Optional[str] = None

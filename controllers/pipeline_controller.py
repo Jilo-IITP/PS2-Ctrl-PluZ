@@ -308,6 +308,16 @@ async def process_full_pipeline(
             # "match_confidence": "98%",
         })
 
+    # Persist mapped_services into the patient's `amount` JSONB column
+    # Format: { "description text": amount_value, ... }
+    if mapped_services:
+        try:
+            amount_jsonb = {svc.get("description"): (svc.get("amount") if svc.get("amount") is not None else 0) for svc in mapped_services if svc.get("description")}
+            supabase.table("patients").update({"amount": amount_jsonb}).eq("id", patient_id).execute()
+            print(f"✅ Patient {patient_id} amount field updated with {len(amount_jsonb)} service entries.")
+        except Exception as e:
+            print(f"⚠️ Failed to update patient amount field (non-fatal): {e}")
+
     # ==========================================
     # STEP 4: VALIDATION
     # ==========================================
