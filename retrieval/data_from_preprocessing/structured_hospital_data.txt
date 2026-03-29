@@ -1,47 +1,90 @@
-Here's the cleaned and structured output:
+Here's the cleaned and structured output from the hospital document:
 
 ---
 
 ### [Patient Info]
-*Information not available in the provided text.*
+*(Information not provided in the raw text.)*
 
 ### [Billing/Charges]
-*Information not available in the provided text.*
+*(Information not provided in the raw text.)*
 
 ### [Medications]
-*Information not available in the provided text.*
+*(Information not provided in the raw text.)*
 
 ### [Diagnosis]
-*A formal diagnosis is not explicitly stated in the provided text, but the following laboratory results contribute to a diagnostic assessment.*
 
-### [Laboratory Results]
-
-**General Physical Examination**
+**General Observations:**
 *   **Colour:** Deep Pale
 *   **Deposit:** Nil
 *   **Specific Gravity:** 1.030
 
-**Chemical Examination**
+**Chemical Examination:**
 
-| Test                      | Result      |
-| :------------------------ | :---------- |
-| Reaction                  | Acidic      |
-| Glucose/Reducing Subs     | Nil         |
-| Phosphate                 | Nil         |
-| Protein (Albumin)         | Trace       |
-| Ketones                   | Nil         |
-| Bile Salt                 | Nil         |
-| Bile Pigments             | Nil         |
-| Urobilinogen              | Nil         |
+| Parameter                   | Result                           |
+| :-------------------------- | :------------------------------- |
+| Reaction                    | Acidic                           |
+| Glucose/Reducing Substances | Nil                              |
+| Phosphate                   | Nil                              |
+| Protein (Albumin)           | Trace                            |
+| Ketones                     | Nil (Assumed, value not specified in raw text) |
+| Bile Salt                   | Nil (Assumed, value not specified in raw text) |
+| Bile Pigments               | Nil (Assumed, value not specified in raw text) |
+| Urobilinogen                | Nil (Assumed, value not specified in raw text) |
 
-**Microscopic Examination**
+**Microscopic Examination:**
 
-| Test                  | Result        |
-| :-------------------- | :------------ |
-| Erythrocytes (HPF)    | Nil           |
-| Leukocytes (HPF)      | 3-6           |
-| Epithelial Cells      | A Few         |
-| Casts                 | Nil           |
-| Crystals              | Nil           |
-| Other                 | Nil           |
+| Parameter          | Result |
+| :----------------- | :----- |
+| Erythrocytes (HPF) | Nil    |
+| Leucocytes (HPF)   | 3-6    |
+| Epithelial Cells   | A Few  |
+| Casts              | Nil    |
+| Crystals           | Nil    |
+| Other              | Nil    |
+
+Here's the cleaned and structured information from the provided OCR output:
+
+## Patient Info
+
+*   **Consultant:** Dr. S.K. Roy, M.B.B.S.
+
+## Billing/Charges
+
+*   No specific billing items found in the document.
+
+## Medications
+
+*   No medications listed in the document.
+
+## Diagnosis
+
+### Laboratory Results
+
+**Hematology Panel**
+
+| Test Name                             | Result    | Unit      |
+| :------------------------------------ | :-------- | :-------- |
+| HAEMOGLOBIN (Method: Cyanmethaemoglobin) | 12        | g/dL      |
+| TOTAL LEUCOCYTE COUNT (TLC)           | 7200      | /cu mm    |
+| RED BLOOD CELL COUNT (RBC)            | 3.50      | x10^6 /cu mm |
+| PACKED CELL VOLUME (PCV)              | 36.7      | %         |
+| MCV (Mean Corpuscular Volume)         | 110.8     | fL        |
+| MCH (Mean Corpuscular HB)             | 34.6      | pg        |
+| MCHC (Mean Corpuscular HB Conc)       | 31.2      | g/dL      |
+| PLATELET COUNT                        | 95,000    | /cu mm    |
+| RDW-SD                                | Not specified |           |
+
+**Differential Leucocyte Count (DLC)**
+
+| Cell Type   | Result | Unit |
+| :---------- | :----- | :--- |
+| NEUTROPHILS | 60     | %    |
+| EOSINOPHILS | 2      | %    |
+| LYMPHOCYTES | 35     | %    |
+| MONOCYTES   | 4      | %    |
+| BASOPHILS   | 0      | %    |
+
+### Notes on Results
+
+Some of the test results are unexpected and need to be correlated clinically. If critical, recheck immediately. Patients are advised to contact the lab for their results.
 
