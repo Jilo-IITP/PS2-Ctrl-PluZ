@@ -21,24 +21,24 @@ const ExtractionDashboard = ({ files = [], apiResults = [], isBatch = false, onC
       }
 
       const resp = await fetch('http://localhost:8000/pipeline/export-html', {
-         method: 'POST',
-         headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify(preauthForm)
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(preauthForm)
       });
 
-      if(resp.ok) {
-         const blob = await resp.blob();
-         const url = URL.createObjectURL(blob);
-         const a = document.createElement('a');
-         a.href = url;
-         a.download = `MediAssist_Export.html`;
-         a.click();
+      if (resp.ok) {
+        const blob = await resp.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `MediAssist_Export.html`;
+        a.click();
       } else {
-         alert('Export failed.');
+        alert('Export failed.');
       }
     } catch (err) {
-       console.error(err);
-       alert('Export failed. Check backend console.');
+      console.error(err);
+      alert('Export failed. Check backend console.');
     }
   };
 
@@ -64,7 +64,7 @@ const ExtractionDashboard = ({ files = [], apiResults = [], isBatch = false, onC
 
   return (
     <div className="flex flex-col h-full animate-in fade-in zoom-in-95 duration-500">
-      
+
       {/* TOP NAVIGATION BAR */}
       <div className="flex items-center justify-between mb-6 pb-4 border-b">
         <Button variant="ghost" onClick={onBack} className="text-muted-foreground font-bold">
@@ -85,17 +85,17 @@ const ExtractionDashboard = ({ files = [], apiResults = [], isBatch = false, onC
         <div className="flex gap-3">
           {stage === 'preAuth' && (
             <Button variant="outline" onClick={handleExportMediAssist} className="font-bold border-muted-foreground text-xs uppercase tracking-widest hidden sm:flex">
-               Export MediAssist JSON
+              Export MediAssist JSON
             </Button>
           )}
-          
+
           {stage === 'preAuth' ? (
             <>
               <Button onClick={onConfirm} variant="outline" className="font-bold shadow-sm">
                 View FHIR Bundle
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
-              <Button onClick={() => onAction('admit')} className="font-bold bg-green-600 hover:bg-green-700 text-white shadow-md shadow-green-900/20">
+              <Button onClick={() => onAction('admit')} className="font-semibold cursor-pointer text-white bg-black shadow-md shadow-green-900/20">
                 Admit Patient
               </Button>
               <Button onClick={() => onAction('discharge')} variant="destructive" className="font-bold shadow-md">
@@ -125,8 +125,8 @@ const ExtractionDashboard = ({ files = [], apiResults = [], isBatch = false, onC
         {files.length > 1 && (
           <TabsList className="mb-4 h-auto flex flex-wrap justify-start items-center p-1 bg-muted/50 w-full overflow-x-auto">
             {files.map((file, idx) => (
-              <TabsTrigger 
-                key={idx} 
+              <TabsTrigger
+                key={idx}
                 value={`file-${idx}`}
                 className="flex items-center gap-2 data-[state=active]:bg-foreground data-[state=active]:text-background data-[state=active]:shadow-sm"
               >
@@ -149,7 +149,7 @@ const ExtractionDashboard = ({ files = [], apiResults = [], isBatch = false, onC
             <TabsContent key={idx} value={`file-${idx}`} className="mt-0 h-full">
               {/* MAIN SPLIT VIEW */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-180px)] min-h-[600px]">
-                
+
                 {/* LEFT PANEL: Document Preview */}
                 <Card className="lg:col-span-5 flex flex-col overflow-hidden shadow-sm h-full">
                   <div className="bg-muted p-3 border-b flex items-center justify-between shrink-0">
@@ -179,29 +179,12 @@ const ExtractionDashboard = ({ files = [], apiResults = [], isBatch = false, onC
 
                 {/* RIGHT PANEL: AI Extracted Data */}
                 <div className="lg:col-span-7 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar h-full pb-8">
-                  
+
                   {/* Top Metric Card */}
-                  <Card className="shadow-sm">
-                     <CardContent className="p-5 flex items-center justify-between">
-                       <div>
-                          <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Extraction Status</p>
-                          <div className="flex items-center gap-2 mt-1 text-foreground">
-                            <ShieldCheck className="w-5 h-5 text-foreground" />
-                            <span className="text-lg font-bold">Verified by AI</span>
-                          </div>
-                       </div>
-                       <div className="text-right w-1/3">
-                          <div className="flex justify-between items-center mb-1">
-                            <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Confidence</p>
-                            <p className="text-sm font-bold text-primary">{confidenceScore}%</p>
-                          </div>
-                          <Progress value={confidenceScore} className="h-2" />
-                       </div>
-                     </CardContent>
-                  </Card>
+
 
                   {/* Header Info */}
-                  <Card className="shadow-sm border-l-4 border-l-foreground">
+                  {/* <Card className="shadow-sm border-l-4 border-l-foreground">
                     <CardHeader className="p-5 pb-0">
                       <CardTitle className="text-xs font-bold uppercase tracking-wide border-b pb-2">Claim Metadata</CardTitle>
                     </CardHeader>
@@ -225,10 +208,10 @@ const ExtractionDashboard = ({ files = [], apiResults = [], isBatch = false, onC
                         </div>
                       </div>
                     </CardContent>
-                  </Card>
+                  </Card> */}
 
                   {/* Diagnoses Card */}
-                  {diagnoses.length > 0 && (
+                  {/* {diagnoses.length > 0 && (
                     <Card className="shadow-sm border-l-4 border-l-amber-500">
                       <CardHeader className="p-5 flex flex-row items-center justify-between pb-2 border-b">
                         <CardTitle className="text-xs font-bold uppercase tracking-wide flex items-center gap-2">
@@ -261,10 +244,10 @@ const ExtractionDashboard = ({ files = [], apiResults = [], isBatch = false, onC
                         </Table>
                       </CardContent>
                     </Card>
-                  )}
+                  )} */}
 
                   {/* Services & Coding Table */}
-                  <Card className="shadow-sm shrink-0">
+                  <Card className="shadow-sm shrink-0 border-l-4 border-l-blue-500">
                     <CardHeader className="p-4 flex flex-row items-center justify-between pb-2 border-b">
                       <CardTitle className="text-xs font-bold uppercase tracking-wide">Coded Services</CardTitle>
                       <Badge variant="secondary" className="text-[10px] uppercase tracking-wider font-bold">

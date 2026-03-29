@@ -95,8 +95,8 @@ def _build_preauth_form_json(ai_extract: dict, patient_db: dict = None, hospital
             "rohiniId":   hospital_db.get("rohini_id", "")
         },
         "patient": {
-            "name":                 pat.get("full_name", patient_db.get("name", "") if patient_db else ""),
-            "gender":               pat.get("gender", patient_db.get("gender", "") if patient_db else ""),
+            "name":                 patient_db.get("name", "") if patient_db else "",
+            "gender":               patient_db.get("gender", "") if patient_db else "",
             "contactNo":            patient_db.get("contact", "") if patient_db else "",
             "altContactNo":         "",
             "ageYears":             str(patient_db.get("age", "")) if patient_db else "",
@@ -175,8 +175,26 @@ def _build_preauth_form_json(ai_extract: dict, patient_db: dict = None, hospital
         }
     }
     return form
-
-
+# Initialize Supabase Client from Singleton
+try:
+    supabase = get_supabase()
+    print("✅ Supabase client initialized via singleton.")
+except Exception as e:
+    print(f"❌ Failed to initialize Supabase client: {e}")
+    supabase = None
+    
+def fetch_supabase_patient(pid):
+    """Fetches full patient info from Supabase."""
+    if not supabase or not pid:
+        return {}
+    
+    try:
+        response = supabase.table("patients").select("*").eq("id", pid).execute()
+        if response.data:
+            return response.data[0]
+    except Exception as e:
+        print(f"❌ Error fetching patient: {e}")
+    return {}
 # ---------------------------------------------------------------------------
 # Core 4-step pipeline
 # ---------------------------------------------------------------------------
@@ -200,13 +218,17 @@ async def process_full_pipeline(files: List[UploadFile], patient_id: str, cms_di
                 raise Exception(structured_text)
             combined_structured += structured_text + "\n\n"
 
-            print("⏳ Running Step 2: Retrieval Mapping...")
-            retrieval_text = run_retrieval_pipeline(structured_text)
-            combined_retrieval += retrieval_text + "\n\n"
-
         except Exception as e:
             print(f"❌ Failed processing {file.filename}: {e}")
             raise HTTPException(status_code=500, detail=str(e))
+        
+    try:
+        print("⏳ Running Step 2: Retrieval Mapping...")
+        combined_retrieval = run_retrieval_pipeline(combined_structured)
+
+    except Exception as e:
+        # print(f"❌ Failed processing {file.filename}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
     # Save intermediate artifacts
     output_folder = os.path.join(BASE_DIR, "retrieval", "data_from_preprocessing")
@@ -225,10 +247,11 @@ async def process_full_pipeline(files: List[UploadFile], patient_id: str, cms_di
     print("⏳ Running Step 3: FHIR Generation...")
     fhir_bundles, ai_extract = run_fhir_generation(combined_structured, combined_retrieval, API_KEY)
 
-    patient_data = ai_extract.get("patients", [{}])[0] if ai_extract.get("patients") else {}
-    diagnoses = patient_data.get("diagnoses", [])
+    patient_data_ext = ai_extract.get("patients", [{}])[0] if ai_extract.get("patients") else {}
+    pat_data = fetch_supabase_patient(patient_id)
+    diagnoses = patient_data_ext.get("diagnoses", [])
     mapped_services = []
-    for svc in patient_data.get("services", []):
+    for svc in patient_data_ext.get("services", []):
         mapped_services.append({
             "description": svc.get("description", ""),
             "amount": svc.get("amount", 0),
@@ -274,8 +297,8 @@ async def process_full_pipeline(files: List[UploadFile], patient_id: str, cms_di
         "hospital_name": ai_extract.get("hospital_name", "Unknown Hospital"),
         "confidence_score": 95,
         "patient": {
-            "name": patient_data.get("full_name", "Unknown"),
-            "doctor_name": patient_data.get("doctor_name", ""),
+            "name": pat_data.get("full_name", "Unknown"),
+            "doctor_name": patient_data_ext.get("doctor_name", ""),
             "services": mapped_services,
             "diagnoses": [
                 {

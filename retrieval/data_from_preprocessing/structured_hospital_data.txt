@@ -1,43 +1,39 @@
-Here's the cleaned and structured doctor's note:
+Here is the cleaned and structured version of the doctor's note:
 
----
+# Doctors Admission Note
 
-### Patient Info
-
-*   **Patient Name:** Rahul
+## Patient Info
+*   **Name:** Rahul
 *   **Date:** 31/03/2022
-
-### Billing/Charges
-
-*(No explicit billing items or charges were mentioned in the provided text.)*
-
-### Medications
-
-*   **Planned:**
-    *   IV antibiotics (for suspected Sepsis/UTI)
-    *   Anti-fungals (for suspected Sepsis/UTI)
-
-### Diagnosis
-
-*   **Primary Diagnosis:** Aplastic Anemia with Pancytopenia and Sepsis
 *   **Chief Complaints:**
     *   High-grade fever (104°F) with chills for 7 days.
     *   Severe generalized weakness and drowsiness.
 *   **Clinical Findings:**
-    *   **Vitals:** Tachycardia (Pulse: 138/min) and febrile.
-    *   **Liver:** Conjugated Jaundice (Total Bilirubin: 3.7)
-*   **Lab Results:**
+    *   **Vitals:** Tachycardia (Pulse: 138/min), Febrile.
+    *   **Liver:** Conjugated Jaundice.
 
-| Test           | Result      | Comment             |
-| :------------- | :---------- | :------------------ |
-| Hemoglobin (Hb)| 5 gm/dl     | Severe Anemia       |
-| Platelets      | 8,000       | Critical            |
-| TLC            | 850         |                     |
-| Total Bilirubin| 3.7         | Conjugated Jaundice |
+### Lab Results
 
-*   **Immediate Plan:**
-    *   Urgent transfusion of 1 unit of blood and 8 units of RDP (Random Donor Platelets).
-    *   Monitor vitals and cardiac status (2D ECHO).
+| Test            | Result         | Notes         |
+| :-------------- | :------------- | :------------ |
+| Hemoglobin (Hb) | 5 gm/dL        | Severe Anemia |
+| Platelets       | 8,000/µL       | Critical      |
+| TLC             | 850/µL         |               |
+| Total Bilirubin | 3.7 mg/dL      |               |
 
----
+### Immediate Plan
+*   Urgent transfusion of 1 unit of blood.
+*   Urgent transfusion of 8 units of RDP (Random Donor Platelets).
+*   Monitor vitals and cardiac status (2D ECHO planned).
+
+## Billing/Charges
+*   No explicit billing items or charges are provided in this note. However, the planned transfusions (blood, RDP) and the 2D ECHO are procedures that will incur charges.
+
+## Medications
+*   IV antibiotics (for suspected Sepsis/UTI)
+*   Anti-fungals (for suspected Sepsis/UTI)
+
+## Diagnosis
+*   Aplastic Anemia with Pancytopenia
+*   Sepsis
 
