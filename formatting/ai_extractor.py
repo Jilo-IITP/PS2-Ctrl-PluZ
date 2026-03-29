@@ -19,6 +19,26 @@ class ExtractedDiagnosis(BaseModel):
     condition: str = Field(description="The medical condition or diagnosis name.")
     icd_10_code: Optional[str] = Field(description="The exact ICD-10 code for the condition if found in the text.")
 
+class ExtractedAdmissionDetails(BaseModel):
+    date_of_admission: Optional[str] = Field(description="Date of admission in DD/MM/YYYY format")
+    time_of_admission: Optional[str] = Field(description="Time of admission in HH:MM format")
+    is_emergency: Optional[str] = Field(description="Either 'emergency' or 'planned'")
+    expected_days_in_hospital: Optional[str] = Field(description="Expected total days of stay")
+    days_in_icu: Optional[str] = Field(description="Number of days in ICU")
+    room_type: Optional[str] = Field(description="Type of room, e.g., GENERAL WARD, PRIVATE")
+
+class ExtractedClinicalDetails(BaseModel):
+    illness_description: Optional[str] = Field(description="Detailed illness, disease, or presenting complaints")
+    clinical_findings: Optional[str] = Field(description="Relevant clinical findings")
+    duration_of_ailment_days: Optional[str] = Field(description="Duration of the present ailment in days")
+    past_history: Optional[str] = Field(description="Past history of present ailment if any")
+    provisional_diagnosis: Optional[str] = Field(description="Provisional diagnosis description")
+    proposed_line_of_treatment: List[str] = Field(description="List of proposed treatments. Example items: 'Medical management', 'Surgical management', 'Intensive care', 'Investigation'")
+    investigation_details: Optional[str] = Field(description="Details of investigations if medical management")
+    route_of_drug_administration: Optional[str] = Field(description="'IV', 'Oral', or 'Other'")
+    surgery_name: Optional[str] = Field(description="Name of the surgery if surgical management")
+    injury_cause: Optional[str] = Field(description="How did the injury occur (if applicable)")
+
 class ExtractedPatient(BaseModel):
     full_name: str = Field(description="The full name of the patient receiving the service.")
     gender: Optional[str] = Field(description="Gender of the patient (male, female, other, unknown).")
@@ -26,6 +46,8 @@ class ExtractedPatient(BaseModel):
     doctor_name: Optional[str] = Field(description="Name of the ordering or attending doctor.")
     diagnoses: List[ExtractedDiagnosis] = Field(description="List of medical conditions and their codes. Empty list if none found.")
     services: List[ExtractedService] = Field(description="List of services or tests performed on THIS specific patient.")
+    admission_details: Optional[ExtractedAdmissionDetails] = Field(default=None, description="Details regarding the hospital admission.")
+    clinical_details: Optional[ExtractedClinicalDetails] = Field(default=None, description="Clinical history and treatment plans.")
 
 class HospitalDocument(BaseModel):
     invoice_number: Optional[str] = Field(description="The main invoice or bill number.")

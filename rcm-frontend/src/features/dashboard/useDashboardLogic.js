@@ -253,6 +253,16 @@ export function useDashboardLogic() {
     }
   };
 
+  // Map DB step values to frontend stage names
+  const dbStepToStage = (step) => {
+    if (!step) return 'preAuth';
+    const s = step.toLowerCase().trim();
+    if (s === 'pre auth' || s === 'pre_auth' || s === 'preauth') return 'preAuth';
+    if (s === 'admitted') return 'admitted';
+    if (s === 'settled' || s === 'discharged') return 'settled';
+    return 'preAuth';
+  };
+
   const processBatch = async (patient, stage) => {
     if (!session) { alert("Session expired. Please log in again."); return; }
     const sDocs = patient.documents.filter(d => d.stage === stage);
@@ -266,12 +276,26 @@ export function useDashboardLogic() {
     }));
 
     setProcessingStatus("Running AI Pipeline — This May Take A Moment...");
+    // Determine the correct pipeline stage based on DB step
+    const pipelineStage = dbStepToStage(patient.step);
+    setProcessingStatus(`Running ${pipelineStage === 'preAuth' ? 'Pre-Auth' : 'Admitted'} Pipeline...`);
+
     const bfd = new FormData();
-    blobs.forEach(f => bfd.append("pdf_files", f));
+    blobs.forEach(f => bfd.append("files", f)); 
+    bfd.append("patient_id", patient.id);
+    // Pass tpa_id for FHIR DB upsert
+    if (session?.user?.id) bfd.append("tpa_id", session.user.id);
 
     try {
-      const res = await fetch(`${API_BASE}/process-pdfs`, { method: 'POST', body: bfd });
-      if (!res.ok) throw new Error("API failed");
+      let endpoint = '';
+      if (pipelineStage === 'preAuth') endpoint = `${API_BASE}/pipeline/preauth`;
+      else endpoint = `${API_BASE}/pipeline/admitted`;
+
+      const res = await fetch(endpoint, { method: 'POST', body: bfd });
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({ detail: 'Unknown error' }));
+        throw new Error(errBody.detail || `API returned ${res.status}`);
+      }
       const data = await res.json();
       setProcessingStatus("Finalizing Extraction...");
       navigate('/process', { 
@@ -282,9 +306,14 @@ export function useDashboardLogic() {
           patient: patient
         } 
       });
+      
+      const passResults = data.results || [data];
+      const batchRes = data.results ? data.results[0] : data;
+
+      navigate('/process', { state: { batchResult: batchRes, results: passResults, files: blobs, stage: pipelineStage, patient, pipelineData: data } });
     } catch (err) {
       console.error(err);
-      alert("Batch processing failed. Check backend logs for tracebacks.");
+      alert(`Pipeline failed: ${err.message}`);
     } finally {
       setLoading(false);
       setProcessingStatus("");

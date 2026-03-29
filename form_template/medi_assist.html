@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medi Assist – Request for Cashless Hospitalisation (Part C)</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #d4d4d4;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 7.2pt;
+      padding: 20px;
+      color: #000;
+    }
+
+    /* ── A4 Page ──────────────────────────────────────────────── */
+    .page {
+      width: 210mm;
+      background: #fff;
+      margin: 0 auto 24px auto;
+      padding: 7mm 9mm 8mm 9mm;
+      box-shadow: 0 3px 16px rgba(0,0,0,.25);
+      position: relative;
+    }
+
+    /* ── Form Header ──────────────────────────────────────────── */
+    .form-header {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .logo svg { width: 36px; height: 36px; }
+    .header-text { text-align: center; }
+    .header-title {
+      font-size: 10.5pt;
+      font-weight: bold;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+    .header-subtitle {
+      font-size: 8.5pt;
+      font-weight: bold;
+    }
+    .block-note {
+      font-size: 6.2pt;
+      font-style: italic;
+      text-align: right;
+      line-height: 2;
+    }
+
+    /* ── Section Band ─────────────────────────────────────────── */
+    .section-band {
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 6.5pt;
+      font-weight: bold;
+      text-align: center;
+      padding: 2px 6px;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      margin: 5px 0 3px;
+    }
+
+    /* ── Hospital Header Fields ───────────────────────────────── */
+    .hosp-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2px;
+      gap: 4px;
+    }
+    .hosp-row .fl { font-size: 6.5pt; white-space: nowrap; flex-shrink: 0; }
+    .hosp-row .spacer { flex: 1; }
+    .hosp-id-label { font-size: 6.5pt; white-space: nowrap; flex-shrink: 0; }
+
+    /* ── TPA Row ──────────────────────────────────────────────── */
+    .tpa-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 6.5pt;
+      padding: 2px 0;
+      gap: 6px;
+    }
+    .tpa-item { display: flex; gap: 3px; align-items: baseline; }
+    .tpa-key { font-weight: bold; white-space: nowrap; }
+    .tpa-val { font-weight: normal; }
+
+    /* ── Field Row (generic) ──────────────────────────────────── */
+    .frow {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      margin-bottom: 2.5px;
+      flex-wrap: nowrap;
+    }
+    .frow.wrap { flex-wrap: wrap; }
+    .fl { /* field label */
+      font-size: 6.3pt;
+      white-space: nowrap;
+      padding-top: 1px;
+      flex-shrink: 0;
+    }
+    .fl-inline { /* label inside a flex row that can grow */
+      font-size: 6.3pt;
+      flex-shrink: 0;
+    }
+
+    /* ── Character Boxes ──────────────────────────────────────── */
+    .cboxes {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 1px;
+    }
+    .cbox {
+      width: 10.5px;
+      height: 11px;
+      border: .8px solid #000;
+      font-size: 6.2pt;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      line-height: 11px;
+      flex-shrink: 0;
+      font-weight: bold;
+      overflow: hidden;
+    }
+
+    /* ── Date / Time Boxes ────────────────────────────────────── */
+    .dboxes {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+    }
+    .dsep { font-size: 7pt; padding: 0 1px; }
+
+    /* ── Checkboxes ───────────────────────────────────────────── */
+    .cbgroup {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .cbitem {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 6.3pt;
+      white-space: nowrap;
+    }
+    .cb {
+      width: 10px;
+      height: 10px;
+      border: .8px solid #000;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8pt;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    /* ── Text Areas ───────────────────────────────────────────── */
+    .ta {
+      border: .8px solid #000;
+      padding: 2px 3px;
+      font-size: 6.3pt;
+      font-family: Arial, sans-serif;
+      word-break: break-word;
+      line-height: 1.35;
+    }
+    .ta-sm { min-height: 14px; }
+    .ta-md { min-height: 22px; }
+    .ta-lg { min-height: 32px; }
+    .ta-xl { min-height: 42px; }
+    .w100 { width: 100%; }
+    .flex1 { flex: 1; min-width: 0; }
+
+    /* ── Two-column content split ─────────────────────────────── */
+    .col2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-bottom: 2.5px;
+    }
+    .col2-left { display: flex; flex-direction: column; gap: 2px; }
+    .col2-right { display: flex; flex-direction: column; gap: 2px; }
+
+    /* ── Cost / Amount row ────────────────────────────────────── */
+    .arow {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 2px;
+    }
+    .alabel { font-size: 6.3pt; flex: 1; }
+    .ars { font-size: 6.3pt; font-weight: bold; white-space: nowrap; }
+
+    /* ── Chronic History ──────────────────────────────────────── */
+    .hitem {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      margin-bottom: 2px;
+    }
+    .hnum { font-size: 6.3pt; flex-shrink: 0; min-width: 10px; }
+    .hlabel { font-size: 6.3pt; flex: 1; }
+    .hdate { display: flex; gap: 1px; align-items: center; }
+
+    /* ── Declaration ──────────────────────────────────────────── */
+    .decl-title {
+      font-size: 7pt;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: underline;
+      margin: 6px 0 3px;
+      letter-spacing: .3px;
+    }
+    .decl-band {
+      font-size: 6.5pt;
+      font-weight: bold;
+      text-decoration: underline;
+      margin: 5px 0 2px;
+    }
+    .decl-point {
+      font-size: 5.8pt;
+      line-height: 1.45;
+      margin-bottom: 2px;
+      display: flex;
+      gap: 3px;
+    }
+    .decl-point-key { flex-shrink: 0; font-weight: bold; }
+
+    /* ── Signature / Seal ─────────────────────────────────────── */
+    .sigbox {
+      border: .8px solid #000;
+      height: 45px;
+      width: 100%;
+    }
+    .sealbox {
+      border: .8px solid #000;
+      height: 55px;
+      width: 100%;
+    }
+
+    /* ── Grid helpers ─────────────────────────────────────────── */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
+
+    /* ── Misc ─────────────────────────────────────────────────── */
+    .hrule { border-top: .7px solid #aaa; margin: 4px 0; }
+    .page-footer {
+      font-size: 5.5pt;
+      text-align: right;
+      margin-top: 8px;
+      border-top: .7px solid #ccc;
+      padding-top: 2px;
+      color: #444;
+    }
+    .bold { font-weight: bold; }
+    .mt2 { margin-top: 2px; }
+    .mt4 { margin-top: 4px; }
+    .small-num-box {
+      width: 20px;
+      height: 11px;
+      border: .8px solid #000;
+      font-size: 6.3pt;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      line-height: 11px;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; margin: 0; page-break-after: always; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════ PAGE 1 -->
+<div class="page" id="page1">
+
+  <!-- Header -->
+  <div class="form-header">
+    <div class="logo">
+      <!-- Medi Assist approximation logo -->
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="38" cy="38" rx="28" ry="22" fill="#e8722a" opacity=".9" transform="rotate(-20 38 38)"/>
+        <ellipse cx="62" cy="38" rx="22" ry="18" fill="#c45a1a" opacity=".85" transform="rotate(20 62 38)"/>
+        <circle cx="38" cy="25" r="7" fill="#e8722a"/>
+        <circle cx="60" cy="27" r="5.5" fill="#c45a1a"/>
+        <path d="M32 35 Q38 48 46 42" stroke="#fff" stroke-width="1.5" fill="none"/>
+        <path d="M55 36 Q60 48 67 43" stroke="#fff" stroke-width="1.2" fill="none"/>
+        <text x="50" y="72" font-size="8" font-family="Arial" font-weight="bold" text-anchor="middle" fill="#1a6ab5">Medi</text>
+        <text x="50" y="82" font-size="7" font-family="Arial" text-anchor="middle" fill="#1a6ab5">Assist</text>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-title">Request for Cashless Hospitalisation for Health Insurance Policy</div>
+      <div class="header-subtitle">PART C (Revised)</div>
+    </div>
+    <div class="block-note">TO BE FILLED IN BLOCK LETTERS</div>
+  </div>
+
+  <!-- Hospital Details -->
+  <div class="hosp-row">
+    <span class="fl">Name of the hospital:</span>
+    <div class="cboxes" data-field="hospital.name" data-count="45" id="hospitalName"></div>
+  </div>
+  <div class="hosp-row">
+    <span class="fl">Hospital location:</span>
+    <div class="cboxes" data-field="hospital.location" data-count="32" id="hospitalLocation"></div>
+    <span class="spacer"></span>
+    <span class="hosp-id-label">Hospital ID:</span>
+    <div class="cboxes" data-field="hospital.hospitalId" data-count="12" id="hospitalId"></div>
+  </div>
+  <div class="hosp-row">
+    <span class="fl">Hospital email ID:</span>
+    <div class="cboxes" data-field="hospital.emailId" data-count="34" id="hospitalEmail"></div>
+    <span class="spacer"></span>
+    <span class="hosp-id-label">ROHINI ID:</span>
+    <div class="cboxes" data-field="hospital.rohiniId" data-count="12" id="hospitalRohini"></div>
+  </div>
+
+  <!-- TPA Details -->
+  <div class="section-band">Details of Third Party Administrator</div>
+  <div class="tpa-row">
+    <div class="tpa-item"><span class="tpa-key">a) Name of TPA company:</span><span class="tpa-val">Medi Assist Insurance TPA Pvt Ltd</span></div>
+    <div class="tpa-item"><span class="tpa-key">b) Phone no.:</span><span class="tpa-val">080 22068666</span></div>
+    <div class="tpa-item"><span class="tpa-key">c) Toll Free Fax no.:</span><span class="tpa-val">1800 425 9559</span></div>
+  </div>
+
+  <!-- Patient Section -->
+  <div class="section-band">To be filled by Insured / Patient</div>
+
+  <!-- a) Patient name -->
+  <div class="frow">
+    <span class="fl">a) Name of the patient:</span>
+    <div class="cboxes" data-field="patient.name" data-count="44" id="patientName"></div>
+  </div>
+
+  <!-- b) Gender | c) Contact | d) Alt Contact -->
+  <div class="frow">
+    <span class="fl">b) Gender:</span>
+    <div class="cbgroup">
+      <div class="cbitem"><div class="cb" data-field="patient.gender" data-value="Male" id="genderMale"></div> Male</div>
+      <div class="cbitem"><div class="cb" data-field="patient.gender" data-value="Female" id="genderFemale"></div> Female</div>
+      <div class="cbitem"><div class="cb" data-field="patient.gender" data-value="Third gender" id="genderThird"></div> Third gender</div>
+    </div>
+    <span class="fl" style="margin-left:6px;">c) Contact no.:</span>
+    <div class="cboxes" data-field="patient.contactNo" data-count="12" id="patientContact"></div>
+    <span class="fl" style="margin-left:4px;">d) Alternate contact no.:</span>
+    <div class="cboxes" data-field="patient.altContactNo" data-count="12" id="patientAltContact"></div>
+  </div>
+
+  <!-- e) Age | f) DOB | g) Insurer ID -->
+  <div class="frow">
+    <span class="fl">e) Age: Years</span>
+    <div class="cboxes" data-field="patient.ageYears" data-count="2" id="ageYears"></div>
+    <span class="fl">Months</span>
+    <div class="cboxes" data-field="patient.ageMonths" data-count="2" id="ageMonths"></div>
+    <span class="fl" style="margin-left:4px;">f) Date of birth:</span>
+    <div class="dboxes" data-field="patient.dateOfBirth" id="patientDob"></div>
+    <span class="fl" style="margin-left:4px;">g) Insurer ID card no.:</span>
+    <div class="cboxes" data-field="patient.insurerIdCardNo" data-count="16" id="insurerIdCard"></div>
+  </div>
+
+  <!-- h) Policy | i) Employee ID -->
+  <div class="frow">
+    <span class="fl">h) Policy number / Name of corporate:</span>
+    <div class="cboxes" data-field="patient.policyNumber" data-count="26" id="policyNumber"></div>
+    <span class="fl" style="margin-left:6px;">i) Employee ID:</span>
+    <div class="cboxes" data-field="patient.employeeId" data-count="14" id="employeeId"></div>
+  </div>
+
+  <!-- j) Other medical claim -->
+  <div class="frow">
+    <span class="fl">j) Currently do you have any other medical claim / health Insurance:</span>
+    <div class="cbgroup">
+      <div class="cbitem"><div class="cb" data-field="patient.hasOtherMedicalClaim" data-value="Yes" id="otherClaimYes"></div> Yes</div>
+      <div class="cbitem"><div class="cb" data-field="patient.hasOtherMedicalClaim" data-value="No" id="otherClaimNo"></div> No</div>
+    </div>
+    <span class="fl" style="margin-left:6px;">j.1) Insurer name:</span>
+    <div class="cboxes" data-field="patient.insurerName" data-count="18" id="insurerName"></div>
+  </div>
+
+  <!-- j.2) Give details -->
+  <div class="frow">
+    <span class="fl" style="white-space:nowrap;">j.2) Give details:</span>
+    <div class="ta ta-md flex1 w100" data-field="patient.claimDetails" id="claimDetails"></div>
+  </div>
+
+  <!-- k) Family physician -->
+  <div class="frow">
+    <span class="fl">k) Do you have a family physician, if yes: Name:</span>
+    <div class="cboxes" data-field="patient.familyPhysicianName" data-count="22" id="familyPhysicianName"></div>
+    <span class="fl" style="margin-left:4px;">k.1) Contact no.:</span>
+    <div class="cboxes" data-field="patient.familyPhysicianContact" data-count="12" id="familyPhysicianContact"></div>
+  </div>
+
+  <!-- L) Occupation -->
+  <div class="frow">
+    <span class="fl">L) Occupation of insured patient:</span>
+    <div class="cboxes" data-field="patient.occupation" data-count="30" id="occupation"></div>
+  </div>
+
+  <!-- m) Address -->
+  <div class="frow">
+    <span class="fl" style="white-space:nowrap;">m) Address of insured patient:</span>
+    <div class="ta ta-xl flex1 w100" data-field="patient.address" id="address"></div>
+  </div>
+
+  <!-- Doctor / Hospital Section -->
+  <div class="section-band">To be filled by the Treating Doctor / Hospital</div>
+
+  <!-- a) Doctor name | b) Contact -->
+  <div class="frow">
+    <span class="fl">a) Name of the treating doctor:</span>
+    <div class="cboxes" data-field="doctor.name" data-count="30" id="doctorName"></div>
+    <span class="fl" style="margin-left:4px;">b) Contact no.:</span>
+    <div class="cboxes" data-field="doctor.contactNo" data-count="12" id="doctorContact"></div>
+  </div>
+
+  <!-- c) Illness | d) Clinical findings -->
+  <div class="col2 mt2">
+    <div class="col2-left">
+      <span class="fl">c) Name of Illness / disease with presenting complaints:</span>
+      <div class="ta ta-lg w100" data-field="doctor.illnessDescription" id="illnessDesc"></div>
+    </div>
+    <div class="col2-right">
+      <span class="fl">d) Relevant clinical findings:</span>
+      <div class="ta ta-lg w100" data-field="doctor.clinicalFindings" id="clinicalFindings"></div>
+    </div>
+  </div>
+
+  <!-- e) Duration | e.1) First consult date -->
+  <div class="frow mt2">
+    <span class="fl">e) Duration of the present ailment:</span>
+    <div class="small-num-box" data-field="doctor.durationDays" id="durationDays"></div>
+    <span class="fl">days</span>
+    <span class="fl" style="margin-left:6px;">e.1) Date of first consultation:</span>
+    <div class="dboxes" data-field="doctor.firstConsultationDate" id="firstConsultDate"></div>
+  </div>
+
+  <!-- e.2) Past history -->
+  <div class="frow">
+    <span class="fl" style="white-space:nowrap;">e.2) Past history of present ailment if any:</span>
+    <div class="ta ta-sm flex1 w100" data-field="doctor.pastHistory" id="pastHistory"></div>
+  </div>
+
+  <!-- f) Provisional diagnosis | f.1) ICD10 code -->
+  <div class="frow">
+    <span class="fl" style="white-space:nowrap;">f) Provisional diagnosis:</span>
+    <div class="ta ta-md flex1" data-field="doctor.provisionalDiagnosis" id="provisionalDiagnosis"></div>
+    <span class="fl" style="margin-left:6px; white-space:nowrap;">f.1) ICD 10 code:</span>
+    <div class="cboxes" data-field="doctor.icd10Code" data-count="10" id="icd10Code"></div>
+  </div>
+
+  <!-- g) Proposed treatment -->
+  <div class="frow">
+    <span class="fl">g) Proposed line of treatment:</span>
+    <div class="cbgroup">
+      <div class="cbitem"><div class="cb" data-field="doctor.proposedTreatment" data-value="Medical management" id="txMedical"></div> Medical management</div>
+      <div class="cbitem"><div class="cb" data-field="doctor.proposedTreatment" data-value="Surgical management" id="txSurgical"></div> Surgical management</div>
+      <div class="cbitem"><div class="cb" data-field="doctor.proposedTreatment" data-value="Intensive care" id="txICU"></div> Intensive care</div>
+      <div class="cbitem"><div class="cb" data-field="doctor.proposedTreatment" data-value="Investigation" id="txInvestigation"></div> Investigation</div>
+      <div class="cbitem"><div class="cb" data-field="doctor.proposedTreatment" data-value="Non-Allopathic treatment" id="txNonAllopathic"></div> Non-Allopathic treatment</div>
+    </div>
+  </div>
+
+  <!-- h) Investigation details | h.1) Route of drug -->
+  <div class="col2 mt2">
+    <div class="col2-left">
+      <span class="fl">h) If investigation and/or medical management, provide details:</span>
+      <div class="ta ta-md w100" data-field="doctor.investigationDetails" id="investigationDetails"></div>
+    </div>
+    <div class="col2-right">
+      <span class="fl">h.1) Route of drug administration:</span>
+      <div class="cbgroup mt2">
+        <div class="cbitem"><div class="cb" data-field="doctor.routeOfDrugAdmin" data-value="IV" id="routeIV"></div> IV</div>
+        <div class="cbitem"><div class="cb" data-field="doctor.routeOfDrugAdmin" data-value="Oral" id="routeOral"></div> Oral</div>
+        <div class="cbitem"><div class="cb" data-field="doctor.routeOfDrugAdmin" data-value="Other" id="routeOther"></div> Other</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- i) Surgery | i.1) ICD10 PCS -->
+  <div class="frow mt2">
+    <span class="fl" style="white-space:nowrap;">i) If Surgical, name of surgery:</span>
+    <div class="ta ta-md flex1" data-field="doctor.surgeryName" id="surgeryName"></div>
+    <span class="fl" style="margin-left:6px; white-space:nowrap;">i.1) ICD 10 PCS code:</span>
+    <div class="cboxes" data-field="doctor.icd10PcsCode" data-count="10" id="icd10PcsCode"></div>
+  </div>
+
+  <!-- j) Other treatments | k) How injury occurred -->
+  <div class="col2 mt2">
+    <div class="col2-left">
+      <span class="fl">j) If other treatments provide details:</span>
+      <div class="ta ta-lg w100" data-field="doctor.otherTreatmentDetails" id="otherTreatmentDetails"></div>
+    </div>
+    <div class="col2-right">
+      <span class="fl">k) How did injury occur:</span>
+      <div class="ta ta-lg w100" data-field="doctor.injuryDescription" id="injuryDesc"></div>
+    </div>
+  </div>
+
+  <!-- L) Accident details -->
+  <div class="frow mt2 wrap">
+    <span class="fl">L) In case of accident: &nbsp;I. Is it RTA:</span>
+    <div class="cbitem"><div class="cb" data-field="doctor.accident.isRTA" data-value="Yes" id="rtaYes"></div> Yes</div>
+    <div class="cbitem"><div class="cb" data-field="doctor.accident.isRTA" data-value="No" id="rtaNo"></div> No</div>
+    <span class="fl" style="margin-left:6px;">ii. Date of injury:</span>
+    <div class="dboxes" data-field="doctor.accident.dateOfInjury" id="injuryDate"></div>
+    <span class="fl" style="margin-left:6px;">iii. Reported to Police:</span>
+    <div class="cbitem"><div class="cb" data-field="doctor.accident.reportedToPolice" data-value="Yes" id="policeYes"></div> Yes</div>
+    <div class="cbitem"><div class="cb" data-field="doctor.accident.reportedToPolice" data-value="No" id="policeNo"></div> No</div>
+    <span class="fl" style="margin-left:6px;">iv. FIR no.:</span>
+    <div class="cboxes" data-field="doctor.accident.firNo" data-count="10" id="firNo"></div>
+  </div>
+
+  <div class="frow wrap">
+    <span class="fl">v. Injury/Disease caused due to substance abuse/alcohol consumption:</span>
+    <div class="cbitem"><div class="cb" data-field="doctor.accident.substanceAbuse" data-value="Yes" id="substanceYes"></div> Yes</div>
+    <div class="cbitem"><div class="cb" data-field="doctor.accident.substanceAbuse" data-value="No" id="substanceNo"></div> No</div>
+    <span class="fl" style="margin-left:10px;">vi. Test conducted to establish this, If yes attach reports:</span>
+    <div class="cbitem"><div class="cb" data-field="doctor.accident.testConducted" data-value="Yes" id="testYes"></div> Yes</div>
+    <div class="cbitem"><div class="cb" data-field="doctor.accident.testConducted" data-value="No" id="testNo"></div> No</div>
+  </div>
+
+  <!-- m) Maternity | n) Delivery date -->
+  <div class="frow">
+    <span class="fl">m) In case of maternity: &nbsp;G</span>
+    <div class="cboxes" data-field="doctor.maternity.G" data-count="3" id="matG"></div>
+    <span class="fl" style="margin-left:4px;">P</span>
+    <div class="cboxes" data-field="doctor.maternity.P" data-count="3" id="matP"></div>
+    <span class="fl" style="margin-left:4px;">L</span>
+    <div class="cboxes" data-field="doctor.maternity.L" data-count="3" id="matL"></div>
+    <span class="fl" style="margin-left:4px;">A</span>
+    <div class="cboxes" data-field="doctor.maternity.A" data-count="3" id="matA"></div>
+    <span class="fl" style="margin-left:10px;">n) Expected date of delivery:</span>
+    <div class="dboxes" data-field="doctor.maternity.expectedDeliveryDate" id="deliveryDate"></div>
+  </div>
+
+  <!-- Patient Admitted -->
+  <div class="section-band">Details of the Patient Admitted</div>
+
+  <div class="frow">
+    <span class="fl">a) Date of admission:</span>
+    <div class="dboxes" data-field="admission.dateOfAdmission" id="admissionDate"></div>
+    <span class="fl" style="margin-left:6px;">b) Time of admission:</span>
+    <div class="dboxes" data-field="admission.timeOfAdmission" id="admissionTime" class="dboxes time-boxes"></div>
+    <span class="fl" style="margin-left:6px;">c) This is</span>
+    <div class="cbitem"><div class="cb" data-field="admission.isEmergency" data-value="emergency" id="admEmergency"></div> an emergency /</div>
+    <div class="cbitem"><div class="cb" data-field="admission.isEmergency" data-value="planned" id="admPlanned"></div> a planned hospitalization event</div>
+  </div>
+
+  <div class="frow">
+    <span class="fl">d) Expected no. of days stay in hospital:</span>
+    <div class="small-num-box" data-field="admission.expectedDays" id="expectedDays"></div>
+    <span class="fl">Days</span>
+    <span class="fl" style="margin-left:8px;">e) Days in ICU:</span>
+    <div class="small-num-box" data-field="admission.icuDays" id="icuDays"></div>
+    <span class="fl">Days</span>
+    <span class="fl" style="margin-left:8px;">f) Room type:</span>
+    <div class="cboxes" data-field="admission.roomType" data-count="18" id="roomType"></div>
+  </div>
+
+  <div class="page-footer">Page 1 of 2 | Version: 25.06.2019</div>
+</div><!-- /page1 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════ PAGE 2 -->
+<div class="page" id="page2">
+
+  <!-- Page 2 Header -->
+  <div class="form-header">
+    <div class="logo">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="38" cy="38" rx="28" ry="22" fill="#e8722a" opacity=".9" transform="rotate(-20 38 38)"/>
+        <ellipse cx="62" cy="38" rx="22" ry="18" fill="#c45a1a" opacity=".85" transform="rotate(20 62 38)"/>
+        <circle cx="38" cy="25" r="7" fill="#e8722a"/>
+        <circle cx="60" cy="27" r="5.5" fill="#c45a1a"/>
+        <path d="M32 35 Q38 48 46 42" stroke="#fff" stroke-width="1.5" fill="none"/>
+        <path d="M55 36 Q60 48 67 43" stroke="#fff" stroke-width="1.2" fill="none"/>
+        <text x="50" y="72" font-size="8" font-family="Arial" font-weight="bold" text-anchor="middle" fill="#1a6ab5">Medi</text>
+        <text x="50" y="82" font-size="7" font-family="Arial" text-anchor="middle" fill="#1a6ab5">Assist</text>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-title">Request for Cashless Hospitalisation for Health Insurance Policy</div>
+      <div class="header-subtitle">PART C (Revised)</div>
+    </div>
+    <div class="block-note">TO BE FILLED IN BLOCK LETTERS</div>
+  </div>
+
+  <!-- Cost + Chronic History two-column -->
+  <div class="col2" style="grid-template-columns: 55% 43%; gap: 12px;">
+
+    <!-- LEFT: Cost breakdown -->
+    <div>
+      <div class="arow">
+        <span class="alabel">g) Per Day Room Rent + Nursing &amp; Service charges + Patient's Diet:</span>
+        <span class="ars">Rs.</span>
+        <div class="cboxes" data-field="costs.roomRent" data-count="10" id="costRoomRent"></div>
+      </div>
+      <div class="arow">
+        <span class="alabel">h) Expected cost for investigation + diagnostics:</span>
+        <span class="ars">Rs.</span>
+        <div class="cboxes" data-field="costs.investigationCost" data-count="10" id="costInvestigation"></div>
+      </div>
+      <div class="arow">
+        <span class="alabel">i) ICU Charges:</span>
+        <span class="ars">Rs.</span>
+        <div class="cboxes" data-field="costs.icuCharges" data-count="10" id="costICU"></div>
+      </div>
+      <div class="arow">
+        <span class="alabel">j) OT Charges:</span>
+        <span class="ars">Rs.</span>
+        <div class="cboxes" data-field="costs.otCharges" data-count="10" id="costOT"></div>
+      </div>
+      <div class="arow">
+        <span class="alabel">k) Professional fees Surgeon + Anesthetist fees + Consultation charges:</span>
+        <span class="ars">Rs.</span>
+        <div class="cboxes" data-field="costs.professionalFees" data-count="10" id="costProfFees"></div>
+      </div>
+      <div class="arow">
+        <span class="alabel">L) Medicines + Consumables cost of Implants: (specify if applicable)</span>
+        <span class="ars">Rs.</span>
+        <div class="cboxes" data-field="costs.medicinesImplants" data-count="10" id="costMedicines"></div>
+      </div>
+      <div class="arow">
+        <span class="alabel">m) Other hospital expenses if any:</span>
+        <span class="ars">Rs.</span>
+        <div class="cboxes" data-field="costs.otherExpenses" data-count="10" id="costOther"></div>
+      </div>
+      <div class="arow">
+        <span class="alabel">n) All inclusive package charges if any applicable:</span>
+        <span class="ars">Rs.</span>
+        <div class="cboxes" data-field="costs.packageCharges" data-count="10" id="costPackage"></div>
+      </div>
+      <div class="arow" style="border-top: .8px solid #000; padding-top: 2px; margin-top: 2px;">
+        <span class="alabel bold">o) Sum Total expected cost of hospitalization</span>
+        <span class="ars">Rs.</span>
+        <div class="cboxes" data-field="costs.totalCost" data-count="10" id="costTotal"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Chronic illness history -->
+    <div>
+      <div style="font-size:6.3pt; font-weight:bold; margin-bottom:3px;">
+        p. Mandatory past history of any chronic illness. If yes (since month/year)
+      </div>
+      <div class="hitem">
+        <span class="hnum">1.</span>
+        <div class="cb" data-field="chronicHistory.diabetes" data-value="true" id="hDiabetes" style="width:9px;height:9px;"></div>
+        <span class="hlabel">Diabetes</span>
+        <div class="hdate">
+          <div class="dboxes" data-field="chronicHistory.diabetesSince" id="hDiabetesDate" data-type="mmyy"></div>
+        </div>
+      </div>
+      <div class="hitem">
+        <span class="hnum">2.</span>
+        <div class="cb" data-field="chronicHistory.heartDisease" data-value="true" id="hHeart" style="width:9px;height:9px;"></div>
+        <span class="hlabel">Heart Disease</span>
+        <div class="hdate">
+          <div class="dboxes" data-field="chronicHistory.heartDiseaseSince" id="hHeartDate" data-type="mmyy"></div>
+        </div>
+      </div>
+      <div class="hitem">
+        <span class="hnum">3.</span>
+        <div class="cb" data-field="chronicHistory.hypertension" data-value="true" id="hHypertension" style="width:9px;height:9px;"></div>
+        <span class="hlabel">Hypertension</span>
+        <div class="hdate">
+          <div class="dboxes" data-field="chronicHistory.hypertensionSince" id="hHypertensionDate" data-type="mmyy"></div>
+        </div>
+      </div>
+      <div class="hitem">
+        <span class="hnum">4.</span>
+        <div class="cb" data-field="chronicHistory.hyperlipidemias" data-value="true" id="hHyperlipid" style="width:9px;height:9px;"></div>
+        <span class="hlabel">Hyperlipidemias</span>
+        <div class="hdate">
+          <div class="dboxes" data-field="chronicHistory.hyperlipidSince" id="hHyperlipidDate" data-type="mmyy"></div>
+        </div>
+      </div>
+      <div class="hitem">
+        <span class="hnum">5.</span>
+        <div class="cb" data-field="chronicHistory.osteoarthritis" data-value="true" id="hOsteo" style="width:9px;height:9px;"></div>
+        <span class="hlabel">Osteoarthritis (specify if applicable)</span>
+        <div class="hdate">
+          <div class="dboxes" data-field="chronicHistory.osteoarthritisSince" id="hOsteoDate" data-type="mmyy"></div>
+        </div>
+      </div>
+      <div class="hitem">
+        <span class="hnum">6.</span>
+        <div class="cb" data-field="chronicHistory.asthma" data-value="true" id="hAsthma" style="width:9px;height:9px;"></div>
+        <span class="hlabel">Asthma / COPD / Bronchitis</span>
+        <div class="hdate">
+          <div class="dboxes" data-field="chronicHistory.asthmaSince" id="hAsthmaDate" data-type="mmyy"></div>
+        </div>
+      </div>
+      <div class="hitem">
+        <span class="hnum">7.</span>
+        <div class="cb" data-field="chronicHistory.cancer" data-value="true" id="hCancer" style="width:9px;height:9px;"></div>
+        <span class="hlabel">Cancer</span>
+        <div class="hdate">
+          <div class="dboxes" data-field="chronicHistory.cancerSince" id="hCancerDate" data-type="mmyy"></div>
+        </div>
+      </div>
+      <div class="hitem">
+        <span class="hnum">8.</span>
+        <div class="cb" data-field="chronicHistory.alcoholDrugAbuse" data-value="true" id="hAlcohol" style="width:9px;height:9px;"></div>
+        <span class="hlabel">Alcohol or drug abuse</span>
+        <div class="hdate">
+          <div class="dboxes" data-field="chronicHistory.alcoholSince" id="hAlcoholDate" data-type="mmyy"></div>
+        </div>
+      </div>
+      <div class="hitem">
+        <span class="hnum">9.</span>
+        <div class="cb" data-field="chronicHistory.hivStd" data-value="true" id="hHIV" style="width:9px;height:9px;"></div>
+        <span class="hlabel">Any HIV or STD / related ailments</span>
+        <div class="hdate">
+          <div class="dboxes" data-field="chronicHistory.hivSince" id="hHIVDate" data-type="mmyy"></div>
+        </div>
+      </div>
+      <div style="margin-top:3px;">
+        <span style="font-size:6.3pt;">10. Any other ailment give details:</span>
+        <div class="ta ta-md w100 mt2" data-field="chronicHistory.otherAilment" id="hOtherAilment"></div>
+      </div>
+    </div>
+  </div><!-- /cost+history col2 -->
+
+  <!-- ── DECLARATION ── -->
+  <div style="font-weight:bold; font-size:6.8pt; text-align:center; border-top: .8px solid #000; border-bottom: .8px solid #000; padding: 2px 0; margin: 5px 0;">
+    DECLARATION <span style="font-weight:normal; font-size:6pt;">(PLEASE READ VERY CAREFULLY)</span>
+  </div>
+  <div style="font-size:6pt; font-style:italic; margin-bottom:4px;">We confirm having read, understood and agreed to the declaration of this form</div>
+
+  <!-- Declaration Doctor fields -->
+  <div class="frow">
+    <span class="fl">a) Name of the treating doctor:</span>
+    <div class="cboxes" data-field="declaration.treatingDoctor.name" data-count="32" id="declDoctorName"></div>
+  </div>
+  <div class="frow">
+    <span class="fl">b) Qualification:</span>
+    <div class="cboxes" data-field="declaration.treatingDoctor.qualification" data-count="22" id="declDoctorQual"></div>
+    <span class="fl" style="margin-left:6px;">c) Registration No. with State code:</span>
+    <div class="cboxes" data-field="declaration.treatingDoctor.registrationNo" data-count="16" id="declDoctorReg"></div>
+  </div>
+
+  <!-- Patient/Rep Declaration -->
+  <div class="decl-band">DECLARATION BY THE PATIENT / REPRESENTATIVE</div>
+  <div class="decl-point"><span class="decl-point-key">a.</span> I agree to allow the hospital to submit all original documents pertaining to hospitalization to the Insurer/TPA after the discharge. I agree to sign on the Final Bill &amp; the Discharge Summary, before my discharge.</div>
+  <div class="decl-point"><span class="decl-point-key">b.</span> Payment to hospital is governed by the terms and conditions of the policy. In case the Insurer / TPA is not liable to settle the hospital bill, I undertake to settle the bill as per the terms and conditions of the policy.</div>
+  <div class="decl-point"><span class="decl-point-key">c.</span> All non-medical expenses and expenses not relevant to current hospitalization and the amounts over &amp; above the limit authorized by the Insurer/TPA not governed by the terms and conditions of the policy will be paid by me.</div>
+  <div class="decl-point"><span class="decl-point-key">d.</span> I hereby declare to abide by the terms and conditions of the policy and if at any time the facts disclosed by me are found to be false or incorrect I forfeit my claim and agree to indemnify the insurer / TPA.</div>
+  <div class="decl-point"><span class="decl-point-key">e.</span> I agree and understand that TPA is in no way warranting the service of the hospital &amp; that the Insurer / TPA is in no way guaranteeing that the services provided by the hospital will be of a particular quality or standard.</div>
+  <div class="decl-point"><span class="decl-point-key">f.</span> I hereby warrant the truth of the forgoing particulars in every respect and I agree that if I have made or shall make any false or untrue statement, suppression or concealment with respect to the claim, my right to claim reimbursement of the said expenses shall be absolutely forfeited.</div>
+  <div class="decl-point"><span class="decl-point-key">g.</span> I agree to indemnify the hospital against all expenses incurred on my behalf, which are not reimbursed by the Insurer/ TPA.</div>
+  <div class="decl-point"><span class="decl-point-key">h.</span> "I/We authorize Insurance Company/TPA to contact me/us through mobile/email for any update on this claim"</div>
+
+  <!-- Patient signature fields -->
+  <div class="frow mt4">
+    <span class="fl">a) Patient's / Insured's name:</span>
+    <div class="cboxes" data-field="declaration.patient.name" data-count="38" id="declPatientName"></div>
+  </div>
+  <div class="frow">
+    <span class="fl">b) Contact number:</span>
+    <div class="cboxes" data-field="declaration.patient.contactNumber" data-count="12" id="declPatientContact"></div>
+    <span class="fl" style="margin-left:6px;">c) Email ID: <em>(Optional)</em></span>
+    <div class="cboxes" data-field="declaration.patient.emailId" data-count="22" id="declPatientEmail"></div>
+  </div>
+  <div class="g2 mt2" style="align-items:start;">
+    <div>
+      <div style="font-size:6.3pt; margin-bottom:2px;">d) Patient's / Insured's signature:</div>
+      <div class="sigbox"></div>
+      <div class="frow mt2">
+        <span class="fl">Date:</span>
+        <div class="dboxes" data-field="declaration.patient.signatureDate" id="patSignDate"></div>
+        <span class="fl" style="margin-left:6px;">Time:</span>
+        <div class="dboxes" data-field="declaration.patient.signatureTime" id="patSignTime" data-type="time"></div>
+      </div>
+    </div>
+    <div style="visibility:hidden;"></div><!-- placeholder for layout -->
+  </div>
+
+  <!-- Hospital Declaration -->
+  <div class="decl-band mt4">HOSPITAL DECLARATION</div>
+  <div class="decl-point"><span class="decl-point-key">a.</span> We have no objection to any authorized TPA / Insurance Company official verifying documents pertaining to hospitalization.</div>
+  <div class="decl-point"><span class="decl-point-key">b.</span> All valid original documents duly countersigned by the insured / patient as per the checklist below will be sent to TPA / Insurance Company within 7 days of the patient's discharge.</div>
+  <div class="decl-point"><span class="decl-point-key">c.</span> We agree that TPA / Insurance Company will not be Liable to make the payment in the event of any discrepancy between the facts in this form and discharge summary or other documents.</div>
+  <div class="decl-point"><span class="decl-point-key">d.</span> The patient declaration has been signed by the patient or by his representative in our presence.</div>
+  <div class="decl-point"><span class="decl-point-key">e.</span> We agree to provide clarifications for the queries raised regarding this hospitalization and we take the sole responsibility for any delay in offering clarifications.</div>
+  <div class="decl-point"><span class="decl-point-key">f.</span> We will abide by the terms and conditions agreed in the MOU.</div>
+  <div class="decl-point"><span class="decl-point-key">g.</span> We confirm that no additional amount would be collected from the insured in excess of Agreed Package Rates except costs towards non-admissible amounts (including additional charges due to opting higher room rent than eligibility choosing separate line of treatment which is not envisaged/ considered in package).</div>
+  <div class="decl-point"><span class="decl-point-key">h.</span> We confirm that no recoveries would be made from the deposit amount collected from the Insured except for costs towards non-admissible amounts (including additional charges due to opting higher room rent than eligibility/ choosing separate line of treatment which is not envisaged/considered in package).</div>
+  <div class="decl-point"><span class="decl-point-key">i.</span> In the event of unauthorized recovery of any additional amount from the Insured in excess of Agreed Package Rates, the authorized TPA / Insurance Company reserves the right to recover the same from us (the Network Provider) and/or take necessary action, as provided under the MOU or applicable laws.</div>
+
+  <!-- Documents Checklist -->
+  <div class="decl-band mt4">DOCUMENTS TO BE PROVIDED BY THE HOSPITAL IN SUPPORT OF THE CLAIM</div>
+  <div class="decl-point"><span class="decl-point-key">1.</span> Detailed Discharge Summary and all Bills from the hospital.</div>
+  <div class="decl-point"><span class="decl-point-key">2.</span> Cash Memos from the Hospitals / Chemists supported by proper prescription.</div>
+  <div class="decl-point"><span class="decl-point-key">3.</span> Receipts and Pathological Test Reports from Pathologists, Supported by note from the attending Medical Practitioner / Surgeon recommending such pathological Tests.</div>
+  <div class="decl-point"><span class="decl-point-key">4.</span> Surgeon's Certificate stating nature of Operation performed and Surgeon's Bill and Receipt.</div>
+  <div class="decl-point"><span class="decl-point-key">5.</span> Certificates from attending Medical Practitioner / Surgeon that the patient is fully cured.</div>
+
+  <!-- Hospital Seal + Doctor Signature -->
+  <div class="g2 mt4">
+    <div>
+      <div style="font-size:6.3pt; margin-bottom:2px;">Hospital seal:</div>
+      <div class="sealbox"></div>
+    </div>
+    <div>
+      <div style="font-size:6.3pt; margin-bottom:2px;">Doctor's signature:</div>
+      <div class="sealbox"></div>
+    </div>
+  </div>
+  <div class="frow mt2">
+    <span class="fl">Date:</span>
+    <div class="dboxes" data-field="declaration.hospital.sealDate" id="hospSealDate"></div>
+    <span class="fl" style="margin-left:8px;">Time:</span>
+    <div class="dboxes" data-field="declaration.hospital.sealTime" id="hospSealTime" data-type="time"></div>
+  </div>
+
+  <div class="page-footer">Page 2 of 2 | Version: 25.06.2019</div>
+</div><!-- /page2 -->
+
+
+<!-- ═════════════════════════════════════════════ SCRIPT ═══════ -->
+<script>
+/* ================================================================
+   SAMPLE DATA — Replace this object with your actual JSON payload
+   ================================================================ */
+const formData = {
+  hospital: {
+    name:       "APOLLO HOSPITALS ENTERPRISE LTD",
+    location:   "21 GREAMS LANE, CHENNAI",
+    hospitalId: "APL00123",
+    emailId:    "cashless@apollohospitals.com",
+    rohiniId:   "R12345678"
+  },
+  patient: {
+    name:                 "RAMESH SURESH KUMAR",
+    gender:               "Male",          // "Male" | "Female" | "Third gender"
+    contactNo:            "9876543210",
+    altContactNo:         "9123456780",
+    ageYears:             "45",
+    ageMonths:            "06",
+    dateOfBirth:          "15/03/1979",    // DD/MM/YYYY
+    insurerIdCardNo:      "MED12345678901",
+    policyNumber:         "POL2024001234",
+    employeeId:           "EMP56789",
+    hasOtherMedicalClaim: "No",            // "Yes" | "No"
+    insurerName:          "",
+    claimDetails:         "",
+    familyPhysicianName:  "DR SURESH PILLAI",
+    familyPhysicianContact: "9988776655",
+    occupation:           "SOFTWARE ENGINEER",
+    address:              "12, MG ROAD, ANNA NAGAR, CHENNAI - 600040, TAMIL NADU"
+  },
+  doctor: {
+    name:                 "DR ANITHA KRISHNAMURTHY",
+    contactNo:            "9876501234",
+    illnessDescription:   "Acute appendicitis with fever and severe right iliac fossa pain for 2 days.",
+    clinicalFindings:     "Tenderness at McBurney's point, guarding, rebound tenderness. WBC elevated.",
+    durationDays:         "3",
+    firstConsultationDate:"12/03/2024",    // DD/MM/YYYY
+    pastHistory:          "No significant past history.",
+    provisionalDiagnosis: "Acute Appendicitis",
+    icd10Code:            "K3580",
+    proposedTreatment:    ["Surgical management"],  // array – multiple allowed
+    investigationDetails: "CBC, LFT, USG Abdomen",
+    routeOfDrugAdmin:     "IV",            // "IV" | "Oral" | "Other"
+    surgeryName:          "Laparoscopic Appendicectomy",
+    icd10PcsCode:         "0DTJ4ZZ",
+    otherTreatmentDetails: "",
+    injuryDescription:    "No injury. Spontaneous onset.",
+    accident: {
+      isRTA:           "No",
+      dateOfInjury:    "",
+      reportedToPolice:"No",
+      firNo:           "",
+      substanceAbuse:  "No",
+      testConducted:   "No"
+    },
+    maternity: {
+      G: "", P: "", L: "", A: "",
+      expectedDeliveryDate: ""
+    }
+  },
+  admission: {
+    dateOfAdmission: "13/03/2024",   // DD/MM/YYYY
+    timeOfAdmission: "10:30",        // HH:MM
+    isEmergency:     "emergency",    // "emergency" | "planned"
+    expectedDays:    "4",
+    icuDays:         "0",
+    roomType:        "GENERAL WARD"
+  },
+  costs: {
+    roomRent:          "2500",
+    investigationCost: "5000",
+    icuCharges:        "0",
+    otCharges:         "30000",
+    professionalFees:  "15000",
+    medicinesImplants: "8000",
+    otherExpenses:     "2000",
+    packageCharges:    "0",
+    totalCost:         "62500"
+  },
+  chronicHistory: {
+    diabetes:         false,  diabetesSince:       "",
+    heartDisease:     false,  heartDiseaseSince:   "",
+    hypertension:     false,  hypertensionSince:   "",
+    hyperlipidemias:  false,  hyperlipidSince:     "",
+    osteoarthritis:   false,  osteoarthritisSince: "",
+    asthma:           false,  asthmaSince:         "",
+    cancer:           false,  cancerSince:         "",
+    alcoholDrugAbuse: false,  alcoholSince:        "",
+    hivStd:           false,  hivSince:            "",
+    otherAilment:     ""
+  },
+  declaration: {
+    treatingDoctor: {
+      name:           "DR ANITHA KRISHNAMURTHY",
+      qualification:  "MS GENERAL SURGERY",
+      registrationNo: "TN MED 54321"
+    },
+    patient: {
+      name:          "RAMESH SURESH KUMAR",
+      contactNumber: "9876543210",
+      emailId:       "ramesh.kumar@email.com",
+      signatureDate: "13/03/2024",
+      signatureTime: "10:45"
+    },
+    hospital: {
+      sealDate: "13/03/2024",
+      sealTime: "11:00"
+    }
+  }
+};
+
+
+/* ================================================================
+   UTILITY – Retrieve nested value from object by dot-path string
+   ================================================================ */
+function getVal(obj, path) {
+  if (!path) return '';
+  return path.split('.').reduce((o, k) => (o != null && o[k] !== undefined) ? o[k] : '', obj);
+}
+
+
+/* ================================================================
+   RENDERERS
+   ================================================================ */
+
+/** Render individual character boxes and fill from string value */
+function renderCharBoxes(container, value, count) {
+  container.innerHTML = '';
+  const chars = String(value || '').toUpperCase().split('');
+  for (let i = 0; i < count; i++) {
+    const box = document.createElement('div');
+    box.className = 'cbox';
+    box.textContent = chars[i] || '';
+    container.appendChild(box);
+  }
+}
+
+/** Render DD/MM/YYYY date boxes */
+function renderDateBoxes(container, rawValue) {
+  container.innerHTML = '';
+  const v     = rawValue || '';
+  const parts = v.split('/');
+  const dd    = (parts[0] || '').padEnd(2, ' ');
+  const mm    = (parts[1] || '').padEnd(2, ' ');
+  const yyyy  = (parts[2] || '').padEnd(4, ' ');
+  const chars = [...dd, ...mm, ...yyyy];
+  chars.forEach((ch, i) => {
+    const box = document.createElement('div');
+    box.className = 'cbox';
+    box.style.width = '10.5px';
+    box.style.height = '11px';
+    box.textContent = ch.trim();
+    container.appendChild(box);
+    // add separator after day (i=1) and month (i=3)
+    if (i === 1 || i === 3) {
+      const sep = document.createElement('span');
+      sep.className = 'dsep';
+      sep.textContent = '';
+      container.appendChild(sep);
+    }
+  });
+}
+
+/** Render HH:MM time boxes */
+function renderTimeBoxes(container, rawValue) {
+  container.innerHTML = '';
+  const v     = rawValue || '';
+  const parts = v.split(':');
+  const hh    = (parts[0] || '').padEnd(2, ' ');
+  const mm    = (parts[1] || '').padEnd(2, ' ');
+  const chars = [...hh, ...mm];
+  chars.forEach((ch, i) => {
+    const box = document.createElement('div');
+    box.className = 'cbox';
+    box.textContent = ch.trim();
+    container.appendChild(box);
+    if (i === 1) {
+      const sep = document.createElement('span');
+      sep.className = 'dsep';
+      sep.textContent = '';
+      container.appendChild(sep);
+    }
+  });
+}
+
+/** Render MM/YY (2+2) boxes for chronic history dates */
+function renderMMYYBoxes(container, rawValue) {
+  container.innerHTML = '';
+  const v     = rawValue || '';
+  const parts = v.split('/');
+  const mm    = (parts[0] || '').padEnd(2, ' ');
+  const yy    = (parts[1] || '').padEnd(2, ' ');
+  const chars = [...mm, ...yy];
+  chars.forEach((ch, i) => {
+    const box = document.createElement('div');
+    box.className = 'cbox';
+    box.textContent = ch.trim();
+    container.appendChild(box);
+    if (i === 1) {
+      const sep = document.createElement('span');
+      sep.className = 'dsep';
+      sep.textContent = '';
+      container.appendChild(sep);
+    }
+  });
+}
+
+/** Mark a checkbox ✓ if value matches expected */
+function setCheckbox(el, value, expected) {
+  if (Array.isArray(value)) {
+    el.textContent = value.includes(expected) ? '✓' : '';
+  } else if (typeof value === 'boolean') {
+    el.textContent = value ? '✓' : '';
+  } else {
+    el.textContent = (String(value) === String(expected)) ? '✓' : '';
+  }
+}
+
+
+/* ================================================================
+   MAIN POPULATE FUNCTION
+   ================================================================ */
+function populateForm(data) {
+
+  /* --- Character box fields ------------------------------------ */
+  document.querySelectorAll('.cboxes[data-field]').forEach(el => {
+    const value = getVal(data, el.dataset.field);
+    const count = parseInt(el.dataset.count) || 20;
+    renderCharBoxes(el, value, count);
+  });
+
+  /* --- Date boxes (DD/MM/YYYY) --------------------------------- */
+  document.querySelectorAll('.dboxes[data-field]').forEach(el => {
+    const type  = el.dataset.type || 'date';
+    const value = getVal(data, el.dataset.field);
+    if (type === 'time') {
+      renderTimeBoxes(el, value);
+    } else if (type === 'mmyy') {
+      renderMMYYBoxes(el, value);
+    } else {
+      renderDateBoxes(el, value);
+    }
+  });
+
+  /* --- admission time (special: time-boxes class) -------------- */
+  const admTime = document.getElementById('admissionTime');
+  if (admTime) renderTimeBoxes(admTime, getVal(data, 'admission.timeOfAdmission'));
+
+  const patSignTime = document.getElementById('patSignTime');
+  if (patSignTime) renderTimeBoxes(patSignTime, getVal(data, 'declaration.patient.signatureTime'));
+
+  const hospSealTime = document.getElementById('hospSealTime');
+  if (hospSealTime) renderTimeBoxes(hospSealTime, getVal(data, 'declaration.hospital.sealTime'));
+
+  /* --- Chronic history MM/YY date boxes ----------------------- */
+  const mmyyFields = [
+    ['hDiabetesDate',     'chronicHistory.diabetesSince'],
+    ['hHeartDate',        'chronicHistory.heartDiseaseSince'],
+    ['hHypertensionDate', 'chronicHistory.hypertensionSince'],
+    ['hHyperlipidDate',   'chronicHistory.hyperlipidSince'],
+    ['hOsteoDate',        'chronicHistory.osteoarthritisSince'],
+    ['hAsthmaDate',       'chronicHistory.asthmaSince'],
+    ['hCancerDate',       'chronicHistory.cancerSince'],
+    ['hAlcoholDate',      'chronicHistory.alcoholSince'],
+    ['hHIVDate',          'chronicHistory.hivSince'],
+  ];
+  mmyyFields.forEach(([id, path]) => {
+    const el = document.getElementById(id);
+    if (el) renderMMYYBoxes(el, getVal(data, path));
+  });
+
+  /* --- Small number boxes ------------------------------------- */
+  const numFields = [
+    ['durationDays', 'doctor.durationDays'],
+    ['expectedDays', 'admission.expectedDays'],
+    ['icuDays',      'admission.icuDays'],
+  ];
+  numFields.forEach(([id, path]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = getVal(data, path) || '';
+  });
+
+  /* --- Text area boxes ---------------------------------------- */
+  const taFields = [
+    ['claimDetails',          'patient.claimDetails'],
+    ['address',               'patient.address'],
+    ['illnessDesc',           'doctor.illnessDescription'],
+    ['clinicalFindings',      'doctor.clinicalFindings'],
+    ['pastHistory',           'doctor.pastHistory'],
+    ['provisionalDiagnosis',  'doctor.provisionalDiagnosis'],
+    ['investigationDetails',  'doctor.investigationDetails'],
+    ['surgeryName',           'doctor.surgeryName'],
+    ['otherTreatmentDetails', 'doctor.otherTreatmentDetails'],
+    ['injuryDesc',            'doctor.injuryDescription'],
+    ['hOtherAilment',         'chronicHistory.otherAilment'],
+  ];
+  taFields.forEach(([id, path]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = getVal(data, path) || '';
+  });
+
+  /* --- All checkboxes ----------------------------------------- */
+  document.querySelectorAll('.cb[data-field]').forEach(el => {
+    const value    = getVal(data, el.dataset.field);
+    const expected = el.dataset.value;
+    setCheckbox(el, value, expected);
+  });
+
+  /* --- Amount / cost rows ------------------------------------- */
+  // (already handled by cboxes – cost fields use char boxes)
+}
+
+
+/* ════════════════════════════════════════════════════════
+   EXPORTED API – call this function with your own JSON
+   ════════════════════════════════════════════════════════ */
+window.populateForm = populateForm;
+
+// Auto-run with sample data on page load
+document.addEventListener('DOMContentLoaded', () => {
+  populateForm(formData);
+});
+</script>
+</body>
+</html>

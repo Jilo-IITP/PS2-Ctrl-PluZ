@@ -1,0 +1,47 @@
+Here's the cleaned and structured output:
+
+---
+
+### [Patient Info]
+*Information not available in the provided text.*
+
+### [Billing/Charges]
+*Information not available in the provided text.*
+
+### [Medications]
+*Information not available in the provided text.*
+
+### [Diagnosis]
+*A formal diagnosis is not explicitly stated in the provided text, but the following laboratory results contribute to a diagnostic assessment.*
+
+### [Laboratory Results]
+
+**General Physical Examination**
+*   **Colour:** Deep Pale
+*   **Deposit:** Nil
+*   **Specific Gravity:** 1.030
+
+**Chemical Examination**
+
+| Test                      | Result      |
+| :------------------------ | :---------- |
+| Reaction                  | Acidic      |
+| Glucose/Reducing Subs     | Nil         |
+| Phosphate                 | Nil         |
+| Protein (Albumin)         | Trace       |
+| Ketones                   | Nil         |
+| Bile Salt                 | Nil         |
+| Bile Pigments             | Nil         |
+| Urobilinogen              | Nil         |
+
+**Microscopic Examination**
+
+| Test                  | Result        |
+| :-------------------- | :------------ |
+| Erythrocytes (HPF)    | Nil           |
+| Leukocytes (HPF)      | 3-6           |
+| Epithelial Cells      | A Few         |
+| Casts                 | Nil           |
+| Crystals              | Nil           |
+| Other                 | Nil           |
+

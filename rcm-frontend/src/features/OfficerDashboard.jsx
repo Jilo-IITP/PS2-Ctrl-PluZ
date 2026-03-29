@@ -120,7 +120,10 @@ export default function OfficerDashboard() {
         isOpen={!!activePatientId} 
         onClose={() => setActivePatientId(null)} 
         onFileAttached={handleFileAttached} 
-        onProcessBatch={processBatch}
+        onProcessBatch={(patient, stage) => {
+          setActivePatientId(null);
+          processBatch(patient, stage);
+        }}
         onUpdateStep={updatePatientStep}
         onDeleteDocument={handleDeleteDocument}
       />

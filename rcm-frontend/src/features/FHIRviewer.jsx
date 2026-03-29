@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Database, ShieldCheck, User, Activity, ArrowRight, ArrowLeft, Code, Copy, CheckCircle2, FileText, Download, Eye } from 'lucide-react';
+import { Database, ShieldCheck, User, Activity, ArrowRight, ArrowLeft, Code, Copy, CheckCircle2, FileText, Download, Eye, ClipboardList, Stethoscope } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -254,7 +254,7 @@ const FhirViewer = ({ files = [], apiResults = [], patient, onProceed, onBack })
         </Button>
 
         {/* Dynamic header title moved to parent ProcessingPipeline */}
-        
+
         <Button size="sm" onClick={onProceed} className="h-7 font-bold shadow-md shadow-foreground/10 text-xs">
           Run Reconciliation
           <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -351,7 +351,7 @@ const FhirViewer = ({ files = [], apiResults = [], patient, onProceed, onBack })
             )}
           </div>
         </Card>
-        
+
         {/* RIGHT: MediAssist PDF Preview (Conditional) */}
         {patient?.step === 'pre auth' && (
           <Card className="lg:col-span-2 shadow-sm flex flex-col overflow-hidden bg-zinc-100">
@@ -370,7 +370,7 @@ const FhirViewer = ({ files = [], apiResults = [], patient, onProceed, onBack })
               </div>
             </CardHeader>
 
-            {/* Changed flex layout and padding here to fix "padding chuda hua hai" layout scaling overlap issue */}
+            {/* Changed flex layout and padding here to fix "padding chuda hua hai" layout scaling overlap issue
             <div className="flex-grow overflow-auto bg-zinc-200/50 relative">
               {loadingMedi ? (
                 <div className="flex flex-col items-center justify-center p-20 gap-3 h-full">
@@ -398,7 +398,7 @@ const FhirViewer = ({ files = [], apiResults = [], patient, onProceed, onBack })
                   <span className="text-[10px] font-bold uppercase tracking-widest">PDF Preview</span>
                 </div>
               )}
-            </div>
+            </div> */}
           </Card>
         )}
 

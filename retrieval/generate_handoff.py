@@ -6,8 +6,12 @@ from get_chunks import StandaloneRetriever
 
 from dotenv import load_dotenv, find_dotenv; load_dotenv(find_dotenv())
 
+# Support both GOOGLE_API_KEY and GEMINI_API_KEY
+if "GOOGLE_API_KEY" not in os.environ and "GEMINI_API_KEY" in os.environ:
+    os.environ["GOOGLE_API_KEY"] = os.environ["GEMINI_API_KEY"]
+
 if "GOOGLE_API_KEY" not in os.environ:
-    raise ValueError("GOOGLE_API_KEY environment variable not set.")
+    raise ValueError("GOOGLE_API_KEY or GEMINI_API_KEY environment variable not set.")
 
 def extract_diagnoses(ocr_text: str) -> list[str]:
     print("-> Pinging Gemini 2.5 Flash for NER extraction...")
@@ -20,7 +24,7 @@ def extract_diagnoses(ocr_text: str) -> list[str]:
     Ignore medications, billing items, lab test names, and patient info.
     If the text says "No specific diagnosis found" or only lists preventative checkups, return an empty list.
     
-    CRITICAL: Translate colloquial symptoms into standard clinical terminology that closely matches the ICD-10 vocabulary before outputting (e.g., convert "Cold" to "Acute nasopharyngitis", "Tiredness" to "Fatigue").
+    CRITICAL: Translate colloquial symptoms into standard clinical terminology short description precise so that it closely matches the ICD-10 vocabulary before outputting (e.g., convert "Cold" to "Acute nasopharyngitis").
     
     Output strictly as a JSON list of strings. Do not include markdown formatting like ```json.
     

@@ -1,25 +1,28 @@
 import os
 import re
 import json
-from supabase import create_client, Client
+import sys
 from dotenv import load_dotenv
+
+# ---------------------------
+# Robust Path Initialization
+# ---------------------------
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.append(BASE_DIR)
+
+from core.supabase import get_supabase
 
 # Load environment variables
 load_dotenv()
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-
-# Initialize Supabase Client
-supabase: Client = None
-if SUPABASE_URL and SUPABASE_KEY and "your-project-url" not in SUPABASE_URL:
-    try:
-        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-        print("✅ Supabase client initialized.")
-    except Exception as e:
-        print(f"❌ Failed to initialize Supabase client: {e}")
-else:
-    print("⚠️ Supabase credentials not found or using placeholders. Skipping DB connection.")
+# Initialize Supabase Client from Singleton
+try:
+    supabase = get_supabase()
+    print("✅ Supabase client initialized via singleton.")
+except Exception as e:
+    print(f"❌ Failed to initialize Supabase client: {e}")
+    supabase = None
 
 def parse_hospital_data(file_path):
     """Parses the structured_hospital_data.txt file into a dictionary."""

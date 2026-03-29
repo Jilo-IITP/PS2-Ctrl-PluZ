@@ -136,7 +136,9 @@ def run_fhir_generation(text_1: str, text_2: str, api_key: str) -> tuple[list[di
         bundle = build_fhir_bundle(patient_obj, invoice_date)
         # return as dict so it's readily JSON-able for the pipeline
         bundles.append(json.loads(bundle.json()))
-        
+    
+    print("->Printing ai extract: ")
+    print(ai_document.model_dump())
     return bundles, ai_document.model_dump()
 
 def main():
