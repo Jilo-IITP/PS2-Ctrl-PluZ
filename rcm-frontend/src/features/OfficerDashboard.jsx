@@ -26,7 +26,8 @@ export default function OfficerDashboard() {
     handleEditPatient, handleDeletePatient, handleDeleteDocument,
     processSettlement,
     processBillAudit, processBillApproval,
-    exportPatientsToCSV
+    exportPatientsToCSV,
+    addPatientAmount, deletePatientAmount, refreshPatientData
   } = useDashboardLogic();
 
   const [editingPatientId, setEditingPatientId] = React.useState(null);

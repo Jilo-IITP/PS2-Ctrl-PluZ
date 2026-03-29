@@ -479,6 +479,7 @@ export function useDashboardLogic() {
     handleOnboardingSubmit, handleCreatePatient, handleFileAttached, processBatch,
     isSubmittingPatient, patientError, setPatientError, updatePatientStep,
     handleEditPatient, handleDeletePatient, handleDeleteDocument,
-    exportPatientsToCSV // <--- Make sure to export the new function here!
+    exportPatientsToCSV,
+    addPatientAmount, deletePatientAmount, refreshPatientData
   };
 }

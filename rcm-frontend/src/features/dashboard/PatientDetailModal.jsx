@@ -21,7 +21,6 @@ const PatientDetailModal = ({
   onAddPatientAmount,
   onDeletePatientAmount,
   onRefreshPatient,
-  onUpdateStep
 }) => {
   if (!patient) return null;
 
