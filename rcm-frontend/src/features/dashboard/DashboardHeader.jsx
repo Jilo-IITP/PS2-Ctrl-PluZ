@@ -13,7 +13,7 @@ const DashboardHeader = ({ userProfile, onLogout }) => {
             <FolderOpen className="w-4 h-4" />
           </div>
           <div>
-            <h1 className="text-sm font-bold tracking-widest leading-none uppercase">RCM Normalize</h1>
+            <h1 className="text-sm font-bold tracking-widest leading-none uppercase">Ctrl PluZ</h1>
             <p className="text-[10px] uppercase font-semibold text-muted-foreground tracking-widest mt-0.5">
               Officer Profile
             </p>

@@ -65,11 +65,11 @@ Source Entity: Conjugated Jaundice
 
 Source Entity: Tachycardia
 --------------------------------------------------
-  Result 1 [ICD: I47 | Score: 0.8211]: Paroxysmal tachycardia
-  Context: **I47 Paroxysmal tachycardia** **Code first** tachycardia complicating: abortion or ectopic or molar pregnancy (O00-O07, O08.8) obstetric surgery and procedures (O75.4) **Excludes1:** tachycardia NOS (R00.0) sinoauricular tachycardia NOS (R00.0) sinus [sinusal] tachycardia NOS (R00.0)
+  Result 1 [ICD: A41 | Score: 0.9340]: Other sepsis
+  Context: sepsis (due to) (in) anthrax (A22.7) sepsis (due to) (in) candidal (B37.7) sepsis (due to) (in) Erysipelothrix (A26.7) sepsis (due to) (in) extraintestinal yersiniosis (A28.2) sepsis (due to) (in) gonococcal (A54.86) sepsis (due to) (in) herpesviral (B00.7) sepsis (due to) (in) listerial (A32.7)
 
-  Result 2 [ICD: I47 | Score: 0.5614]: Paroxysmal tachycardia
-  Context: IST **I47.19 Other supraventricular tachycardia** Atrial (paroxysmal) tachycardia Atrioventricular [AV] (paroxysmal) tachycardia Atrioventricular re-entrant (nodal) tachycardia [AVNRT] [AVRT] Junctional (paroxysmal) tachycardia Nodal (paroxysmal) tachycardia **I47.2 Ventricular tachycardia**
+  Result 2 [ICD: A41 | Score: 0.9030]: Other sepsis
+  Context: sepsis (due to) (in) listerial (A32.7) sepsis (due to) (in) melioidosis (A24.1) sepsis (due to) (in) meningococcal (A39.2-A39.4) sepsis (due to) (in) plague (A20.7) sepsis (due to) (in) tularemia (A21.7) toxic shock syndrome (A48.3) **A41.0 Sepsis due to Staphylococcus aureus**
 
 
 Source Entity: Sepsis
