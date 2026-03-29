@@ -6,6 +6,12 @@ from fastapi import UploadFile, HTTPException, status
 from google import genai
 from google.genai import types
 
+import logging
+
+# Disable most logging for cleaner output
+logging.getLogger("google").setLevel(logging.ERROR)
+logging.getLogger("httpx").setLevel(logging.ERROR)
+
 # ---------------------------
 # Robust Path Initialization
 # ---------------------------
@@ -33,9 +39,9 @@ class SettlementController:
         supabase = get_supabase()
         
         # 1. Update Patient Status to "discharged"
-        print(f"Update patient {patient_id} status to 'discharged'...")
+        print(f"Update patient {patient_id} status to 'discharge'...")
         try:
-            supabase.table("patients").update({"step": "discharged"}).eq("id", patient_id).eq("tpa_id", tpa_id).execute()
+            supabase.table("patients").update({"step": "discharge"}).eq("id", patient_id).eq("tpa_id", tpa_id).execute()
         except Exception as e:
             print(f"Warning: Failed to update patient status: {e}")
 
@@ -75,8 +81,7 @@ class SettlementController:
         client = genai.Client(api_key=API_KEY)
         
         prompt = f"""
-        You are a Medical Billing Auditor and Claims Adjuster.
-        Your task is to analyze a Settlement Letter from an insurance company and identify if the deductions made are valid.
+        You are a Medical Billing Auditor. Compare the Settlement Letter against FHIR data.
         
         CONTEXT (FHIR CLINICAL DATA):
         {json.dumps(fhir_context, indent=2)}
@@ -85,13 +90,15 @@ class SettlementController:
         {settlement_text}
         
         INSTRUCTIONS:
-        1. Extract all deductions from the settlement letter (Description, Amount, Reason).
-        2. Cross-reference each deduction with the provided FHIR data. 
-           - Look for matching services, CPT codes, and clinical justifications.
-           - If a service was performed and documented in FHIR but deducted as "Not Covered" or "Unsupported" in the settlement, it is likely an INVALID deduction.
-        3. For each deduction, provide a clear justification and a recommendation (e.g., "Appeal based on documented clinical necessity").
-        4. If no deductions are found, return is_audit_passed: true.
-        5. Return the result in the specified JSON format.
+        1. Extract the Patient Name and {patient_id}.
+        2. Set 'is_audit_passed' to true only if deductions are zero.
+        3. If false, list EVERY deductions with:
+           - The exact 'amount' deducted.
+           - The 'reason_given' by insurance.
+           - A 'recommendation' explaining EXACTLY which missing bills, test reports, or clinical notes (from FHIR or otherwise) are needed to recover this specific amount.
+           - A 'pass_probability' (percentage 0-100%) representing the chance of winning an appeal if the recommended documents are provided.
+        4. DO NOT include a summary paragraph.
+        5. Return strictly in JSON format.
         """
         
         try:
@@ -114,3 +121,4 @@ class SettlementController:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
                 detail=f"AI Audit failed: {str(e)}"
             )
+        
