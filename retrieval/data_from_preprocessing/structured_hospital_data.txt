@@ -1,90 +1,127 @@
-Here's the cleaned and structured output from the hospital document:
+Here's the cleaned, structured, and identified output:
+
+---
+
+**Document Identification:**
+
+*   **Admission Note:** Found at "Initial Doctors Admission Note Patient Name: Rahul Date: 31/03/2022"
+*   **Lab Report Summary:** Found at "Labs: Hb: 5gm/dl (Severe Anemia), Platelets: 8000 (Critical) , TLC: 850. Liver: Conjugated Jaundice (Total Bilirubin: 3.7)"
+
+---
+
+### Patient Info
+
+*   **Name:** Rahul
+*   **Date:** 31/03/2022
+*   **Chief Complaints:** High-grade fever (104°F) with chills for 7 days. Severe generalized weakness and drowsiness.
+*   **Clinical Findings:**
+    *   **Vitals:** Tachycardia (Pulse: 138/min) and febrile.
+
+### Diagnosis
+
+*   Aplastic Anemia with Pancytopenia and Sepsis
+*   Conjugated Jaundice
+
+### Medications
+
+*   IV antibiotics (planned for suspected Sepsis/UTI)
+*   Anti-fungals (planned for suspected Sepsis/UTI)
+
+### Billing/Charges
+
+No specific billing items or charges were found in the provided text.
+
+### Test Results
+
+| Test Parameter       | Result    | Notes            |
+| :------------------- | :-------- | :--------------- |
+| Hemoglobin (Hb)      | 5 gm/dl   | Severe Anemia    |
+| Platelets            | 8,000     | Critical         |
+| Total Leukocyte Count (TLC) | 850       |                  |
+| Total Bilirubin      | 3.7       | Conjugated Jaundice |
+
+### Treatment Plan
+
+*   Urgent transfusion of 1 unit of blood.
+*   Urgent transfusion of 8 units of RDP (Random Donor Platelets).
+*   Start IV antibiotics and anti-fungals for suspected Sepsis/UTI.
+*   Monitor vitals and cardiac status (2D Echo).
+
+Here's the cleaned, structured, and identified content:
+
+---
+
+### Document Identification
+
+*   **Blood Report**: Identified by the phrase "Blood Report & Pathology Bill" at the beginning of the text.
+*   **Pathology Bill**: Identified by the phrase "Blood Report & Pathology Bill" and further detailed as "The financial summary for laboratory and pathological services is as follows".
 
 ---
 
 ### [Patient Info]
-*(Information not provided in the raw text.)*
+*(No patient information was found in the provided text.)*
 
 ### [Billing/Charges]
-*(Information not provided in the raw text.)*
+
+The financial summary for laboratory and pathological services is as follows:
+
+| Service Description              | Bill Amount (INR) | Discount (INR) | Total Payable (INR) |
+| :------------------------------- | :---------------- | :--------------- | :------------------ |
+| Pathology Charges                | 49,390.00         | 3,951.20         | 45,438.80           |
+| Investigation & Lab (Settlement) | N/A               | 29,865.00        | 2.00\*              |
 
 ### [Medications]
-*(Information not provided in the raw text.)*
+*(No medication information was found in the provided text.)*
 
 ### [Diagnosis]
+*(No diagnosis information was found in the provided text.)*
 
-**General Observations:**
-*   **Colour:** Deep Pale
-*   **Deposit:** Nil
-*   **Specific Gravity:** 1.030
+Here's the cleaned and structured output, with document identification:
 
-**Chemical Examination:**
+---
 
-| Parameter                   | Result                           |
-| :-------------------------- | :------------------------------- |
-| Reaction                    | Acidic                           |
-| Glucose/Reducing Substances | Nil                              |
-| Phosphate                   | Nil                              |
-| Protein (Albumin)           | Trace                            |
-| Ketones                     | Nil (Assumed, value not specified in raw text) |
-| Bile Salt                   | Nil (Assumed, value not specified in raw text) |
-| Bile Pigments               | Nil (Assumed, value not specified in raw text) |
-| Urobilinogen                | Nil (Assumed, value not specified in raw text) |
+**Document Identification:**
 
-**Microscopic Examination:**
+*   **Blood Report / Lab Results**: Identified by the phrase "Blood Report Summary" and the detailed "laboratory investigations conducted during the admission period (31/03/2022 to 03/04/2022)" listing specific hematological levels and serum tests.
 
-| Parameter          | Result |
-| :----------------- | :----- |
-| Erythrocytes (HPF) | Nil    |
-| Leucocytes (HPF)   | 3-6    |
-| Epithelial Cells   | A Few  |
-| Casts              | Nil    |
-| Crystals           | Nil    |
-| Other              | Nil    |
+---
 
-Here's the cleaned and structured information from the provided OCR output:
+### Patient Info
 
-## Patient Info
+*   *No specific patient information (e.g., Name, DOB, MRN) found in this excerpt.*
+*   **Admission Period**: 31/03/2022 to 03/04/2022
 
-*   **Consultant:** Dr. S.K. Roy, M.B.B.S.
+### Billing/Charges
 
-## Billing/Charges
+*   *No billing or charge details found in this excerpt.*
 
-*   No specific billing items found in the document.
+### Medications
 
-## Medications
+**Blood Transfusions Administered:**
 
-*   No medications listed in the document.
+| Type of Transfusion        | Quantity | Date Administered |
+| :------------------------- | :------- | :---------------- |
+| Blood                      | 1 unit   | 31/03/2022        |
+| Random Donor Platelets (RDP) | 8 units  | 31/03/2022        |
+| Blood                      | 1 unit   | 01/04/2022        |
 
-## Diagnosis
+### Diagnosis
 
-### Laboratory Results
+The laboratory investigations revealed critical hematological levels consistent with the following conditions:
 
-**Hematology Panel**
+*   **Pancytopenia**
+*   **Severe Anemia**
+*   **Jaundice** (indicated by elevated Serum Bilirubin)
+*   **Sepsis** (indicated by elevated Serum Procalcitonin)
 
-| Test Name                             | Result    | Unit      |
-| :------------------------------------ | :-------- | :-------- |
-| HAEMOGLOBIN (Method: Cyanmethaemoglobin) | 12        | g/dL      |
-| TOTAL LEUCOCYTE COUNT (TLC)           | 7200      | /cu mm    |
-| RED BLOOD CELL COUNT (RBC)            | 3.50      | x10^6 /cu mm |
-| PACKED CELL VOLUME (PCV)              | 36.7      | %         |
-| MCV (Mean Corpuscular Volume)         | 110.8     | fL        |
-| MCH (Mean Corpuscular HB)             | 34.6      | pg        |
-| MCHC (Mean Corpuscular HB Conc)       | 31.2      | g/dL      |
-| PLATELET COUNT                        | 95,000    | /cu mm    |
-| RDW-SD                                | Not specified |           |
+**Laboratory Investigations Summary:**
 
-**Differential Leucocyte Count (DLC)**
-
-| Cell Type   | Result | Unit |
-| :---------- | :----- | :--- |
-| NEUTROPHILS | 60     | %    |
-| EOSINOPHILS | 2      | %    |
-| LYMPHOCYTES | 35     | %    |
-| MONOCYTES   | 4      | %    |
-| BASOPHILS   | 0      | %    |
-
-### Notes on Results
-
-Some of the test results are unexpected and need to be correlated clinically. If critical, recheck immediately. Patients are advised to contact the lab for their results.
+| Test                          | Result         | Interpretation/Comment              |
+| :---------------------------- | :------------- | :---------------------------------- |
+| Hemoglobin (Hb)               | 5 gm/dl        | Extremely low                       |
+| Total Leucocyte Count (TLC)   | 850            | Severely low                        |
+| Platelet Count                | 8,000          | Critically low                      |
+| Serum Bilirubin (Total)       | 3.7 mg/dl      | Elevated, indicating Jaundice       |
+| Serum Bilirubin (Direct)      | 2.24 mg/dl     | Elevated, indicating Jaundice       |
+| Serum Procalcitonin           | 2.33           | Elevated, indicating Sepsis         |
 

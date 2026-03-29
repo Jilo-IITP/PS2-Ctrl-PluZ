@@ -2,7 +2,8 @@
 import os
 import easyocr
 import google.generativeai as genai
-from pdf2image import convert_from_path
+# from pdf2image import convert_from_path
+from pdf2image import convert_from_bytes
 from dotenv import load_dotenv , find_dotenv
 
 #keys in secrets tab
@@ -16,36 +17,41 @@ reader = easyocr.Reader(['en'])
 #gemini model
 model = genai.GenerativeModel('models/gemini-2.5-flash')
 
-def process_single_pdf(pdf_path):
-    """Converts PDF to text using EasyOCR."""
-    print(f"--- Extracting text from: {os.path.basename(pdf_path)} ---")
+from pdf2image import convert_from_bytes
+import numpy as np
+# Assuming your reader is initialized globally at the top of your file
+# reader = easyocr.Reader(['en'])
+
+def process_single_pdf(file_bytes: bytes, filename: str):
+    """Converts PDF bytes directly to text using EasyOCR in memory."""
+    print(f"--- Extracting text from: {filename} ---")
 
     try:
-        images = convert_from_path(pdf_path)
+        # Load PDF directly from the downloaded bytes (No disk I/O!)
+        images = convert_from_bytes(file_bytes)
     except Exception as e:
         return f"Error reading PDF: {e}"
 
     raw_text = ""
-    for i, image in enumerate(images):
-        temp_img = f"temp_page_{i}.jpg"
-        image.save(temp_img)
-
-        # Run EasyOCR
-        result = reader.readtext(temp_img, detail=0)
+    for image in images:
+        # EasyOCR can read numpy arrays directly. 
+        # This skips the slow image.save() and os.remove() steps entirely.
+        img_array = np.array(image)
+        
+        result = reader.readtext(img_array, detail=0)
         if result:
             raw_text += " ".join(result) + " "
 
-        os.remove(temp_img)
     return raw_text
 
 def structure_text_with_gemini(raw_text, filename):
     """Sends messy text to Gemini for cleaning and structuring."""
     prompt = f"""
-    The following text is from a hospital document named '{filename}'.
     It is unstructured OCR output. Please:
     1. Clean it up (fix typos, remove page numbers and hospital headers).
     2. Structure it into sections: [Patient Info, Billing/Charges, Medications, Diagnosis].
     3. Use Markdown tables for any billing items or test result lists.
+    **Document Identification:** From the merged content, identify and list the original document types (e.g., Bill, Blood Report, Discharge Summary). Use specific markers from the text (like 'Invoice #123' or 'Lab Date: March 20') to show where each document was found.
 
     RAW TEXT:
     {raw_text}
@@ -83,22 +89,23 @@ def main():
         print(f"No PDF files found in '{input_folder}'. Upload them to the sidebar folder.")
         return
 
+    combined_raw_text = ""
     with open(output_file, "w", encoding="utf-8") as master_file:
         for filename in pdf_files:
             pdf_path = os.path.join(input_folder, filename)
-
-            # Step A: OCR Extraction
+            # OCR Extraction for each file
             raw_content = process_single_pdf(pdf_path)
+            combined_raw_text += f"\n--- Source File: {filename} ---\n" + raw_content
 
-            # Step B: LLM Structuring
-            print(f"Structuring {filename} with Gemini...")
-            structured_data = structure_text_with_gemini(raw_content, filename)
+    print(f"Structuring all data from {len(pdf_files)} files")  
 
-            # Step C: Write to the master text file
-            # Step C: Total Clean Version
-            master_file.write(structured_data + "\n\n")
+    structured_data = structure_text_with_gemini(combined_raw_text, "Combined Patient Records")
 
-    print(f"\nSuccess! Data synced to retrieval folder: '{output_file}'")
+    # --- Step C: Write the final consolidated result ---
+    with open(output_file, "w", encoding="utf-8") as master_file:
+        master_file.write(structured_data)
+
+    print(f"\nSuccess! Consolidated data saved to: '{output_file}'")
 
     # Check if file exists and has content before downloading
     #if os.path.exists(output_file) and os.path.getsize(output_file) > 0:

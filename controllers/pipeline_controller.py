@@ -4,12 +4,15 @@ Pipeline orchestration logic split into two stages: Pre-Auth and Admitted (Disch
 Both run the full 4-step pipeline. Pre-Auth additionally generates the medi_assist form JSON.
 FHIR records are upserted (replaced, not duplicated) per patient.
 """
+from preprocessing.pdf_to_text import structure_text_with_gemini
+from preprocessing.pdf_to_text import process_single_pdf
 import os
 import json
 import uuid
-from typing import List
+from typing import List, Optional
 from fastapi import UploadFile, HTTPException
 from core.supabase import get_supabase
+from supabase import Client
 
 # Local Pipeline Imports
 import sys
@@ -23,6 +26,13 @@ from preprocessing.pdf_to_text import run_pdf_pipeline
 from retrieval.generate_handoff import run_retrieval_pipeline
 from formatting.fhir_gen import run_fhir_generation
 from validator.final_val import run_validation
+
+from pydantic import BaseModel
+
+class PipelineRequest(BaseModel):
+    document_ids: List[str]
+    patient_id: str
+    tpa_id: Optional[str] = None
 
 import dotenv
 dotenv.load_dotenv()
@@ -198,57 +208,95 @@ def fetch_supabase_patient(pid):
 # ---------------------------------------------------------------------------
 # Core 4-step pipeline
 # ---------------------------------------------------------------------------
-async def process_full_pipeline(files: List[UploadFile], patient_id: str, cms_dicts: dict, tpa_id: str = None):
+
+
+import uuid
+from typing import List
+from fastapi import HTTPException
+from supabase import Client
+import os
+
+async def process_full_pipeline(
+    document_ids: List[str], 
+    patient_id: str, 
+    cms_dicts: dict, 
+    supabase: Client, 
+    tpa_id: str 
+):
     combined_structured = ""
-    combined_retrieval = ""
     doc_id = str(uuid.uuid4())
-
-    for file in files:
-        print(f"--- Processing {file.filename} ---")
-        file_path = os.path.join(INPUT_FOLDER, file.filename)
-        with open(file_path, "wb") as buffer:
-            content = await file.read()
-            buffer.write(content)
-            await file.seek(0)
-
+    
+    # ==========================================
+    # STEP 1: DOWNLOAD FROM BUCKET & PROCESS
+    # ==========================================
+    for doc_uuid in document_ids:
+        doc_res = supabase.table("documents").select("file_name, file_url").eq("id", doc_uuid).execute()
+        
+        if not doc_res.data:
+            continue
+            
+        file_url = doc_res.data[0]["file_url"]
+        file_name = doc_res.data[0]["file_name"]
+        
+        # --- THE FIX: Extract the relative path just like you do in delete_document ---
+        marker = "/storage/v1/object/public/medical_documents/"
+        if marker in file_url:
+            storage_path = file_url.split(marker, 1)[1]
+        else:
+            storage_path = file_url # Fallback just in case
+            
+        print(f"--- Downloading {file_name} from Supabase Storage ---")
+        
         try:
-            print("⏳ Running Step 1: Preprocessing...")
-            structured_text = run_pdf_pipeline(file_path, file.filename)
-            if structured_text.startswith("Error") or structured_text.startswith("Gemini API Error"):
+            # Pass the clean storage_path, NOT the full URL
+            file_bytes = supabase.storage.from_("medical_documents").download(storage_path)
+            
+            # 3. Process the bytes in memory using our fast function
+            raw_content = process_single_pdf(file_bytes, file_name) 
+            structured_text = structure_text_with_gemini(raw_content, file_name)
+            
+            if structured_text.startswith("Error"):
                 raise Exception(structured_text)
+                
             combined_structured += structured_text + "\n\n"
+            
+            # 4. UPDATE the existing document row with the extracted text
+            supabase.table("documents").update({
+                "extracted_text": structured_text 
+            }).eq("id", doc_uuid).execute()
 
         except Exception as e:
-            print(f"❌ Failed processing {file.filename}: {e}")
+            print(f"❌ Failed processing {file_name}: {e}")
             raise HTTPException(status_code=500, detail=str(e))
-        
+            
+    # ==========================================
+    # STEP 2: BATCH RETRIEVAL (VERITAS)
+    # ==========================================
     try:
-        print("⏳ Running Step 2: Retrieval Mapping...")
+        print("⏳ Running Step 2: Retrieval Mapping on merged data...")
         combined_retrieval = run_retrieval_pipeline(combined_structured)
-
     except Exception as e:
-        # print(f"❌ Failed processing {file.filename}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-    # Save intermediate artifacts
-    output_folder = os.path.join(BASE_DIR, "retrieval", "data_from_preprocessing")
-    os.makedirs(output_folder, exist_ok=True)
-    with open(os.path.join(output_folder, "structured_hospital_data.txt"), "w", encoding="utf-8") as f:
-        f.write(combined_structured)
-
-    retrieval_folder = os.path.join(BASE_DIR, "data", "input")
-    os.makedirs(retrieval_folder, exist_ok=True)
-    with open(os.path.join(retrieval_folder, "reti_output.txt"), "w", encoding="utf-8") as f:
-        f.write(combined_retrieval)
-
-    if not API_KEY:
-        raise Exception("GEMINI_API_KEY not found.")
-
+    # ==========================================
+    # STEP 3: FHIR GENERATION
+    # ==========================================
     print("⏳ Running Step 3: FHIR Generation...")
-    fhir_bundles, ai_extract = run_fhir_generation(combined_structured, combined_retrieval, API_KEY)
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise Exception("GEMINI_API_KEY not found.")
+        
+    fhir_bundles, ai_extract = run_fhir_generation(
+        combined_structured, 
+        combined_retrieval, 
+        api_key
+    )
 
     patient_data_ext = ai_extract.get("patients", [{}])[0] if ai_extract.get("patients") else {}
-    pat_data = fetch_supabase_patient(patient_id)
+    
+    pat_response = supabase.table("patients").select("name").eq("id", patient_id).execute()
+    pat_name = pat_response.data[0]["name"] if pat_response.data else "Unknown"
+
     diagnoses = patient_data_ext.get("diagnoses", [])
     mapped_services = []
     for svc in patient_data_ext.get("services", []):
@@ -260,44 +308,50 @@ async def process_full_pipeline(files: List[UploadFile], patient_id: str, cms_di
             "match_confidence": "98%",
         })
 
+    # ==========================================
+    # STEP 4: VALIDATION
+    # ==========================================
     print("⏳ Running Step 4: Final Validation...")
     validation_report = run_validation(
-        fhir_bundles,
-        cms_dicts["ptp_edits"],
-        cms_dicts["mue_limits"],
-        cms_dicts["gender_codes"],
-        cms_dicts["ncd_map"],
+        fhir_bundles, 
+        cms_dicts["ptp_edits"], 
+        cms_dicts["mue_limits"], 
+        cms_dicts["gender_codes"], 
+        cms_dicts["ncd_map"]
     )
 
-    # Determine validity from the report
     is_valid = True
     if isinstance(validation_report, dict):
         is_valid = validation_report.get("is_valid", True)
     elif isinstance(validation_report, list):
-        is_valid = len(validation_report) == 0  # no errors = valid
+        is_valid = len(validation_report) == 0  
 
-    # Upsert FHIR into DB (replace existing for same patient)
+    # ==========================================
+    # STEP 5: UPSERT FINAL RECORD TO DB
+    # ==========================================
     fhir_bundle = fhir_bundles[0] if fhir_bundles else {}
     if tpa_id and fhir_bundle:
         try:
-            await _upsert_fhir_record(patient_id, tpa_id, fhir_bundle, is_valid)
+            supabase.table("fhir_records").upsert({
+                "patient_id": patient_id,
+                "tpa_id": tpa_id,
+                "fhir_json": fhir_bundle,
+                "combined_ocr_text": combined_structured,     
+                "combined_retrieval_text": combined_retrieval, 
+                "is_valid": is_valid
+            }, on_conflict="patient_id").execute()
         except Exception as e:
             print(f"⚠️ FHIR DB upsert warning (non-fatal): {e}")
 
-    CACHE[doc_id] = {
-        "fhir_bundles": fhir_bundles,
-        "validation_report": validation_report,
-    }
-
     result = {
         "doc_id": doc_id,
-        "fileName": "Batch processing" if len(files) > 1 else files[0].filename,
+        "fileName": "Batch processing" if len(document_ids) > 1 else "Single Document",
         "invoice_number": ai_extract.get("invoice_number") or f"INV-{uuid.uuid4().hex[:6].upper()}",
         "invoice_date": ai_extract.get("invoice_date", "Unknown"),
         "hospital_name": ai_extract.get("hospital_name", "Unknown Hospital"),
         "confidence_score": 95,
         "patient": {
-            "name": pat_data.get("full_name", "Unknown"),
+            "name": pat_name, 
             "doctor_name": patient_data_ext.get("doctor_name", ""),
             "services": mapped_services,
             "diagnoses": [
@@ -317,19 +371,25 @@ async def process_full_pipeline(files: List[UploadFile], patient_id: str, cms_di
 
 
 # ---------------------------------------------------------------------------
-# Pre-Auth endpoint — full pipeline + medi_assist form JSON
+# Preauth endpoint
 # ---------------------------------------------------------------------------
-async def run_preauth_pipeline(files: List[UploadFile], patient_id: str, cms_dicts: dict, tpa_id: str = None):
-    print(f"\n🚀 API HIT: Processing {len(files)} files through Pre-Auth Pipeline for patient {patient_id}.")
+async def run_preauth_pipeline(req: PipelineRequest, cms_dicts: dict):
+    print(f"\n🚀 API HIT: Processing {len(req.document_ids)} files through Pre-Auth Pipeline for patient {req.patient_id}.")
 
     try:
-        results = await process_full_pipeline(files, patient_id, cms_dicts, tpa_id)
+        # 2. Pass document_ids instead of files
+        results = await process_full_pipeline(
+            document_ids=req.document_ids, 
+            patient_id=req.patient_id, 
+            cms_dicts=cms_dicts, 
+            supabase=supabase, 
+            tpa_id=req.tpa_id
+        )
 
         # Fetch patient record from DB for form hydration
         patient_db = {}
         try:
-            supabase = get_supabase()
-            res = supabase.table("patients").select("*").eq("id", patient_id).single().execute()
+            res = supabase.table("patients").select("*").eq("id", req.patient_id).single().execute()
             patient_db = res.data or {}
         except Exception:
             pass
@@ -337,13 +397,12 @@ async def run_preauth_pipeline(files: List[UploadFile], patient_id: str, cms_dic
         # Fetch TPA/Hospital data
         hospital_db = {}
         try:
-            if tpa_id:
-                user_res = supabase.table("users").select("hospital_id").eq("id", tpa_id).single().execute()
+            if req.tpa_id:
+                user_res = supabase.table("users").select("hospital_id").eq("id", req.tpa_id).single().execute()
                 h_id = (user_res.data or {}).get("hospital_id")
                 if h_id:
                     hosp_res = supabase.table("hospitals").select("*").eq("id", h_id).single().execute()
                     hospital_db = hosp_res.data or {}
-                    print(hospital_db)
         except Exception as e:
             print(f"⚠️ Failed to fetch hospital details for TPA: {e}")
 
@@ -352,6 +411,7 @@ async def run_preauth_pipeline(files: List[UploadFile], patient_id: str, cms_dic
         results[0]["preauth_form_json"] = preauth_form_json
 
         return {"status": "success", "results": results}
+        
     except HTTPException:
         raise
     except Exception as e:
@@ -362,14 +422,21 @@ async def run_preauth_pipeline(files: List[UploadFile], patient_id: str, cms_dic
 # ---------------------------------------------------------------------------
 # Admitted endpoint — full pipeline, no form JSON
 # ---------------------------------------------------------------------------
-async def run_admitted_pipeline(files: List[UploadFile], patient_id: str, cms_dicts: dict, tpa_id: str = None):
-    print(f"\n🚀 API HIT: Running Admitted Pipeline for patient {patient_id}.")
+async def run_admitted_pipeline(req: PipelineRequest, cms_dicts: dict):
+    print(f"\n🚀 API HIT: Running Admitted Pipeline for patient {req.patient_id}.")
 
-    if not files:
+    if not req.document_ids:
         raise HTTPException(status_code=400, detail="Admitted pipeline requires discharge summary/files.")
 
+
     try:
-        results = await process_full_pipeline(files, patient_id, cms_dicts, tpa_id)
+        results = await process_full_pipeline(
+            document_ids=req.document_ids, 
+            patient_id=req.patient_id, 
+            cms_dicts=cms_dicts, 
+            supabase=supabase, 
+            tpa_id=req.tpa_id
+        )
         return {"status": "success", "results": results}
     except HTTPException:
         raise
