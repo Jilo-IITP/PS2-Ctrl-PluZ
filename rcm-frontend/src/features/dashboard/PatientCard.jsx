@@ -15,10 +15,7 @@ const PatientCard = ({ patient, onSelect }) => {
   const StepIcon = stepCfg.icon;
 
   return (
-    <Card onClick={() => onSelect(patient.id)} className="shadow-sm border border-border cursor-pointer hover:border-foreground/50 hover:shadow-md transition-all duration-200 group rounded-sm overflow-hidden">
-      {/* Step indicator bar along top */}
-      <div className={`h-1 w-full ${step === 'admitted' ? 'bg-blue-500' : step === 'settled' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-
+    <Card onClick={() => onSelect(patient.id)} className="shadow-sm border border-border cursor-pointer hover:border-foreground/50 hover:shadow-md transition-all duration-200 group rounded-sm overflow-hidden bg-card">
       <div className="p-5 flex flex-col gap-4">
         {/* Row 1: Name + Step Badge */}
         <div className="flex justify-between items-start gap-3">

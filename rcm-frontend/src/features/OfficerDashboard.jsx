@@ -19,7 +19,8 @@ export default function OfficerDashboard() {
     patients, loading, activePatientId, setActivePatientId, 
     isNewPatientOpen, setIsNewPatientOpen, userProfile, isOnboardingOpen,
     processingStatus, patientForm, setPatientForm, hospitalForm, setHospitalForm,
-    handleOnboardingSubmit, handleCreatePatient, handleFileAttached, processBatch
+    handleOnboardingSubmit, handleCreatePatient, handleFileAttached, processBatch, processSettlement,
+    processBillAudit, processBillApproval
   } = useDashboardLogic();
 
   return (
@@ -78,6 +79,10 @@ export default function OfficerDashboard() {
         onClose={() => setActivePatientId(null)} 
         onFileAttached={handleFileAttached} 
         onProcessBatch={processBatch} 
+        onProcessSettlement={processSettlement}
+        onProcessBillAudit={processBillAudit}
+        onProcessBillApproval={processBillApproval}
+        onUpdateStep={() => {}} 
       />
 
       <OnboardingModal 

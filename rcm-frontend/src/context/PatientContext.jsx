@@ -15,7 +15,10 @@ export const PatientProvider = ({ children }) => {
         const saved = sessionStorage.getItem('patient_data');
         return saved ? JSON.parse(saved) : [];
     });
-    const [isFetched, setIsFetched] = useState(false);
+    const [isFetched, setIsFetched] = useState(() => {
+        const saved = sessionStorage.getItem('patient_data');
+        return !!(saved && JSON.parse(saved).length > 0);
+    });
     const [userProfile, setUserProfile] = useState(() => {
         const saved = sessionStorage.getItem('user_profile');
         return saved ? JSON.parse(saved) : null;

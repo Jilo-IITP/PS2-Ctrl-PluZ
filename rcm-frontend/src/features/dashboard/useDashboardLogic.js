@@ -107,12 +107,11 @@ export function useDashboardLogic() {
     setPatientForm({ name: "", gender: "", contact: "", dob: "", age: "", policy_number: "", employee_id: "", insurer_id: "", medical_claim: false, occupation: "", address: "" });
   };
 
-  const handleFileAttached = async (e, patientId, stage) => {
+  const handleFileAttached = async (e, patientId, stage, prefix = "") => {
     const files = Array.from(e.target.files);
-    // Keep rawFile in memory so we can re-use it for pipeline without downloading
     const newDocs = files.map(f => ({ 
       id: `t-${Math.random()}`, 
-      name: f.name, 
+      name: prefix ? `${prefix}${f.name}` : f.name, 
       stage, 
       status: 'pending', 
       url: URL.createObjectURL(f), 
@@ -121,13 +120,44 @@ export function useDashboardLogic() {
     setPatients(ps => ps.map(p => p.id === patientId ? { ...p, documents: [...p.documents, ...newDocs] } : p));
     for (const f of files) {
       const fd = new FormData();
-      fd.append("file", f, `${stage}__${f.name}`);
+      const fileName = prefix ? `${prefix}${f.name}` : f.name;
+      fd.append("file", f, `${stage}__${fileName}`);
       const res = await fetch(`${API_BASE}/documents/?patient_id=${patientId}`, { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` }, body: fd });
       const up = await res.json();
       setPatients(ps => ps.map(p => p.id === patientId ? { 
         ...p, 
-        documents: p.documents.map(d => d.name === f.name && d.stage === stage ? { ...d, id: up.id, url: up.file_url, rawFile: f } : d) 
+        documents: p.documents.map(d => (d.name === fileName || d.name === f.name) && d.stage === stage ? { ...d, id: up.id, url: up.file_url, rawFile: f } : d) 
       } : p));
+    }
+  };
+
+  const processBillAudit = async (patient) => {
+    // MISSING ENDPOINT: The /pipeline/bill endpoint is currently not implemented on the backend.
+    setLoading(true);
+    setProcessingStatus("Auditing Hospital Bill...");
+    try {
+      await new Promise(r => setTimeout(r, 2000)); // Simulating AI audit
+      alert("Bill Audit Complete (Simulated). The clinical validation matches the generated bill.");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+      setProcessingStatus("");
+    }
+  };
+
+  const processBillApproval = async (patient) => {
+    // MISSING ENDPOINT: The /pipeline/bill-approved endpoint is currently not implemented on the backend.
+    setLoading(true);
+    setProcessingStatus("Verifying Authorization...");
+    try {
+      await new Promise(r => setTimeout(r, 1500)); // Simulating authorization check
+      alert("Bill Authorization Verified (Simulated). All line items are approved by the medical board.");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+      setProcessingStatus("");
     }
   };
 
@@ -197,10 +227,43 @@ export function useDashboardLogic() {
     }
   };
 
+  const processSettlement = async (patient, settlementFile) => {
+    setLoading(true);
+    setProcessingStatus("Auditing Settlement...");
+    
+    const formData = new FormData();
+    formData.append('file', settlementFile);
+
+    try {
+      const res = await fetch(`${API_BASE}/settlement/audit?patient_id=${patient.id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session?.access_token || ''}`
+        },
+        body: formData
+      });
+
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({ detail: 'Settlement audit failed' }));
+        throw new Error(errBody.detail || `API returned ${res.status}`);
+      }
+
+      const data = await res.json();
+      navigate('/settlement', { state: { settlementResult: data, patient } });
+    } catch (err) {
+      console.error(err);
+      alert(`Settlement Audit failed: ${err.message}`);
+    } finally {
+      setLoading(false);
+      setProcessingStatus("");
+    }
+  };
+
   return {
     patients, loading, activePatientId, setActivePatientId, 
     isNewPatientOpen, setIsNewPatientOpen, userProfile, isOnboardingOpen,
     processingStatus, patientForm, setPatientForm, hospitalForm, setHospitalForm,
-    handleOnboardingSubmit, handleCreatePatient, handleFileAttached, processBatch
+    handleOnboardingSubmit, handleCreatePatient, handleFileAttached, processBatch, processSettlement,
+    processBillAudit, processBillApproval
   };
 }
