@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, CheckCircle2, UploadCloud, AlertCircle, FileSearch } from 'lucide-react';
+import { FileText, CheckCircle2, UploadCloud, AlertCircle, FileSearch, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import AdmittedStageWorkspace from './AdmittedStageWorkspace';
@@ -11,7 +11,7 @@ const DocumentStage = ({
   Icon, 
   onUploadClick, 
   onProcessBatch,
-  onDeleteDocument 
+  onDeleteDocument,
   onProcessSettlement,
   onProcessBillAudit,
   onProcessBillApproval

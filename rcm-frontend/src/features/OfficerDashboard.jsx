@@ -25,7 +25,7 @@ export default function OfficerDashboard() {
     isSubmittingPatient, patientError, setPatientError, updatePatientStep,
     handleEditPatient, handleDeletePatient, handleDeleteDocument,
     processSettlement,
-    processBillAudit, processBillApproval
+    processBillAudit, processBillApproval,
     exportPatientsToCSV
   } = useDashboardLogic();
 

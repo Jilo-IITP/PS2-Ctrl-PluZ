@@ -165,6 +165,7 @@ export function useDashboardLogic() {
     } finally {
       setLoading(false);
       setProcessingStatus("");
+    }
   };
 
   const updatePatientStep = async (patientId, newStep) => {
@@ -240,7 +241,7 @@ export function useDashboardLogic() {
       console.error(err);
       alert("Failed to delete patient context.");
     }
-  };
+  }; // Fixed closing brace
 
   const handleDeleteDocument = async (patientId, docId) => {
     if (!session) return;
@@ -260,48 +261,7 @@ export function useDashboardLogic() {
     } catch (err) {
       console.error(err);
       alert("Failed to delete document.");
-    try {
-      setLoading(true);
-      setProcessingStatus("Synchronizing Patient Registry...");
-      
-      const res = await fetch(`${API_BASE}/patients/`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${session.access_token}` 
-        },
-        body: JSON.stringify({ 
-          aadhar_no: patientForm.aadhar_no 
-        })
-      });
-      
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.detail || "Failed to create/update patient");
-      }
-      
-      const newPat = await res.json();
-      
-      // Update local state: Replace if already exists in list, otherwise add to top
-      setPatients(prev => {
-        const exists = prev.findIndex(p => p.aadhar_no === newPat.aadhar_no);
-        if (exists !== -1) {
-          const updated = [...prev];
-          updated[exists] = { ...newPat, documents: prev[exists].documents || [] };
-          return updated;
-        }
-        return [{ ...newPat, documents: [] }, ...prev];
-      });
-      
-      setIsNewPatientOpen(false);
-      setPatientForm({ aadhar_no: "" });
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    } finally {
-      setLoading(false);
-      setProcessingStatus("");
-    }
+    } // Fixed closing brace
   };
 
   const handleFileAttached = async (e, patientId, stage, prefix = "") => {
@@ -374,29 +334,19 @@ export function useDashboardLogic() {
     setLoading(true);
     setProcessingStatus("Aggregating Records...");
     
-    // Check if we already have the rawFile in memory (session memory)
-    const blobs = await Promise.all(sDocs.map(async d => {
-      if (d.rawFile) return d.rawFile;
-      const r = await fetch(d.url);
-      const b = await r.blob();
-      return new File([b], d.name, { type: 'application/pdf' });
-    }));
-
-    setProcessingStatus("Running AI Pipeline — This May Take A Moment...");
-    // Determine the correct pipeline stage based on DB step
-    const pipelineStage = dbStepToStage(patient.step);
-    setProcessingStatus(`Running ${pipelineStage === 'preAuth' ? 'Pre-Auth' : 'Admitted'} Pipeline...`);
-
-    const payload = {
-      document_ids: sDocs.map(d => d.id).filter(id => id && !id.startsWith('t-')),
-      patient_id: patient.id,
-      tpa_id: session?.user?.id || null
-    };
-
     try {
-      let endpoint = '';
-      if (pipelineStage === 'preAuth') endpoint = `${API_BASE}/pipeline/preauth`;
-      else endpoint = `${API_BASE}/pipeline/admitted`;
+      const pipelineStage = dbStepToStage(patient.step);
+      setProcessingStatus(`Running ${pipelineStage === 'preAuth' ? 'Pre-Auth' : 'Admitted'} Pipeline...`);
+
+      const payload = {
+        document_ids: sDocs.map(d => d.id).filter(id => id && !id.startsWith('t-')),
+        patient_id: patient.id,
+        tpa_id: session?.user?.id || null
+      };
+
+      let endpoint = pipelineStage === 'preAuth' 
+        ? `${API_BASE}/pipeline/preauth` 
+        : `${API_BASE}/pipeline/admitted`;
 
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -406,25 +356,27 @@ export function useDashboardLogic() {
         },
         body: JSON.stringify(payload)
       });
+
       if (!res.ok) {
         const errBody = await res.json().catch(() => ({ detail: 'Unknown error' }));
         throw new Error(errBody.detail || `API returned ${res.status}`);
       }
+
       const data = await res.json();
       setProcessingStatus("Finalizing Extraction...");
-      navigate('/process', {
-        state: {
-          batchResult: data.results[0],
-          results: data.results,
-          files: sDocs.map(d => ({ name: d.name, url: d.url })),
-          patient: patient
-        }
+
+      // Single navigation call with all necessary data
+      navigate('/process', { 
+        state: { 
+          batchResult: data.results ? data.results[0] : data, 
+          results: data.results || [data], 
+          files: sDocs.map(d => ({ name: d.name, url: d.url })), 
+          stage: pipelineStage, 
+          patient, 
+          pipelineData: data 
+        } 
       });
 
-      const passResults = data.results || [data];
-      const batchRes = data.results ? data.results[0] : data;
-
-      navigate('/process', { state: { batchResult: batchRes, results: passResults, files: blobs, stage: pipelineStage, patient, pipelineData: data } });
     } catch (err) {
       console.error(err);
       alert(`Pipeline failed: ${err.message}`);
